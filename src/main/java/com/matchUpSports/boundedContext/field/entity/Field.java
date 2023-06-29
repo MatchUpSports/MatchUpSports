@@ -6,13 +6,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +25,7 @@ public class Field {
 
     private String fieldLocation;
 
-    private Long price;
+    private int price;
 
     private LocalTime openTime;
 
@@ -30,8 +33,15 @@ public class Field {
 
     private int courtCount;
 
-    private String image;
-
     private String registNum;
 
+    public Field() {
+        this.fieldName = null;
+        this.fieldLocation = null;
+        this.price = 0;
+        this.closeTime = LocalTime.now();
+        this.openTime = LocalTime.now();
+        this.courtCount  = 0;
+        this.registNum = null;
+    }
 }
