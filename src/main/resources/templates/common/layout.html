@@ -26,16 +26,18 @@
 
 <body class="min-h-screen w-screen flex flex-col">
 <div class="btm-nav pb-0">
-    <button id="projectBtn" onclick="activateButton('projectBtn')">
+    <button id="projectBtn" onclick="activateButton('projectBtn'); window.location.href='/match'">
         <i class="fa-solid fa-diagram-project"></i>
     </button>
-    <button id="homeBtn" class="active" onclick="activateButton('homeBtn')">
+    <button id="homeBtn" class="active" onclick="activateButton('homeBtn'); window.location.href='/'">
         <i class="fa-solid fa-house"></i>
     </button>
-    <button id="userBtn" onclick="activateButton('userBtn')">
+    <button id="userBtn" onclick="activateButton('userBtn'); window.location.href='/mypage'">
         <i class="fa-solid fa-user"></i>
     </button>
 </div>
+
+
 <div class="min-h-fit grow">
     <main layout:fragment="main"></main>
 </div>
