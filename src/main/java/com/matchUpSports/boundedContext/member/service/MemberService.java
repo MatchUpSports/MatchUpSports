@@ -8,7 +8,6 @@ import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,6 @@ public class MemberService {
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
-
     @Transactional
     public Member saveOAuth2Member(DivideOAuth2User customOAuth2User) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
@@ -52,12 +50,12 @@ public class MemberService {
 
         Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
-            .email(joiningForm.getEmail())
-            .phoneNumber(joiningForm.getPhone())
-            .authorities(memberAuthorities)
-            .bigDistrict(joiningForm.getBigDistrict())
-            .smallDistrict(joiningForm.getSmallDistrict())
-            .tier(tierClassifier.get(joiningForm.getTier()))
+                .email(joiningForm.getEmail())
+                .phoneNumber(joiningForm.getPhone())
+                .authorities(memberAuthorities)
+                .bigDistrict(joiningForm.getBigDistrict())
+                .smallDistrict(joiningForm.getSmallDistrict())
+                .tier(tierClassifier.get(joiningForm.getTier()))
                 .build();
 
         return memberRepository.save(memberWithUserInput);
@@ -108,7 +106,7 @@ public class MemberService {
                 .bigDistrict(modifyingForm.getBigDistrict())
                 .smallDistrict(modifyingForm.getSmallDistrict())
                 .tier(tierClassifier.get(modifyingForm.getTier()))
-                    .build();
+                .build();
         return memberRepository.save(modifiedMember);
     }
 
@@ -136,8 +134,7 @@ public class MemberService {
     private List<String> convertAuthoritiesToString(List<? extends GrantedAuthority> simpleGrantedAuthorities) {
         return simpleGrantedAuthorities.stream()
                 .map(simpleGrantedAuthority -> simpleGrantedAuthority.getAuthority().substring(5
-                                                        , simpleGrantedAuthority.getAuthority().length()))
+                        , simpleGrantedAuthority.getAuthority().length()))
                 .toList();
     }
 }
-
