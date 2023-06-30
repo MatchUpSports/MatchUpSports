@@ -25,6 +25,10 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
   security:
     oauth2:
       client:
