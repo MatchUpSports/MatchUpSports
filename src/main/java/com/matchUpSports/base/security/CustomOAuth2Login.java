@@ -1,10 +1,9 @@
 package com.matchUpSports.base.security;
 
-import com.matchUpSports.boundedContext.member.entity.Member;
-import com.matchUpSports.boundedContext.member.service.MemberService;
 import com.matchUpSports.base.security.social.SocialUserFactory;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
-import com.matchUpSports.base.security.social.SocialUserFactory;
+import com.matchUpSports.boundedContext.member.entity.Member;
+import com.matchUpSports.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

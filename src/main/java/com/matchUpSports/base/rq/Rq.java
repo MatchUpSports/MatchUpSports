@@ -1,9 +1,9 @@
 package com.matchUpSports.base.rq;
 
 import com.matchUpSports.base.rsData.RsData;
+import com.matchUpSports.base.ut.Ut;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
-import com.matchUpSports.base.ut.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
