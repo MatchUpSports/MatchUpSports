@@ -2,7 +2,7 @@ package com.matchUpSports.boundedContext.match.controller;
 
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.field.entity.Field;
-import com.matchUpSports.boundedContext.field.repository.FieldRepository;
+import com.matchUpSports.boundedContext.field.service.FieldService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
 import com.matchUpSports.boundedContext.match.service.MatchService;
@@ -21,12 +21,11 @@ import java.util.List;
 @RequestMapping("/match")
 public class MatchController {
     private final MatchService matchService;
-
-    private final FieldRepository fieldRepository;
+    private final FieldService fieldService;
 
     @GetMapping("/filter")
     public String showMatchingFilter(Model model) {
-        List<Field> fields = fieldRepository.findAll();
+        List<Field> fields = fieldService.findAllFields();
         model.addAttribute("fields", fields);
         return "matching/filterPage";
     }
