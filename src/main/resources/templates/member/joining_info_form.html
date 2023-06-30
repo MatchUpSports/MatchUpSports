@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>가입시 필수 양식</title>
+</head>
+<body>
+<style>
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        width: 100px;
+        height: 50px;
+    }
+</style>
+
+<script>
+    function validate(form) {
+        const emailValidate = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+        const email = form.email;
+        if (email.value.length == 0 || !emailValidate.test(email.value)) {
+            alert('올바르지 않은 이메일 형식입니다')
+            email.focus();
+            return
+        }
+
+        const phoneNumberValidate = /^010[0-9]{7,8}$/;
+        const phoneNumber = form.phone;
+        if (phoneNumber.value.length == 0 || !phoneNumberValidate.test(phoneNumber.value)) {
+            alert('올바르지 않은 휴대전화번호 입니다')
+            phoneNumber.focus();
+            return;
+        }
+
+        const area = form.area;
+        if (area.value.length == 0) {
+            alert('사는 지역을 입력해주십시오')
+            area.focus();
+            return;
+        }
+
+        form.submit();
+    }
+</script>
+<form action="#" th:action method="#" th:method = "${httpMethod}" onsubmit="validate(this); return false;">
+    <div>
+        <div>이메일을 입력해 주세요</div>
+        <input type="text" id="email" name="email" class="card" th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
+
+        <div>전화번호를 입력해 주세요 ('-' 미포함, 010으로 시작)</div>
+        <input type="text" id="phone" name="phone" class="card" th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
+
+        <div th:block th:if="${modifyingForm == null}">
+            <div>회원 종류를 입력해 주세요</div>
+            <select id="authorities" name="authorities" class="card">
+                <option value="일반 유저">일반 유저</option>
+                <option value="시설 주인">시설 주인</option>
+            </select>
+        </div>
+
+        <div>사는 지역을 입력해 주세요</div>
+        <input type="text" id="area" name="area" class="card" th:value="${modifyingForm != null ? modifyingForm.area : ''}"/>
+
+        <div>자신이 생각하는 족구 실력을 입력해주세요</div>
+        <select id="tier" name="tier" class="card">
+            <option value="하수" th:selected="${modifyingForm == null || modifyingForm.tier == '하수'}">하수</option>
+            <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수</option>
+            <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수</option>
+        </select>
+    </div>
+
+
+    <button class="btn" type="submit">제출</button>
+</form>
+</body>
+</html>
