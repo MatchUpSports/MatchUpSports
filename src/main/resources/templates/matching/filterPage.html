@@ -10,7 +10,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        $(function() {
+        $(function () {
             // url에서 msg 파라미터를 받아와 alert 창 띄우기
             const urlParams = new URLSearchParams(window.location.search);
             const msg = urlParams.get('msg');
@@ -91,54 +91,31 @@
         <input type="text" id="startDate" name="matchDate" readonly>
         <button type="button" id="startDatePickerButton">Select Date</button>
     </div>
+    <!-- 수정된 fieldLocation 부분 -->
     <div>
         <label for="location">fieldLocation:</label>
-        <select id="location" name="fieldLocation" onchange="showVenues()">
+        <select id="location" name="fieldLocation">
             <option value="">Select location</option>
-            <option value="Seoul">Seoul</option>
-            <option value="Suwon">Suwon</option>
-            <option value="Gangwon">Gangwon-do</option>
+            <th:block th:each="field : ${fields}">
+                <option th:value="${field.fieldLocation}" th:text="${field.fieldLocation}"></option>
+            </th:block>
         </select>
     </div>
 
-    <!-- 구장 정보 입력 폼 -->
+    <!-- 수정된 stadium 부분 -->
     <div>
         <label for="venue">stadium:</label>
         <select id="venue" name="stadium">
             <option value="">Select venue</option>
-            <!-- 서울 -->
-            <option id="a" value="A" style="display: none;">A Stadium</option>
-            <option id="b" value="B" style="display: none;">B Stadium</option>
-            <option id="c" value="C" style="display: none;">C Stadium</option>
-
-            <!-- 수원 -->
-            <option id="1" value="1" style="display: none;">1 Stadium</option>
-            <option id="2" value="2" style="display: none;">2 Stadium</option>
-            <option id="3" value="3" style="display: none;">3 Stadium</option>
-
-            <!-- 강원도 -->
-            <option id="ga" value="가" style="display: none;">가 Stadium</option>
-            <option id="na" value="나" style="display: none;">나 Stadium</option>
-            <option id="da" value="다" style="display: none;">다 Stadium</option>
+            <th:block th:each="field : ${fields}">
+                <option th:value="${field.fieldName}" th:text="${field.fieldName}"></option>
+            </th:block>
         </select>
     </div>
 
-    <!-- 시간 정보 입력 폼 -->
-    <div>
-        <label for="time">usageTime:</label>
-        <select id="time" name="usageTime">
-            <option value="">Select usageTime</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-        </select>
-    </div>
+    <!-- usageTime ==> 원래는 타임 개념으로 받을려 했지만 더 디테일하게 시작시간과 끝나는시간을 30분 단위로 쪼개서 기입하도록 함 부분 -->
+
+
     <!-- 빠른 매칭 버튼 -->
     <button type="submit">빠른 매칭!</button>
 </form>

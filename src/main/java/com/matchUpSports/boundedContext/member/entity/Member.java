@@ -27,7 +27,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Member {
     @Id
-    @GeneratedValue(strategy  = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @CreatedDate
     private LocalDateTime createdDate;
@@ -35,10 +35,10 @@ public class Member {
     private LocalDateTime modifiedDate;
     private LocalDateTime deleteDate;
     private String username;
-//    private String password;
+    //    private String password;
     private String email;
     private String phoneNumber;
-//    private String authorities;
+    //    private String authorities;
     private int winningRate;
     private String bigDistrict;
     private String smallDistrict;
@@ -48,8 +48,9 @@ public class Member {
     private Set<Role> authorities = new HashSet<>();
 
     public List<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_"+i.name())).toList();
+        return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_" + i.name())).toList();
     }
+
     public void addRole(Role role) {
         this.authorities.add(role);
     }

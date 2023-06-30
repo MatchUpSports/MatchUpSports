@@ -1,6 +1,8 @@
 package com.matchUpSports.boundedContext.match.controller;
 
 import com.matchUpSports.base.rsData.RsData;
+import com.matchUpSports.boundedContext.field.entity.Field;
+import com.matchUpSports.boundedContext.field.repository.FieldRepository;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
 import com.matchUpSports.boundedContext.match.service.MatchService;
@@ -12,15 +14,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/match")
 public class MatchController {
     private final MatchService matchService;
 
-    //매치 페이지의 메인 조건 보여주기
+    private final FieldRepository fieldRepository;
+
     @GetMapping("/filter")
-    public String showMatchingFilter() {
+    public String showMatchingFilter(Model model) {
+        List<Field> fields = fieldRepository.findAll();
+        model.addAttribute("fields", fields);
         return "matching/filterPage";
     }
 

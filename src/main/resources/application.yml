@@ -34,10 +34,10 @@ spring:
     oauth2:
       client:
         registration:
-#          google:
-#            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
-#            client-name: Google
-#            scope: profile, email
+          #          google:
+          #            redirect-uri: '{baseUrl}/{action}/oauth2/code/{registrationId}'
+          #            client-name: Google
+          #            scope: profile, email
           kakao:
             scope:
             client-name: Kakao

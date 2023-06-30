@@ -1,85 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>구장 등록</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <style>
-    .card {
-      width: 400px;
-      min-height: 500px;
-      margin: 10px;
-    }
-    .result-id button {
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-    .result-id button:hover {
-      color: green;
-    }
-    .submit-button {
-      width: 150px;
-      height: 60px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      color: white;
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 0 auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>구장 등록</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .card {
+            width: 400px;
+            min-height: 500px;
+            margin: 10px;
+        }
+
+        .result-id button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .result-id button:hover {
+            color: green;
+        }
+
+        .submit-button {
+            width: 150px;
+            height: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
 <h1 style="text-align: center">구장 등록</h1>
 <form th:object="${createForm}" th:action="@{/field/create}" method="POST" enctype="multipart/form-data">
-  <div layout:fragment="content" class="d-flex flex-column align-items-center max-w-3xl mx-auto" style="text-align: center">
-    <div class="card">
-      <label>이름</label>
-      <input type="text" name="name" required><br>
+    <div layout:fragment="content" class="d-flex flex-column align-items-center max-w-3xl mx-auto"
+         style="text-align: center">
+        <div class="card">
+            <label>이름</label>
+            <input type="text" name="name" required><br>
 
-      <label>위치</label>
-      <input type="text" name="location" required><br>
+            <label>위치</label>
+            <input type="text" name="location" required><br>
 
-      <label>가격</label>
-      <input type="number" name="price" required><br>
+            <label>가격</label>
+            <input type="number" name="price" required><br>
 
-      <label>영업 시작 시간</label>
-      <input type="time" name="openTime" required><br>
+            <label>영업 시작 시간</label>
+            <input type="time" name="openTime" required><br>
 
-      <label>영업 종료 시간</label>
-      <input type="time" name="closeTime" required><br>
+            <label>영업 종료 시간</label>
+            <input type="time" name="closeTime" required><br>
 
-      <label>구장 개수</label>
-      <input type="number" name="count" required><br>
+            <label>구장 개수</label>
+            <input type="number" name="count" required><br>
 
-      <label>등록번호</label>
-      <input type="text" name="registNum" required><br>
+            <label>등록번호</label>
+            <input type="text" name="registNum" required><br>
 
-      <label for="images" style="text-align: left">구장 이미지 업로드</label>
-      <input type="file" id="images" name="images" multiple><br><br>
+            <label for="images" style="text-align: left">구장 이미지 업로드</label>
+            <input type="file" id="images" name="images" multiple><br><br>
 
-      <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">
+            <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">
 
-<!-- !!!!!!!!!!!!!!!!한솔님 여기 action 태그 값 바꿔주셔야해요!!-->
-        <form th:action="@{/matches/name}" method="get">
-          <button class="submit-button" onclick="showSuccessMessage()" id="registBtn" style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px" >등록하기</button>
-        </form>
-      </div>
+                <!-- !!!!!!!!!!!!!!!!한솔님 여기 action 태그 값 바꿔주셔야해요!!-->
+                <form th:action="@{/matches/name}" method="get">
+                    <button class="submit-button" onclick="showSuccessMessage()" id="registBtn"
+                            style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px">등록하기
+                    </button>
+                </form>
+            </div>
 
+        </div>
     </div>
-  </div>
 </form>
 <script>
-  function showSuccessMessage() {
-    toastNotice("입력하신 시설이 등록되었습니다.")
-  }
+    function showSuccessMessage() {
+        toastNotice("입력하신 시설이 등록되었습니다.")
+    }
 </script>
 </body>
 </html>

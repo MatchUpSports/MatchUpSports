@@ -8,6 +8,7 @@ import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class MemberService {
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
+
     @Transactional
     public Member saveOAuth2Member(DivideOAuth2User customOAuth2User) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
