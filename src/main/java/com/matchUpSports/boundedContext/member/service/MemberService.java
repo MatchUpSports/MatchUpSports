@@ -1,18 +1,20 @@
 package com.matchUpSports.boundedContext.member.service;
 
 import com.matchUpSports.base.Role;
-import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
+import com.matchUpSports.boundedContext.member.dto.BasicUserInfoForm;
+import com.matchUpSports.boundedContext.member.dto.JoiningForm;
+import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
+import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -20,7 +22,10 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
-
+    private static final Map<String, Integer> tierClassifier = new HashMap<>(Map.of("하수", 1, "중수", 2, "고수", 3));
+    private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
+    private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
+    private static final List<String> tiers = new ArrayList<>(Arrays.asList("하수", "중수", "고수"));
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -39,6 +44,70 @@ public class MemberService {
         }
 
         return findByName.get();
+    }
+
+    @Transactional(readOnly = false)
+    public Member createJoiningForm(JoiningForm joiningForm, Member member) {
+        validateUserInput(joiningForm);
+
+        String authorities = joiningForm.getAuthorities();
+        Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(authorities)));
+        Member memberWithUserInput = member.toBuilder()
+            .email(joiningForm.getEmail())
+            .phoneNumber(joiningForm.getPhone())
+            .authorities(memberAuthorities)
+            .area(joiningForm.getArea())
+            .tier(tierClassifier.get(joiningForm.getTier()))
+                .build();
+
+        return memberRepository.save(memberWithUserInput);
+    }
+
+    private boolean validateUserInput(BasicUserInfoForm joiningForm) {
+        String phoneNumberValidate = "^010[0-9]{7,8}$";
+        if (!Pattern.matches(phoneNumberValidate, joiningForm.getPhone())) {
+            throw new RuntimeException("잘못된 휴대전화번호 양식입니다");
+        }
+
+        if (!tiers.contains(joiningForm.getTier())) {
+            throw new RuntimeException("잘못된 족구 실력 양식입니다");
+        }
+        
+        if (joiningForm.getArea() == null || joiningForm.getArea().equals("")) {
+            throw new RuntimeException("잘못된 지역 양식입니다");
+        }
+
+        return true;
+    }
+
+    public ModifyingDisplaying showModifyingForm(long memberId) {
+        Optional<Member> wrappedMember = memberRepository.findById(memberId);
+        if (wrappedMember.isEmpty()) {
+            return null;
+        }
+        Member member = wrappedMember.get();
+        ModifyingDisplaying displayingForm = ModifyingDisplaying.builder()
+                .email(member.getEmail())
+                .phone(member.getPhoneNumber())
+                .area(member.getArea())
+                .tier(tierUnpacker.get(member.getTier()))
+                .build();
+
+        return displayingForm;
+    }
+
+
+    @Transactional(readOnly = false)
+    public Member modify(ModifyingForm modifyingForm, Member member) {
+        validateUserInput(modifyingForm);
+
+        Member modifiedMember = member.toBuilder()
+                .email(modifyingForm.getEmail())
+                .phoneNumber(modifyingForm.getPhone())
+                .area(modifyingForm.getArea())
+                .tier(tierClassifier.get(modifyingForm.getTier()))
+                    .build();
+        return memberRepository.save(modifiedMember);
     }
 }
 

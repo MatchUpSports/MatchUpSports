@@ -43,7 +43,7 @@ public class Member {
 //    private String authorities;
     private int winningRate;
     private String area;
-    private String tier;
+    private int tier;
     @Convert(converter = CustomConverter.class)
     @Builder.Default
     private Set<Role> authorities = new HashSet<>();
