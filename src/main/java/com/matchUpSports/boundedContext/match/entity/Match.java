@@ -28,7 +28,7 @@ public class Match {
 
     private LocalDate matchDate;    // 매치 날짜
 
-    private Integer usageTime;          // 이용 시간
+    private Integer usageTime;          // 이용 시간 ===> 몇시부터 몇시까지 할지 적어놔야함
 
     private String progressStatus;  // 진행 상태 (타입에 관해서 추후에 생각해봐야 함)
 

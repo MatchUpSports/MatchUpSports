@@ -5,8 +5,8 @@ import com.matchUpSports.boundedContext.field.entity.FieldImage;
 import com.matchUpSports.boundedContext.field.repository.FieldImageRepository;
 import com.matchUpSports.boundedContext.field.repository.FieldRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ public class FieldImageService {
 
         List<FieldImage> fieldImages = new ArrayList<>();
 
-        for(MultipartFile image: images) {
+        for (MultipartFile image : images) {
             String fileName = generatedUniqueFileName(image.getOriginalFilename());
             String filePath = storageLocation + fileName;
 

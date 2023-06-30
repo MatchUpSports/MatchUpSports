@@ -7,10 +7,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -41,7 +39,7 @@ public class Field {
         this.price = 0;
         this.closeTime = LocalTime.now();
         this.openTime = LocalTime.now();
-        this.courtCount  = 0;
+        this.courtCount = 0;
         this.registNum = null;
     }
 }

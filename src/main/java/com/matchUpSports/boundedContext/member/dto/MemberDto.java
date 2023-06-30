@@ -1,4 +1,5 @@
 package com.matchUpSports.boundedContext.member.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
