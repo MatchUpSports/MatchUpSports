@@ -114,7 +114,39 @@
     </div>
 
     <!-- usageTime ==> 원래는 타임 개념으로 받을려 했지만 더 디테일하게 시작시간과 끝나는시간을 30분 단위로 쪼개서 기입하도록 함 부분 -->
+    <!-- 수정된 startTime 부분 -->
+    <div>
+        <label for="startTime">Start Time:</label>
+        <select id="startTime" name="startTime">
+            <option value="">Select start time</option>
+            <th:block th:each="field : ${fields}">
+                <th:block th:with="openHour=${field.openTime.getHour()}, openMinute=${field.openTime.getMinute()}, closeHour=${field.closeTime.getHour()}, closeMinute=${field.closeTime.getMinute()}">
+                    <th:block th:each="hr : ${#numbers.sequence(openHour, closeHour - 1)}">
+                        <th:block th:each="minute : ${#numbers.sequence(openMinute, 30, 30)}">
+                            <option th:value="${hr + ':' + minute}" th:text="${hr + ':' + minute}"></option>
+                        </th:block>
+                    </th:block>
+                </th:block>
+            </th:block>
+        </select>
+    </div>
 
+    <!-- 수정된 finishTime 부분 -->
+    <div>
+        <label for="finishTime">Finish Time:</label>
+        <select id="finishTime" name="finishTime">
+            <option value="">Select finish time</option>
+            <th:block th:each="field : ${fields}">
+                <th:block th:with="openHour=${field.openTime.getHour()}, openMinute=${field.openTime.getMinute()}, closeHour=${field.closeTime.getHour()}, closeMinute=${field.closeTime.getMinute()}">
+                    <th:block th:each="hr : ${#numbers.sequence(openHour + 1, closeHour)}">
+                        <th:block th:each="minute : ${#numbers.sequence(openMinute, 30, 30)}">
+                            <option th:value="${hr + ':' + minute}" th:text="${hr + ':' + minute}"></option>
+                        </th:block>
+                    </th:block>
+                </th:block>
+            </th:block>
+        </select>
+    </div>
 
     <!-- 빠른 매칭 버튼 -->
     <button type="submit">빠른 매칭!</button>

@@ -51,4 +51,8 @@ public class FieldService {
             e.printStackTrace();
         }
     }
+
+    public List<Field> findAllFields() {
+        return fieldRepository.findAll();
+    }
 }
