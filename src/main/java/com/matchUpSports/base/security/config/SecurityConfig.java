@@ -37,7 +37,8 @@ public class SecurityConfig {
                         "/image/**", "/js/**").permitAll()
                 .anyRequest().authenticated());
 
-        http.csrf(c -> c.ignoringRequestMatchers("/product/more/**"));
+        // "/match/**" 경로 추가
+        http.csrf(c -> c.ignoringRequestMatchers("/product/more/**", "/match/**"));
 
         return http.build();
     }

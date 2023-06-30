@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Main Page</title>
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- jQuery 및 jQuery UI 스크립트 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function() {
+            // url에서 msg 파라미터를 받아와 alert 창 띄우기
+            const urlParams = new URLSearchParams(window.location.search);
+            const msg = urlParams.get('msg');
+            if (msg) {
+                alert(msg);
+            }
+        });
+    </script>
+    <script>
+        function showVenues() {
+            var locationSelect = document.getElementById("location");
+            var venueSelect = document.getElementById("venue");
+
+            var selectedLocation = locationSelect.options[locationSelect.selectedIndex].value;
+
+            // 모든 구장 옵션 숨기기
+            var options = venueSelect.options;
+            for (var i = 0; i < options.length; i++) {
+                options[i].style.display = "none";
+            }
+
+            // 선택한 지역에 해당하는 구장 옵션 표시
+            if (selectedLocation === "Seoul") {
+                document.getElementById("a").style.display = "block";
+                document.getElementById("b").style.display = "block";
+                document.getElementById("c").style.display = "block";
+            } else if (selectedLocation === "Suwon") {
+                document.getElementById("1").style.display = "block";
+                document.getElementById("2").style.display = "block";
+                document.getElementById("3").style.display = "block";
+            } else if (selectedLocation === "Gangwon") {
+                document.getElementById("ga").style.display = "block";
+                document.getElementById("na").style.display = "block";
+                document.getElementById("da").style.display = "block";
+            }
+        }
+
+        // 페이지 로드 시 실행되는 함수
+        window.onload = function () {
+            showVenues(); // 구장 옵션 초기화
+        }
+    </script>
+
+    <script>
+        $(function () {
+            // Datepicker 설정
+            $("#startDate").datepicker({
+                dateFormat: "yy-mm-dd", // 날짜 형식 설정
+                minDate: 0, // 오늘 이전 날짜는 선택 불가
+                showButtonPanel: true, // 오늘, 닫기 버튼 표시
+                closeText: "Close", // 닫기 버튼 텍스트
+                currentText: "Today", // 오늘 버튼 텍스트
+                onSelect: function (dateText, inst) {
+                    // 날짜 선택 시 이벤트 처리
+                    console.log("Selected date: " + dateText);
+                }
+            });
+
+            // Datepicker 버튼 클릭 시 달력 표시
+            $("#startDatePickerButton").click(function () {
+                $("#startDate").datepicker("show");
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+<div th:if="${message}" th:text="${message}" style="color:red;"></div>
+
+<h1>조건 페이지</h1>
+
+<!-- 시작월일 정보 입력 폼 -->
+<form method="post" action="/match">
+    <div>
+
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate" name="matchDate" readonly>
+        <button type="button" id="startDatePickerButton">Select Date</button>
+    </div>
+    <div>
+        <label for="location">fieldLocation:</label>
+        <select id="location" name="fieldLocation" onchange="showVenues()">
+            <option value="">Select location</option>
+            <option value="Seoul">Seoul</option>
+            <option value="Suwon">Suwon</option>
+            <option value="Gangwon">Gangwon-do</option>
+        </select>
+    </div>
+
+    <!-- 구장 정보 입력 폼 -->
+    <div>
+        <label for="venue">stadium:</label>
+        <select id="venue" name="stadium">
+            <option value="">Select venue</option>
+            <!-- 서울 -->
+            <option id="a" value="A" style="display: none;">A Stadium</option>
+            <option id="b" value="B" style="display: none;">B Stadium</option>
+            <option id="c" value="C" style="display: none;">C Stadium</option>
+
+            <!-- 수원 -->
+            <option id="1" value="1" style="display: none;">1 Stadium</option>
+            <option id="2" value="2" style="display: none;">2 Stadium</option>
+            <option id="3" value="3" style="display: none;">3 Stadium</option>
+
+            <!-- 강원도 -->
+            <option id="ga" value="가" style="display: none;">가 Stadium</option>
+            <option id="na" value="나" style="display: none;">나 Stadium</option>
+            <option id="da" value="다" style="display: none;">다 Stadium</option>
+        </select>
+    </div>
+
+    <!-- 시간 정보 입력 폼 -->
+    <div>
+        <label for="time">usageTime:</label>
+        <select id="time" name="usageTime">
+            <option value="">Select usageTime</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select>
+    </div>
+    <!-- 빠른 매칭 버튼 -->
+    <button type="submit">빠른 매칭!</button>
+</form>
+</body>
+</html>
