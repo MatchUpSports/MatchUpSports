@@ -19,6 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FieldController {
     private final FieldService fieldService;
 
+    @GetMapping("")
+    public String showAdmMain() {
+        return "field/management";
+    }
+
+    @GetMapping("/")
+    public String showAdmMain2() {
+        return "redirect:/field";
+    }
+
     @GetMapping("/create")
     public String createField(Model model) {
 
