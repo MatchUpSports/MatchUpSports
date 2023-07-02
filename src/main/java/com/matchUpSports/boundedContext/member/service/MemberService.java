@@ -28,6 +28,7 @@ public class MemberService {
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
+
     @Transactional
     public Member saveOAuth2Member(DivideOAuth2User customOAuth2User) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());

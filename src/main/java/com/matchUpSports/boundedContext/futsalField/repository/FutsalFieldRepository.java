@@ -1,14 +1,14 @@
-package com.matchUpSports.boundedContext.field.repository;
+package com.matchUpSports.boundedContext.futsalField.repository;
 
-import com.matchUpSports.boundedContext.field.entity.Field;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface FieldRepository extends JpaRepository<Field, Long> {
+public interface FutsalFieldRepository extends JpaRepository<FutsalField, Long> {
     // FieldRepository.java
-    List<Field> findByFieldLocation(String location);
+    List<FutsalField> findByFieldLocation(String location);
 
-    Field findByFieldName(String fieldName);
+    FutsalField findByFieldName(String fieldName);
 
 }

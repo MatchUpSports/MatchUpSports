@@ -1,7 +1,8 @@
-package com.matchUpSports.boundedContext.field.controller;
+package com.matchUpSports.boundedContext.futsalField.controller;
 
-import com.matchUpSports.boundedContext.field.form.CreateFieldForm;
-import com.matchUpSports.boundedContext.field.service.FieldService;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
+import com.matchUpSports.boundedContext.futsalField.form.CreateFutsalFieldForm;
+import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -13,14 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/field")
-public class FieldController {
-    private final FieldService fieldService;
+public class FutsalFieldController {
+    private final FutsalFieldService futsalFieldService;
 
     @GetMapping("")
-    public String showAdmMain() {
+    public String showManageMain(Model model) {
+        List<FutsalField> futsalFields = futsalFieldService.findAll();
+        model.addAttribute("futsalFields", futsalFields);
         return "field/management";
     }
 
@@ -32,13 +37,13 @@ public class FieldController {
     @GetMapping("/create")
     public String createField(Model model) {
 
-        model.addAttribute("createForm", new CreateFieldForm());
+        model.addAttribute("createForm", new CreateFutsalFieldForm());
 
         return "field/create";
     }
 
     @PostMapping("/create")
-    public String createField(@Validated CreateFieldForm createForm, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {
+    public String createField(@Validated CreateFutsalFieldForm createForm, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             // 유효성 검사를 실패한 경우 작성 폼으로 다시 이동
@@ -47,7 +52,7 @@ public class FieldController {
             return "field/create";
         }
 
-        fieldService.create(createForm);
+        futsalFieldService.create(createForm);
 
         return "matches/matchResult";
     }

@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.match.entity;
 
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -37,4 +38,7 @@ public class Match {
     private String stadium; //구장 이름 = fieldName
     private int subStadiumCount; //그 구장에 있는 구장 수 = courtCount
     private int participantCount; //한 매치에 참여하는 인원수
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private FutsalField field;                    // 시설
 }
