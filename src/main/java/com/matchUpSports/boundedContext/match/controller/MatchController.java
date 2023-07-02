@@ -1,7 +1,6 @@
 package com.matchUpSports.boundedContext.match.controller;
 
 import com.matchUpSports.base.rsData.RsData;
-import com.matchUpSports.boundedContext.field.entity.Field;
 import com.matchUpSports.boundedContext.field.service.FieldService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
@@ -9,12 +8,7 @@ import com.matchUpSports.boundedContext.match.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,9 +18,9 @@ public class MatchController {
     private final FieldService fieldService;
 
     @GetMapping("/filter")
-    public String showMatchingFilter(Model model) {
-        List<Field> fields = fieldService.findAllFields();
-        model.addAttribute("fields", fields);
+    public String showMatchingFilter(@RequestParam(required = false) String fieldLocation, Model model) {
+        model.addAttribute("fields", fieldService.findFieldsByLocation(fieldLocation));
+        model.addAttribute("selectedLocation", fieldLocation);
         return "matching/filterPage";
     }
 
@@ -37,7 +31,7 @@ public class MatchController {
             return "redirect:/match/waiting";
         } else {
             model.addAttribute("message", result.getMsg());
-            return "matching/filterPage"; //
+            return "matching/filterPage";
         }
     }
 
@@ -47,4 +41,3 @@ public class MatchController {
         return "matching/waiting";
     }
 }
-
