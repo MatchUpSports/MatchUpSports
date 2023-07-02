@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{common/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center max-w-2xl mx-auto bg-base-100">
+        <!-- 시설 등록이 없을 경우 -->
+        <div th:if="${#lists.isEmpty(futsalFields)}" class="hero min-h-screen" style="background-image: url(https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80);">
+            <div class="hero-overlay bg-opacity-60"></div>
+            <div class="hero-content text-center text-neutral-content">
+                <div class="max-w-md">
+                    <h1 class="mb-5 text-3xl font-bold">시설 관리자 페이지</h1>
+                    <p class="mb-5">풋살장을 쉽게 관리해보세요</p>
+                    <button class="btn btn-primary" onclick="window.location.href='/field/create'">시작하기</button>
+                </div>
+            </div>
+        </div>
+    <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
+    <div th:if="${!#lists.isEmpty(futsalFields)}" class="min-h-screen">
+        <div class="absolute top-0 left-0 right-0 flex flex-col justify-start items-start px-10 pt-10 pb-0 w-full">
+            <div class="max-w-2xl w-full">
+                <h1 class="mb-5 text-3xl font-bold text-left">시설 관리자 페이지</h1>
+                <p class="mb-5">풋살장을 관리해보세요</p>
+                <table class="table w-full border-0">
+                    <tbody>
+                    <tr th:each="field : ${futsalFields}" class="mb-4 border-0">
+                        <td class="w-full border-0">
+                            <a class="btn btn-block btn-outline gap-1 w-full" href="">
+                                <span th:text="${field.getFieldName()}" class="normal-case"></span><br>
+                                <span th:text="${field.getFieldLocation()}" class="normal-case"></span>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
