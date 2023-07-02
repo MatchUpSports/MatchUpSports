@@ -1,9 +1,9 @@
-package com.matchUpSports.boundedContext.field.service;
+package com.matchUpSports.boundedContext.futsalField.service;
 
-import com.matchUpSports.boundedContext.field.entity.Field;
-import com.matchUpSports.boundedContext.field.form.CreateFieldForm;
-import com.matchUpSports.boundedContext.field.repository.FieldImageRepository;
-import com.matchUpSports.boundedContext.field.repository.FieldRepository;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
+import com.matchUpSports.boundedContext.futsalField.form.CreateFutsalFieldForm;
+import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldImageRepository;
+import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +17,19 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FieldService {
-    private final FieldRepository fieldRepository;
-    private final FieldImageService fieldImageService;
-    private final FieldImageRepository fieldImageRepository;
+public class FutsalFieldService {
+    private final FutsalFieldRepository fieldRepository;
+    private final FutsalFieldImageService fieldImageService;
+    private final FutsalFieldImageRepository fieldImageRepository;
+
+    public List<FutsalField> findAll() {
+        return fieldRepository.findAll();
+    }
 
     @Transactional
-    public void create(@Valid CreateFieldForm createForm) {
+    public void create(@Valid CreateFutsalFieldForm createForm) {
         try {
-            Field field = Field.builder()
+            FutsalField field = FutsalField.builder()
                     .fieldName(createForm.getName())
                     .fieldLocation(createForm.getLocation())
                     .openTime(createForm.getOpenTime())

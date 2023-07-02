@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.field.entity;
+package com.matchUpSports.boundedContext.futsalField.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @SuperBuilder
 @ToString(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-public class FieldImage {
+public class FutsalFieldImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +24,5 @@ public class FieldImage {
     private String path;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Field field;
+    private FutsalField field;
 }

@@ -1,9 +1,9 @@
-package com.matchUpSports.boundedContext.field.service;
+package com.matchUpSports.boundedContext.futsalField.service;
 
-import com.matchUpSports.boundedContext.field.entity.Field;
-import com.matchUpSports.boundedContext.field.entity.FieldImage;
-import com.matchUpSports.boundedContext.field.repository.FieldImageRepository;
-import com.matchUpSports.boundedContext.field.repository.FieldRepository;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalFieldImage;
+import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldImageRepository;
+import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
@@ -22,18 +22,18 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class FieldImageService {
-    private final FieldRepository fieldRepository;
-    private final FieldImageRepository fieldImageRepository;
+public class FutsalFieldImageService {
+    private final FutsalFieldRepository fieldRepository;
+    private final FutsalFieldImageRepository fieldImageRepository;
 
     @Value("${spring.dev_fileLocation}")
     private String storageLocation;
 
     // 시설 사진 등록
     public void uploadImages(Long id, List<MultipartFile> images) throws IOException {
-        Field field = fieldRepository.findById(id).orElse(null);
+        FutsalField field = fieldRepository.findById(id).orElse(null);
 
-        List<FieldImage> fieldImages = new ArrayList<>();
+        List<FutsalFieldImage> fieldImages = new ArrayList<>();
 
         for (MultipartFile image : images) {
             String fileName = generatedUniqueFileName(image.getOriginalFilename());
@@ -43,7 +43,7 @@ public class FieldImageService {
 
             image.transferTo(new File(filePath));
 
-            FieldImage fieldImage = FieldImage
+            FutsalFieldImage fieldImage = FutsalFieldImage
                     .builder()
                     .field(field)
                     .name(fileName)
