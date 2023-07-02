@@ -1,84 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Main Page</title>
-    <!-- jQuery UI CSS -->
+    <title>Filter Page</title>
+
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-    <!-- jQuery 및 jQuery UI 스크립트 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         $(function () {
+            const getQueryParam = (name) => {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            };
+
             // url에서 msg 파라미터를 받아와 alert 창 띄우기
-            const urlParams = new URLSearchParams(window.location.search);
-            const msg = urlParams.get('msg');
+            const msg = getQueryParam('msg');
             if (msg) {
                 alert(msg);
             }
-        });
-    </script>
-    <script>
-        function showVenues() {
-            var locationSelect = document.getElementById("location");
-            var venueSelect = document.getElementById("venue");
 
-            var selectedLocation = locationSelect.options[locationSelect.selectedIndex].value;
-
-            // 모든 구장 옵션 숨기기
-            var options = venueSelect.options;
-            for (var i = 0; i < options.length; i++) {
-                options[i].style.display = "none";
-            }
-
-            // 선택한 지역에 해당하는 구장 옵션 표시
-            if (selectedLocation === "Seoul") {
-                document.getElementById("a").style.display = "block";
-                document.getElementById("b").style.display = "block";
-                document.getElementById("c").style.display = "block";
-            } else if (selectedLocation === "Suwon") {
-                document.getElementById("1").style.display = "block";
-                document.getElementById("2").style.display = "block";
-                document.getElementById("3").style.display = "block";
-            } else if (selectedLocation === "Gangwon") {
-                document.getElementById("ga").style.display = "block";
-                document.getElementById("na").style.display = "block";
-                document.getElementById("da").style.display = "block";
-            }
-        }
-
-        // 페이지 로드 시 실행되는 함수
-        window.onload = function () {
-            showVenues(); // 구장 옵션 초기화
-        }
-    </script>
-
-    <script>
-        $(function () {
             // Datepicker 설정
             $("#startDate").datepicker({
-                dateFormat: "yy-mm-dd", // 날짜 형식 설정
-                minDate: 0, // 오늘 이전 날짜는 선택 불가
-                showButtonPanel: true, // 오늘, 닫기 버튼 표시
-                closeText: "Close", // 닫기 버튼 텍스트
-                currentText: "Today", // 오늘 버튼 텍스트
-                onSelect: function (dateText, inst) {
-                    // 날짜 선택 시 이벤트 처리
-                    console.log("Selected date: " + dateText);
-                }
+                dateFormat: "yy-mm-dd",
+                minDate: 0,
+                showButtonPanel: true,
+                closeText: "Close",
+                currentText: "Today",
+                onSelect: (dateText, inst) => console.log("Selected date: " + dateText)
             });
 
-            // Datepicker 버튼 클릭 시 달력 표시
             $("#startDatePickerButton").click(function () {
                 $("#startDate").datepicker("show");
+            });
+
+            $("#location").change(function () {
+                const location = $(this).val();
+                window.location.href = location ? `/match/filter?fieldLocation=${location}` : "/match/filter";
+            }).val(getQueryParam('fieldLocation'));
+
+            const fields = JSON.parse(`<th:block th:utext="${fields}"></th:block>`);
+
+            const updateStartAndFinishTimes = (selectedField) => {
+                ["startTime", "finishTime"].forEach((timeType) => {
+                    let timeSelect = $(`#${timeType}`).empty().append(`<option value=''>Select ${timeType.split('T')[0]} time</option>`);
+
+                    if (selectedField) {
+                        for (let currentTime = selectedField.openTime; currentTime <= selectedField.closeTime; currentTime.setMinutes(currentTime.getMinutes() + 30)) {
+                            timeSelect.append(`<option value='${currentTime}'>${currentTime}</option>`);
+                        }
+                    }
+                });
+            };
+
+            $("#location").change(function () {
+                let location = $(this).val();
+                let filteredFields = fields.filter(field => field.fieldLocation === location);
+                let venueDropdown = $("#venue").empty().append("<option value=''>Select venue</option>");
+
+                for (let field of filteredFields) {
+                    venueDropdown.append(`<option value="${field.fieldName}">${field.fieldName}</option>`);
+                }
+
+                updateStartAndFinishTimes(null);
+            });
+
+            $("#venue").change(function () {
+                let selectedFieldName = $(this).val();
+                let selectedField = selectedFieldName ? fields.find(field => field.fieldName === selectedFieldName) : null;
+                updateStartAndFinishTimes(selectedField);
             });
         });
     </script>
 
 </head>
 <body>
-
+<!-- Usage messages -->
 <div th:if="${message}" th:text="${message}" style="color:red;"></div>
 
 <h1>조건 페이지</h1>
@@ -86,66 +84,40 @@
 <!-- 시작월일 정보 입력 폼 -->
 <form method="post" action="/match">
     <div>
-
         <label for="startDate">Start Date:</label>
-        <input type="text" id="startDate" name="matchDate" readonly>
+        <input type="text" id="startDate" name="matchDate" readonly/>
         <button type="button" id="startDatePickerButton">Select Date</button>
     </div>
-    <!-- 수정된 fieldLocation 부분 -->
     <div>
         <label for="location">fieldLocation:</label>
-        <select id="location" name="fieldLocation">
+        <select id="location">
             <option value="">Select location</option>
-            <th:block th:each="field : ${fields}">
-                <option th:value="${field.fieldLocation}" th:text="${field.fieldLocation}"></option>
-            </th:block>
+            <option value="서울">서울</option>
+            <option value="수원">수원</option>
+            <option value="포항">포항</option>
+            <option value="울산">울산</option>
+            <option value="강원도">강원도</option>
         </select>
     </div>
 
-    <!-- 수정된 stadium 부분 -->
     <div>
         <label for="venue">stadium:</label>
         <select id="venue" name="stadium">
             <option value="">Select venue</option>
-            <th:block th:each="field : ${fields}">
+            <th:block th:each="field : ${fields}" th:if="${selectedLocation eq field.fieldLocation}">
                 <option th:value="${field.fieldName}" th:text="${field.fieldName}"></option>
             </th:block>
         </select>
     </div>
 
-    <!-- usageTime ==> 원래는 타임 개념으로 받을려 했지만 더 디테일하게 시작시간과 끝나는시간을 30분 단위로 쪼개서 기입하도록 함 부분 -->
-    <!-- 수정된 startTime 부분 -->
+    <!-- StartTime and FinishTime -->
     <div>
         <label for="startTime">Start Time:</label>
-        <select id="startTime" name="startTime">
-            <option value="">Select start time</option>
-            <th:block th:each="field : ${fields}">
-                <th:block th:with="openHour=${field.openTime.getHour()}, openMinute=${field.openTime.getMinute()}, closeHour=${field.closeTime.getHour()}, closeMinute=${field.closeTime.getMinute()}">
-                    <th:block th:each="hr : ${#numbers.sequence(openHour, closeHour - 1)}">
-                        <th:block th:each="minute : ${#numbers.sequence(openMinute, 30, 30)}">
-                            <option th:value="${hr + ':' + minute}" th:text="${hr + ':' + minute}"></option>
-                        </th:block>
-                    </th:block>
-                </th:block>
-            </th:block>
-        </select>
+        <select id="startTime" name="startTime"></select>
     </div>
-
-    <!-- 수정된 finishTime 부분 -->
     <div>
         <label for="finishTime">Finish Time:</label>
-        <select id="finishTime" name="finishTime">
-            <option value="">Select finish time</option>
-            <th:block th:each="field : ${fields}">
-                <th:block th:with="openHour=${field.openTime.getHour()}, openMinute=${field.openTime.getMinute()}, closeHour=${field.closeTime.getHour()}, closeMinute=${field.closeTime.getMinute()}">
-                    <th:block th:each="hr : ${#numbers.sequence(openHour + 1, closeHour)}">
-                        <th:block th:each="minute : ${#numbers.sequence(openMinute, 30, 30)}">
-                            <option th:value="${hr + ':' + minute}" th:text="${hr + ':' + minute}"></option>
-                        </th:block>
-                    </th:block>
-                </th:block>
-            </th:block>
-        </select>
+        <select id="finishTime" name="finishTime"></select>
     </div>
 
     <!-- 빠른 매칭 버튼 -->

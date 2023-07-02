@@ -52,7 +52,12 @@ public class FieldService {
         }
     }
 
-    public List<Field> findAllFields() {
-        return fieldRepository.findAll();
+    //matchController에 filterPages.html에서 필요한 로직
+    public List<Field> findFieldsByLocation(String location) {
+        if (location == null || location.isEmpty()) {
+            return fieldRepository.findAll();
+        }
+        return fieldRepository.findByFieldLocation(location);
     }
+
 }
