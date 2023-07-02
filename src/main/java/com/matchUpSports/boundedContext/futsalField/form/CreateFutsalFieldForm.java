@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.field.form;
+package com.matchUpSports.boundedContext.futsalField.form;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateFieldForm {
+public class CreateFutsalFieldForm {
 
     @NotEmpty(message = "이름을 입력해 주세요.")
     private String name;
@@ -38,7 +38,7 @@ public class CreateFieldForm {
     @NotEmpty(message = "사업자 등록 번호를 입력해주세요.")
     private String registNum;
 
-    public CreateFieldForm() {
+    public CreateFutsalFieldForm() {
         this.images = null;
     }
 

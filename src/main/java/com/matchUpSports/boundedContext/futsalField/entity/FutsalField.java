@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.field.entity;
+package com.matchUpSports.boundedContext.futsalField.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @SuperBuilder
-public class Field {
+public class FutsalField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +33,7 @@ public class Field {
 
     private String registNum;
 
-    public Field() {
+    public FutsalField() {
         this.fieldName = null;
         this.fieldLocation = null;
         this.price = 0;
