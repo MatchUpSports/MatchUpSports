@@ -20,14 +20,14 @@
     <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
     <div th:if="${!#lists.isEmpty(futsalFields)}" class="min-h-screen">
         <div class="absolute top-0 left-0 right-0 flex flex-col justify-start items-start px-10 pt-10 pb-0 w-full">
-            <div class="max-w-2xl w-full">
+            <div class="max-w-2xl w-full mb-16">
                 <h1 class="mb-5 text-3xl font-bold text-left">시설 관리자 페이지</h1>
                 <p class="mb-5">풋살장을 관리해보세요</p>
                 <table class="table w-full border-0">
                     <tbody>
                     <tr th:each="field : ${futsalFields}" class="mb-4 border-0">
                         <td class="w-full border-0">
-                            <a class="btn btn-block btn-outline gap-1 w-full" href="">
+                            <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-block btn-outline gap-1 w-full" href="">
                                 <span th:text="${field.getFieldName()}" class="normal-case"></span><br>
                                 <span th:text="${field.getFieldLocation()}" class="normal-case"></span>
                             </a>
