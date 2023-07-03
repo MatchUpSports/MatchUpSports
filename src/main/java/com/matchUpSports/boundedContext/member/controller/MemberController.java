@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.member.controller;
 
+import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.boundedContext.member.dto.JoiningForm;
 import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
@@ -24,18 +25,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
     private final MemberService memberService;
     private static final String DOMAIN = "localhost";
+    private final Rq rq;
     @Autowired
-    Rq rq;
+    private Districts districts;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/joiningForm")
     public String writeJoiningForm(Model model) {
-        String area = rq.getMember().getArea();
+        String area = rq.getMember().getBigDistrict();
         if (area != null) {
             return "redirect:/";
         }
 
         model.addAttribute("httpMethod", "POST");
+        model.addAttribute("bigDistricts", districts.getBigDistricts());
+        model.addAttribute("smallDistricts", districts.getSmallDistricts());
+
         return "/member/joining_info_form";
     }
 
@@ -56,7 +61,11 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modifyForm")
     public String modifyUserInfo(Model model) {
-        long memberId = rq.getMember().getId();
+        Member member = rq.getMember();
+        if (member.getTier() == 0) {
+            return "redirect:/member/joiningForm";
+        }
+        long memberId = member.getId();
         ModifyingDisplaying modifyingForm = memberService.showModifyingForm(memberId);
 
         if (modifyingForm == null) {
@@ -65,6 +74,8 @@ public class MemberController {
 
         model.addAttribute("modifyingForm", modifyingForm);
         model.addAttribute("httpMethod", "PUT");
+        model.addAttribute("bigDistricts", districts.getBigDistricts());
+        model.addAttribute("smallDistricts", districts.getSmallDistricts());
         return "/member/joining_info_form";
     }
 
