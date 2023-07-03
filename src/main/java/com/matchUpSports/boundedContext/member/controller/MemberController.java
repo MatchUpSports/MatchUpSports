@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
     private final MemberService memberService;
 <<<<<<< HEAD
+<<<<<<< HEAD
     @Value("${custom.site.baseUrl}")
     private String domain;
     private final Rq rq;
@@ -55,6 +56,10 @@ public class MemberController {
         if (isModifiedTier) {
 =======
     private static final String DOMAIN = "localhost";
+=======
+    @Value("${custom.site.baseUrl}")
+    private static String domain;
+>>>>>>> 0b52900 (Refator : BaseUrl을 MemberController의 하드코딩에서 application.yml의 소프트코딩으로 전환)
     private final Rq rq;
     @Autowired
     private Districts districts;
