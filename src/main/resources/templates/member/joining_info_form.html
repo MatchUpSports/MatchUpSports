@@ -6,10 +6,14 @@
 </head>
 <body>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c61101e (Feat : 사용자 정보 입력 페이지 공통 레이아웃 적용 및 시각적 디자인 개선)
 <main layout:fragment="main">
     <style>
         .card {
             margin-bottom: 30px;
+<<<<<<< HEAD
 =======
 <style>
     .card {
@@ -80,8 +84,25 @@
 
         .input {
             border-color: skyblue;
+=======
         }
 
+        .vertical_distance {
+            margin-bottom: 10px;
+        }
+
+        .input {
+            border-color: skyblue;
+        }
+
+        .btn {
+            width: 100px;
+            height: 50px;
+>>>>>>> c61101e (Feat : 사용자 정보 입력 페이지 공통 레이아웃 적용 및 시각적 디자인 개선)
+        }
+    </style>
+
+<<<<<<< HEAD
 <<<<<<< HEAD
         .btn {
             width: 100px;
@@ -89,6 +110,8 @@
         }
     </style>
 
+=======
+>>>>>>> c61101e (Feat : 사용자 정보 입력 페이지 공통 레이아웃 적용 및 시각적 디자인 개선)
     <form action="#" th:action method="#" th:method = "${httpMethod}" onsubmit="validate(this); return false;">
         <div>
             <div class="vertical_distance">이메일을 입력해 주세요</div>
@@ -126,6 +149,7 @@
                 </select>
             </div>
         </div>
+<<<<<<< HEAD
 
 
         <button class="btn" type="submit">제출</button>
@@ -201,44 +225,83 @@
 =======
         form.submit();
     }
+=======
+>>>>>>> c61101e (Feat : 사용자 정보 입력 페이지 공통 레이아웃 적용 및 시각적 디자인 개선)
 
-    /*<![CDATA[*/
-    const smallDistricts = /*[[${smallDistricts}]]*/;
-    const modifying = /*[[${modifyingForm}]]*/;
-    function updateSmallDistricts() {
-        let bigDistrict = document.getElementById("bigDistrict").value;
-        let smallDistrictDropdown = document.getElementById("smallDistrict");
 
-        // 기존 옵션들을 삭제
-        while (smallDistrictDropdown.firstChild) {
-            smallDistrictDropdown.removeChild(smallDistrictDropdown.firstChild);
+        <button class="btn" type="submit">제출</button>
+    </form>
+    <script th:inline="javascript">
+        function validate(form) {
+            const emailValidate = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+            const email = form.email;
+            if (email.value.length == 0 || !emailValidate.test(email.value)) {
+                alert('올바르지 않은 이메일 형식입니다')
+                email.focus();
+                return
+            }
+
+            const phoneNumberValidate = /^010[0-9]{7,8}$/;
+            const phoneNumber = form.phone;
+            if (phoneNumber.value.length == 0 || !phoneNumberValidate.test(phoneNumber.value)) {
+                alert('올바르지 않은 휴대전화번호 입니다')
+                phoneNumber.focus();
+                return;
+            }
+
+            const area = form.area;
+            if (area.value.length == 0) {
+                alert('사는 지역을 입력해주십시오')
+                area.focus();
+                return;
+            }
+
+            form.submit();
         }
 
-        // 선택한 bigDistrict에 해당하는 smallDistricts 가져오기
-        let smallDistrictsList = smallDistricts[bigDistrict];
+        /*<![CDATA[*/
+        const smallDistricts = /*[[${smallDistricts}]]*/;
+        const modifying = /*[[${modifyingForm}]]*/;
+        function updateSmallDistricts() {
+            let bigDistrict = document.getElementById("bigDistrict").value;
+            let smallDistrictDropdown = document.getElementById("smallDistrict");
 
-        // 새로운 옵션들을 추가
-        for (let i = 0; i < smallDistrictsList.length; i++) {
-            let smallDistrict = smallDistrictsList[i];
-            let option = document.createElement("option");
-            option.value = smallDistrict;
-            option.text = smallDistrict;
-            smallDistrictDropdown.appendChild(option);
+            // 기존 옵션들을 삭제
+            while (smallDistrictDropdown.firstChild) {
+                smallDistrictDropdown.removeChild(smallDistrictDropdown.firstChild);
+            }
+
+            // 선택한 bigDistrict에 해당하는 smallDistricts 가져오기
+            let smallDistrictsList = smallDistricts[bigDistrict];
+
+            // 새로운 옵션들을 추가
+            for (let i = 0; i < smallDistrictsList.length; i++) {
+                let smallDistrict = smallDistrictsList[i];
+                let option = document.createElement("option");
+                option.value = smallDistrict;
+                option.text = smallDistrict;
+                smallDistrictDropdown.appendChild(option);
+            }
         }
-    }
 
-    window.onload = function() {
-        if (modifying != null) {
-            document.getElementById("bigDistrict").value = modifying.bigDistrict;
-            updateSmallDistricts()
-            document.getElementById("smallDistrict").value = modifying.smallDistrict;
-            return
+        window.onload = function() {
+            if (modifying != null) {
+                document.getElementById("bigDistrict").value = modifying.bigDistrict;
+                updateSmallDistricts()
+                document.getElementById("smallDistrict").value = modifying.smallDistrict;
+                return
+            }
+
+            updateSmallDistricts();
         }
+        /*]]>*/
 
-        updateSmallDistricts();
-    }
-    /*]]>*/
-
+<<<<<<< HEAD
 </script>
 >>>>>>> 9414b0e (Feat : 사용자 입력 정보에 구체적인 지역 선택 폼 기능 적용)
+=======
+    </script>
+</main>
+</body>
+>>>>>>> c61101e (Feat : 사용자 정보 입력 페이지 공통 레이아웃 적용 및 시각적 디자인 개선)
 </html>
