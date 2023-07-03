@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface FieldRepository extends JpaRepository<Field, Long> {
     // FieldRepository.java
-    public List<Field> findByFieldLocation(String location);
+    List<Field> findByFieldLocation(String location);
+
+    Field findByFieldName(String fieldName);
 
 }

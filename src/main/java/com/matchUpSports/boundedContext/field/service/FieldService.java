@@ -52,7 +52,7 @@ public class FieldService {
         }
     }
 
-    //matchController에 filterPages.html에서 필요한 로직
+    //해당 지역에 있는 스타디움 찾는 로직
     public List<Field> findFieldsByLocation(String location) {
         if (location == null || location.isEmpty()) {
             return fieldRepository.findAll();
