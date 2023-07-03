@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
-<!--    <script src="https://kit.fontawesome.com/87140d707c.js" crossorigin="anonymous"></script>-->
+    <!--    <script src="https://kit.fontawesome.com/87140d707c.js" crossorigin="anonymous"></script>-->
     <!-- toastr 불러오기 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
     <!--    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">-->
@@ -25,20 +25,35 @@
 </head>
 
 <body class="min-h-screen w-screen flex flex-col">
-<div class="btm-nav pb-0">
-    <button>
+<div class="btm-nav pb-0 max-w-2xl mx-auto bg-base-100">
+    <button id="projectBtn" onclick="activateButton('projectBtn'); window.location.href='/match'">
         <i class="fa-solid fa-diagram-project"></i>
     </button>
-    <button class="active">
+    <button id="homeBtn" class="active" onclick="activateButton('homeBtn'); window.location.href='/'">
         <i class="fa-solid fa-house"></i>
     </button>
-    <button>
+    <button id="userBtn" onclick="activateButton('userBtn'); window.location.href='/mypage'">
         <i class="fa-solid fa-user"></i>
     </button>
 </div>
-<div class="min-h-fit grow">
+
+
+<div class="min-h-fit grow flex-grow flex items-center justify-center">
     <main layout:fragment="main"></main>
 </div>
+
+<script>
+    function activateButton(id) {
+        // 모든 버튼의 active 클래스를 제거
+        document.getElementById('projectBtn').classList.remove('active');
+        document.getElementById('homeBtn').classList.remove('active');
+        document.getElementById('userBtn').classList.remove('active');
+
+        // 클릭된 버튼에 active 클래스를 추가
+        document.getElementById(id).classList.add('active');
+    }
+
+</script>
 </body>
 
 </html>
