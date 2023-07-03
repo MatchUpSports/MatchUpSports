@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-    private static final String DOMAIN = "localhost";
+    @Value("${custom.site.baseUrl}")
+    private static String domain;
     private final Rq rq;
     @Autowired
     private Districts districts;
@@ -51,7 +53,7 @@ public class MemberController {
         memberService.createJoiningForm(joiningForm, member);
 
         String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(DOMAIN)) {
+        if (referer != null && referer.startsWith(domain)) {
             return "redirect:" + referer;
         }
 
@@ -86,7 +88,7 @@ public class MemberController {
         memberService.modify(modifyingForm, member);
 
         String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(DOMAIN)) {
+        if (referer != null && referer.startsWith(domain)) {
             return "redirect:" + referer;
         }
 
