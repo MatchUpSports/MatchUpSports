@@ -5,10 +5,73 @@
     <title>가입시 필수 양식</title>
 </head>
 <body>
+<<<<<<< HEAD
 <main layout:fragment="main">
     <style>
         .card {
             margin-bottom: 30px;
+=======
+<style>
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        width: 100px;
+        height: 50px;
+    }
+</style>
+
+<form action="#" th:action method="#" th:method = "${httpMethod}" onsubmit="validate(this); return false;">
+    <div>
+        <div>이메일을 입력해 주세요</div>
+        <input type="text" id="email" name="email" class="card" th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
+
+        <div>전화번호를 입력해 주세요 ('-' 미포함, 010으로 시작)</div>
+        <input type="text" id="phone" name="phone" class="card" th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
+
+        <div th:block th:if="${modifyingForm == null}">
+            <div>회원 종류를 입력해 주세요</div>
+            <select id="authorities" name="authorities" class="card">
+                <option value="일반 유저">일반 유저</option>
+                <option value="시설 주인">시설 주인</option>
+            </select>
+        </div>
+
+        <div>사는 지역을 입력해 주세요</div>
+        <div>
+            <select name="bigDistrict" id="bigDistrict" onchange="updateSmallDistricts()">
+                <option th:each="big : ${bigDistricts}" th:value="${big}" th:text="${big}"></option>
+            </select>
+
+            <select name="smallDistrict" id="smallDistrict">
+                <!-- 초기 옵션은 없음 -->
+            </select>
+        </div>
+<!--        <input type="text" id="area" name="area" class="card" th:value="${modifyingForm != null ? modifyingForm.getBigDistinct : ''}"/>-->
+
+        <div>자신이 생각하는 족구 실력을 입력해주세요</div>
+        <select id="tier" name="tier" class="card">
+            <option value="하수" th:selected="${modifyingForm == null || modifyingForm.tier == '하수'}">하수</option>
+            <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수</option>
+            <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수</option>
+        </select>
+    </div>
+
+
+    <button class="btn" type="submit">제출</button>
+</form>
+</body>
+
+<script th:inline="javascript">
+    function validate(form) {
+        const emailValidate = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+        const email = form.email;
+        if (email.value.length == 0 || !emailValidate.test(email.value)) {
+            alert('올바르지 않은 이메일 형식입니다')
+            email.focus();
+            return
+>>>>>>> 9414b0e (Feat : 사용자 입력 정보에 구체적인 지역 선택 폼 기능 적용)
         }
 
         .vertical_distance {
@@ -19,6 +82,7 @@
             border-color: skyblue;
         }
 
+<<<<<<< HEAD
         .btn {
             width: 100px;
             height: 50px;
@@ -134,4 +198,47 @@
     </script>
 </main>
 </body>
+=======
+        form.submit();
+    }
+
+    /*<![CDATA[*/
+    const smallDistricts = /*[[${smallDistricts}]]*/;
+    const modifying = /*[[${modifyingForm}]]*/;
+    function updateSmallDistricts() {
+        let bigDistrict = document.getElementById("bigDistrict").value;
+        let smallDistrictDropdown = document.getElementById("smallDistrict");
+
+        // 기존 옵션들을 삭제
+        while (smallDistrictDropdown.firstChild) {
+            smallDistrictDropdown.removeChild(smallDistrictDropdown.firstChild);
+        }
+
+        // 선택한 bigDistrict에 해당하는 smallDistricts 가져오기
+        let smallDistrictsList = smallDistricts[bigDistrict];
+
+        // 새로운 옵션들을 추가
+        for (let i = 0; i < smallDistrictsList.length; i++) {
+            let smallDistrict = smallDistrictsList[i];
+            let option = document.createElement("option");
+            option.value = smallDistrict;
+            option.text = smallDistrict;
+            smallDistrictDropdown.appendChild(option);
+        }
+    }
+
+    window.onload = function() {
+        if (modifying != null) {
+            document.getElementById("bigDistrict").value = modifying.bigDistrict;
+            updateSmallDistricts()
+            document.getElementById("smallDistrict").value = modifying.smallDistrict;
+            return
+        }
+
+        updateSmallDistricts();
+    }
+    /*]]>*/
+
+</script>
+>>>>>>> 9414b0e (Feat : 사용자 입력 정보에 구체적인 지역 선택 폼 기능 적용)
 </html>

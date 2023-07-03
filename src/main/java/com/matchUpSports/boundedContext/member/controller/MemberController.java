@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+<<<<<<< HEAD
     @Value("${custom.site.baseUrl}")
     private String domain;
     private final Rq rq;
@@ -52,6 +53,18 @@ public class MemberController {
         Member member = (Member) session.getAttribute("member");
         boolean isModifiedTier = member.getTier() != 0;
         if (isModifiedTier) {
+=======
+    private static final String DOMAIN = "localhost";
+    private final Rq rq;
+    @Autowired
+    private Districts districts;
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/joiningForm")
+    public String writeJoiningForm(Model model) {
+        String area = rq.getMember().getBigDistrict();
+        if (area != null) {
+>>>>>>> 9414b0e (Feat : 사용자 입력 정보에 구체적인 지역 선택 폼 기능 적용)
             return "redirect:/";
         }
 
