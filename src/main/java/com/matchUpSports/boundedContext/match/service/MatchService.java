@@ -1,8 +1,8 @@
 package com.matchUpSports.boundedContext.match.service;
 
 import com.matchUpSports.base.rsData.RsData;
-import com.matchUpSports.boundedContext.field.entity.Field;
-import com.matchUpSports.boundedContext.field.repository.FieldRepository;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
+import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class MatchService {
     private final MatchRepository matchRepository;
     private final MatchMemberRepository matchMemberRepository;
-    private final FieldRepository fieldRepository;
+    private final FutsalFieldRepository fieldRepository;
     private final MemberRepository memberRepository;
 
     // 매치 생성 메서드
@@ -89,7 +89,7 @@ public class MatchService {
                 matchForm.getUsageTime()
         );
 
-        Field selectedField = fieldRepository.findByFieldName(matchForm.getStadium());
+        FutsalField selectedField = fieldRepository.findByFieldName(matchForm.getStadium());
         int maxSubStadiumCount = selectedField.getCourtCount();
 
         int[] subStadiumMembers = new int[maxSubStadiumCount + 1];
