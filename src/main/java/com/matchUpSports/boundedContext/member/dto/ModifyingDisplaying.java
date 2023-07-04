@@ -10,6 +10,7 @@ public class ModifyingDisplaying {
     @Email
     private String email;
     private String phone;
-    private String area;
+    private String bigDistrict;
+    private String smallDistrict;
     private String tier;
 }
