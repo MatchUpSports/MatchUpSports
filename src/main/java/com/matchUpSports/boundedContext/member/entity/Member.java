@@ -54,6 +54,10 @@ public class Member {
     @Builder.Default
     private Set<Role> authorities = new HashSet<>();
 
+    private String accessToken;
+
+    private int point;
+
     public List<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_" + i.name())).toList();
     }
