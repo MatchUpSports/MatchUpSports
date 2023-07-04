@@ -2,7 +2,7 @@ package com.matchUpSports.boundedContext.match.controller;
 
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
-import com.matchUpSports.boundedContext.field.service.FieldService;
+import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
 import com.matchUpSports.boundedContext.match.service.MatchService;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/match")
 public class MatchController {
     private final MatchService matchService;
-    private final FieldService fieldService;
+    private final FutsalFieldService fieldService;
     private final Rq rq;
 
     //매치를 위한 조건 페이지를 보여준다.
