@@ -32,13 +32,14 @@ public class MemberService {
     }
 
     @Transactional
-    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User) {
+    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
 
         if (findByName.isEmpty()) {
             Member member = Member.builder()
                     .username(customOAuth2User.getUsername())
                     .email(customOAuth2User.getEmail())
+                    .accessToken(accessToken)
                     .build();
             member.addRole(Role.USER);
 
@@ -126,6 +127,11 @@ public class MemberService {
                 .winningRate(convertWinningRateToString(member.getWinningRate()))
                 .authorities(convertAuthoritiesToString(member.getAuthorities()))
                 .build();
+    }
+
+    @Transactional
+    public String getAccessToken(String userName){
+        return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
     private String convertWinningRateToString(int winningRate) {

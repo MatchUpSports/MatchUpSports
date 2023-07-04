@@ -23,10 +23,14 @@ public class CustomOAuth2Login extends DefaultOAuth2UserService {
         String providerName = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        // 카카오 로그인 액세스 토큰
+        String accessToken = userRequest.getAccessToken().getTokenValue().toString();
+
         DivideOAuth2User customOAuth2User = SocialUserFactory.create(providerName, oAuth2User);
 
-        Member member = memberService.saveOAuth2Member(customOAuth2User);
+        Member member = memberService.saveOAuth2Member(customOAuth2User, accessToken);
 
         return new CustomOAuth2User(member.getUsername(), member.getAuthorities());
     }
+
 }
