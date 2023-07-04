@@ -19,8 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
@@ -42,7 +40,8 @@ public class Member {
     private String phoneNumber;
 //    private String authorities;
     private int winningRate;
-    private String area;
+    private String bigDistrict;
+    private String smallDistrict;
     private int tier;
     @Convert(converter = CustomConverter.class)
     @Builder.Default

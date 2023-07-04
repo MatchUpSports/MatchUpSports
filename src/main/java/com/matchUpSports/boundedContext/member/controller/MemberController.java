@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.member.controller;
 
+import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.boundedContext.member.dto.JoiningForm;
 import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,19 +25,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-    private static final String DOMAIN = "localhost";
+    @Value("${custom.site.baseUrl}")
+    private static String domain;
+    private final Rq rq;
     @Autowired
-    Rq rq;
+    private Districts districts;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/joiningForm")
     public String writeJoiningForm(Model model) {
-        String area = rq.getMember().getArea();
+        String area = rq.getMember().getBigDistrict();
         if (area != null) {
             return "redirect:/";
         }
 
         model.addAttribute("httpMethod", "POST");
+        model.addAttribute("bigDistricts", districts.getBigDistricts());
+        model.addAttribute("smallDistricts", districts.getSmallDistricts());
+
         return "/member/joining_info_form";
     }
 
@@ -46,7 +53,7 @@ public class MemberController {
         memberService.createJoiningForm(joiningForm, member);
 
         String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(DOMAIN)) {
+        if (referer != null && referer.startsWith(domain)) {
             return "redirect:" + referer;
         }
 
@@ -56,7 +63,11 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modifyForm")
     public String modifyUserInfo(Model model) {
-        long memberId = rq.getMember().getId();
+        Member member = rq.getMember();
+        if (member.getTier() == 0) {
+            return "redirect:/member/joiningForm";
+        }
+        long memberId = member.getId();
         ModifyingDisplaying modifyingForm = memberService.showModifyingForm(memberId);
 
         if (modifyingForm == null) {
@@ -65,6 +76,8 @@ public class MemberController {
 
         model.addAttribute("modifyingForm", modifyingForm);
         model.addAttribute("httpMethod", "PUT");
+        model.addAttribute("bigDistricts", districts.getBigDistricts());
+        model.addAttribute("smallDistricts", districts.getSmallDistricts());
         return "/member/joining_info_form";
     }
 
@@ -75,7 +88,7 @@ public class MemberController {
         memberService.modify(modifyingForm, member);
 
         String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(DOMAIN)) {
+        if (referer != null && referer.startsWith(domain)) {
             return "redirect:" + referer;
         }
 

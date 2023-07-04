@@ -56,7 +56,8 @@ public class MemberService {
             .email(joiningForm.getEmail())
             .phoneNumber(joiningForm.getPhone())
             .authorities(memberAuthorities)
-            .area(joiningForm.getArea())
+            .bigDistrict(joiningForm.getBigDistrict())
+            .smallDistrict(joiningForm.getSmallDistrict())
             .tier(tierClassifier.get(joiningForm.getTier()))
                 .build();
 
@@ -72,8 +73,8 @@ public class MemberService {
         if (!tiers.contains(joiningForm.getTier())) {
             throw new RuntimeException("잘못된 족구 실력 양식입니다");
         }
-        
-        if (joiningForm.getArea() == null || joiningForm.getArea().equals("")) {
+
+        if (joiningForm.getBigDistrict() == null || joiningForm.getBigDistrict().equals("")) {
             throw new RuntimeException("잘못된 지역 양식입니다");
         }
 
@@ -89,7 +90,8 @@ public class MemberService {
         ModifyingDisplaying displayingForm = ModifyingDisplaying.builder()
                 .email(member.getEmail())
                 .phone(member.getPhoneNumber())
-                .area(member.getArea())
+                .bigDistrict(member.getBigDistrict())
+                .smallDistrict(member.getSmallDistrict())
                 .tier(tierUnpacker.get(member.getTier()))
                 .build();
 
@@ -104,7 +106,8 @@ public class MemberService {
         Member modifiedMember = member.toBuilder()
                 .email(modifyingForm.getEmail())
                 .phoneNumber(modifyingForm.getPhone())
-                .area(modifyingForm.getArea())
+                .bigDistrict(modifyingForm.getBigDistrict())
+                .smallDistrict(modifyingForm.getSmallDistrict())
                 .tier(tierClassifier.get(modifyingForm.getTier()))
                     .build();
         return memberRepository.save(modifiedMember);

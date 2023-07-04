@@ -34,7 +34,7 @@ class MemberTest {
                 .email(email)
                 .phoneNumber(phoneNumber)
                 .authorities(new HashSet<>())
-                .area(area)
+                .bigDistrict(area)
                 .tier(tier)
                 .build();
         Member creatingResult = memberRepository.save(member);
