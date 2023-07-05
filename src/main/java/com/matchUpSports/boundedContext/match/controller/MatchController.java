@@ -1,11 +1,13 @@
 package com.matchUpSports.boundedContext.match.controller;
 
+import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.field.service.FieldService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
 import com.matchUpSports.boundedContext.match.service.MatchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MatchController {
     private final MatchService matchService;
     private final FieldService fieldService;
+    private final Rq rq;
 
     @GetMapping("/filter")
     public String showMatchingFilter(@RequestParam(required = false) String fieldLocation, Model model) {
@@ -24,9 +27,12 @@ public class MatchController {
         return "matching/filterPage";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public String addMatch(@ModelAttribute MatchForm matchForm, Model model) {
-        RsData<Match> result = matchService.createMatch(matchForm);
+        long memberId = rq.getMemberId();
+        RsData<Match> result = matchService.createMatch(matchForm, memberId);
+
         if (result.isSuccess()) {
             return "redirect:/match/waiting";
         } else {
