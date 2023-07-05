@@ -1,7 +1,9 @@
 package com.matchUpSports.base.rq;
 
+import com.matchUpSports.base.exception.handler.DataNotFoundException;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.ut.Ut;
+import com.matchUpSports.boundedContext.member.dto.MemberDto;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +33,9 @@ public class Rq {
     private final HttpServletResponse resp;
     private final HttpSession session;
     private final User user;
+
     private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
+    private MemberDto memberDto;
 
     public Rq(MemberService memberService, MessageSource messageSource, LocaleResolver localeResolver, HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.memberService = memberService;
@@ -50,12 +54,6 @@ public class Rq {
             this.user = null;
         }
     }
-
-//    public boolean isAdmin() {
-//        if (isLogout()) return false;
-//
-//        return getMember().isAdmin();
-//    }
 
     public boolean isRefererAdminPage() {
         SavedRequest savedRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
@@ -81,12 +79,29 @@ public class Rq {
         if (isLogout()) return null;
 
         // 데이터가 없는지 체크
-        if (member == null) {
-            member = memberService.findByUsername(user.getUsername()).orElseThrow();
+        try {
+            member = memberService.findByUsername(user.getUsername());
+        } catch (DataNotFoundException e) {
+            throw new DataNotFoundException("존재하지 않는 유저입니다.");
         }
 
         return member;
     }
+
+    public String getUsername() {
+        if (isLogout()) {
+            return null;
+        }
+        // 데이터가 없는지 체크
+        try {
+            member = memberService.findByUsername(user.getUsername());
+        } catch (DataNotFoundException e) {
+            throw new DataNotFoundException("존재하지 않는 유저입니다.");
+        }
+
+        return member.getUsername();
+    }
+
 
     // 뒤로가기 + 메세지
     public String historyBack(String msg) {

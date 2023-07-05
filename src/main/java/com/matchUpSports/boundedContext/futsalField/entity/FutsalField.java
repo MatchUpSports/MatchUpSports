@@ -1,9 +1,7 @@
 package com.matchUpSports.boundedContext.futsalField.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.matchUpSports.boundedContext.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -13,12 +11,15 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class FutsalField {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @ManyToOne
+    @JoinColumn(name="futsalFields")
+    private Member member;
+    private String memberUsername;
     private String fieldName;
 
     private String fieldLocation;
@@ -32,6 +33,8 @@ public class FutsalField {
     private int courtCount;
 
     private String registNum;
+
+//    private  String imageUrl;
 
     public FutsalField() {
         this.fieldName = null;
