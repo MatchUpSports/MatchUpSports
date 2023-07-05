@@ -2,11 +2,14 @@ package com.matchUpSports.boundedContext.member.entity;
 
 import com.matchUpSports.base.Role;
 import com.matchUpSports.base.convert.CustomConverter;
+import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,6 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +31,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Member {
     @Id
-    @GeneratedValue(strategy  = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @CreatedDate
     private LocalDateTime createdDate;
@@ -35,21 +39,25 @@ public class Member {
     private LocalDateTime modifiedDate;
     private LocalDateTime deleteDate;
     private String username;
-    //    private String password;
     private String email;
     private String phoneNumber;
-    //    private String authorities;
     private int winningRate;
     private String bigDistrict;
     private String smallDistrict;
     private int tier;
+
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL})
+    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
+    private List<FutsalField> futsalFields = new ArrayList<>();
+
     @Convert(converter = CustomConverter.class)
     @Builder.Default
     private Set<Role> authorities = new HashSet<>();
 
     public List<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_"+i.name())).toList();
+        return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_" + i.name())).toList();
     }
+
     public void addRole(Role role) {
         this.authorities.add(role);
     }
