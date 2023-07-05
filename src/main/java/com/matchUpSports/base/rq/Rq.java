@@ -156,4 +156,9 @@ public class Rq {
 
         return Ut.json.toStr(parameterMap);
     }
+
+    public Long getMemberId() {
+        if (isLogout()) return null;
+        return getMember().getId();
+    }
 }
