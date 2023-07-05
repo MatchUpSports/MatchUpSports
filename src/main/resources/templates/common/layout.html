@@ -7,21 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!--    <script src="https://kit.fontawesome.com/87140d707c.js" crossorigin="anonymous"></script>-->
-    <!-- toastr 불러오기 -->
+    <script src="https://kit.fontawesome.com/87140d707c.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <!-- toastr 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
 
-    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
-    <!--    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">-->
-
-    <!--    <script src="/resource/common/common.js"></script>-->
+    <script src="/resource/common/common.js"></script>
     <link href="/resource/common/common.css" rel="stylesheet">
-    <!--    <script th:inline="javascript">-->
-    <!--        // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)-->
-    <!--        const params = JSON.parse('[( ${@rq.paramsJsonStr} )]');-->
-    <!--    </script>-->
+    <script th:inline="javascript">
+        // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
+        const params = JSON.parse('[( ${@rq.paramsJsonStr} )]');
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<!--        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+
 </head>
 
 <body class="min-h-screen w-screen flex flex-col">
@@ -42,7 +43,7 @@
     <main layout:fragment="main"></main>
 </div>
 
-<script>
+<script th:inline="javascript">
     function activateButton(id) {
         // 모든 버튼의 active 클래스를 제거
         document.getElementById('projectBtn').classList.remove('active');
@@ -53,6 +54,29 @@
         document.getElementById(id).classList.add('active');
     }
 
+    if (params.msg) {
+        toastNotice(params.msg[0]);
+    }
+
+    if (params.errorMsg) {
+        toastWarning(params.errorMsg[0]);
+    }
+
+    $(window).bind("pageshow", function (event) {
+        const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___" + location.href;
+
+        if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+            toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+            localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+        } else {
+            const localStorageKeyAboutHistoryBackErrorMsg = "historyBackErrorMsg___null";
+
+            if (localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg)) {
+                toastWarning(localStorage.getItem(localStorageKeyAboutHistoryBackErrorMsg));
+                localStorage.removeItem(localStorageKeyAboutHistoryBackErrorMsg);
+            }
+        }
+    });
 </script>
 </body>
 
