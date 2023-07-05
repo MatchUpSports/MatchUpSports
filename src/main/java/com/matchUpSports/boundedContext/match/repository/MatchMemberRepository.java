@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface MatchMemberRepository extends JpaRepository<MatchMember, Long> {
     List<MatchMember> findByMember(Member loggedInMember);
+
+    List<MatchMember> findByMemberId(Long memberId);
 }

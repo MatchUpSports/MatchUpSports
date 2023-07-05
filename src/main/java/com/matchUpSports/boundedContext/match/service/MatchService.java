@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -96,8 +97,9 @@ public class MatchService {
             subStadiumMembers[currentSubStadium] = currentParticipantCount;
         }
 
+        //테스트를 위해서 2명에서 1명으로 수정함
         for (int i = 1; i <= maxSubStadiumCount; i++) {
-            if (subStadiumMembers[i] < 2) {
+            if (subStadiumMembers[i] < 1) {
                 for (Match existingMatch : matches) {
                     if (existingMatch.getSubStadiumCount() == i) {
                         return new MatchAndSubStadium(existingMatch, i);
@@ -132,32 +134,6 @@ public class MatchService {
         return Objects.isNull(matchForm.getStadium()) || Objects.isNull(matchForm.getMatchDate()) || Objects.isNull(matchForm.getUsageTime());
     }
 
-    private int findAvailableSubStadium(MatchForm matchForm) {
-        List<Match> matches = matchRepository.findByStadiumAndMatchDateAndUsageTime(
-                matchForm.getStadium(),
-                matchForm.getMatchDate(),
-                matchForm.getUsageTime()
-        );
-
-        Field selectedField = fieldRepository.findByFieldName(matchForm.getStadium());
-        int maxSubStadiumCount = selectedField.getCourtCount();
-
-        int[] subStadiumMembers = new int[maxSubStadiumCount + 1];
-
-        for (Match existingMatch : matches) {
-            int currentSubStadium = existingMatch.getSubStadiumCount();
-            int currentParticipantCount = existingMatch.getParticipantCount();
-            subStadiumMembers[currentSubStadium] = currentParticipantCount;
-        }
-
-        for (int i = 1; i <= maxSubStadiumCount; i++) {
-            if (subStadiumMembers[i] < 2) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     private Match createAndSaveMatch(MatchForm matchForm, int availableSubStadium) {
         Match newMatch = matchForm.toEntity();
         newMatch.setParticipantCount(1);
@@ -173,4 +149,16 @@ public class MatchService {
         matchMember.setVoteCount(0);
         matchMemberRepository.save(matchMember);
     }
+
+    //대기화면에서 보여주는 메서드
+    @Transactional(readOnly = true)
+    public List<Match> getMatchesForUser(long memberId) {
+        List<MatchMember> matchMembers = matchMemberRepository.findByMemberId(memberId);
+        List<Match> matches = new ArrayList<>();
+        for (MatchMember matchMember : matchMembers) {
+            matches.add(matchMember.getMatch());
+        }
+        return matches;
+    }
+
 }

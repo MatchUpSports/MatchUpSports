@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/match")
@@ -43,7 +45,13 @@ public class MatchController {
 
     //웨이팅 페이지 작업해야함
     @GetMapping("/waiting")
-    public String showWaiting() {
+    public String showWaiting(Model model) {
+        long memberId = rq.getMemberId(); // 현재 사용자의 memberId를 가져옵니다.
+
+        List<Match> matches = matchService.getMatchesForUser(memberId);
+        model.addAttribute("matches", matches);
+
         return "matching/waiting";
     }
+
 }
