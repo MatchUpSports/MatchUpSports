@@ -1,6 +1,7 @@
 package com.matchUpSports.boundedContext.member.service;
 
 import com.matchUpSports.base.Role;
+import com.matchUpSports.base.exception.handler.DataNotFoundException;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
 import com.matchUpSports.boundedContext.member.dto.*;
 import com.matchUpSports.boundedContext.member.entity.Member;
@@ -25,8 +26,9 @@ public class MemberService {
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
     private static final List<String> tiers = new ArrayList<>(Arrays.asList("하수", "중수", "고수"));
 
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username)
+                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 유저입니다."));
     }
 
     @Transactional
