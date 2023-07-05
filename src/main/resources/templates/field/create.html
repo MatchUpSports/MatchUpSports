@@ -1,97 +1,177 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
-    <meta charset="UTF-8">
-    <title>구장 등록</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <style>
-        .card {
-            width: 400px;
-            min-height: 500px;
-            margin: 10px;
-        }
-
-        .result-id button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .result-id button:hover {
-            color: green;
-        }
-
-        .submit-button {
-            width: 150px;
-            height: 60px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0 auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>구장 등록</title>
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+<!--  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css"/>-->
 </head>
 <body>
-<h1 style="text-align: center">구장 등록</h1>
-<form th:object="${createForm}" th:action="@{/field/create}" method="POST" enctype="multipart/form-data">
-    <div layout:fragment="content" class="d-flex flex-column align-items-center max-w-3xl mx-auto"
-         style="text-align: center">
-        <div class="card">
-            <label>이름</label>
-            <input type="text" name="name" required><br>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+  <script>
 
-            <!--            일단은 5가지 지역만 등록하도록 -->
-            <label>위치</label>
-            <select name="location" required>
-                <option value="서울">서울</option>
-                <option value="수원">수원</option>
-                <option value="강원도">강원도</option>
-                <option value="포항">포항</option>
-                <option value="울산">울산</option>
-            </select><br>
+    function Validation__createField(form) {
+      form.name = document.getElementById("name").value;
 
-            <label>가격</label>
-            <input type="number" name="price" required><br>
+      if (form.name.value.trim().length == 0) {
+        toastWarning("구장명을 작성해주세요.");
+        form.name.focus();
+        return;
+      }
 
-            <label>영업 시작 시간</label>
-            <input type="time" name="openTime" required><br>
+      if (form.location.value.trim().length == 0) {
+        toastWarning("지역을 작성해주세요.");
+        form.location.focus();
+        return;
+      }
 
-            <label>영업 종료 시간</label>
-            <input type="time" name="closeTime" required><br>
+      if (form.price.value.trim().length == 0) {
+        toastWarning("이용료를 작성해주세요.");
+        form.price.focus();
+        return;
+      }
 
-            <label>구장 개수</label>
-            <input type="number" name="count" required><br>
+      if (form.openTime.value.trim().length == 0) {
+        toastWarning("영업 시작 시간을 작성해주세요.");
+        form.openTime.focus();
+        return;
+      }
 
-            <label>등록번호</label>
-            <input type="text" name="registNum" required><br>
+      if (form.closeTime.value.trim().length == 0) {
+        toastWarning("영업 종료 시간을 작성해주세요.");
+        form.closeTime.focus();
+        return;
+      }
 
-            <label for="images" style="text-align: left">구장 이미지 업로드</label>
-            <input type="file" id="images" name="images" multiple><br><br>
+      if (form.courtCount.value.trim().length == 0) {
+        toastWarning("구장 수를 작성해주세요.");
+        form.courtCount.focus();
+        return;
+      }
 
-            <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">
+      if (form.registNum.value.trim().length == 0) {
+        toastWarning("사업자 등록 번호를 작성해주세요.");
+        form.registNum.focus();
+        return;
+      }
 
-                <form th:action="@{/matches/name}" method="get">
-                    <button class="submit-button" onclick="showSuccessMessage()" id="registBtn"
-                            style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px">등록하기
-                    </button>
-                </form>
-            </div>
+      form.submit();
+    }
+  </script>
 
-        </div>
+  <div class="w-full bg-no-repeat bg-cover flex flex-col items-center justify-center gap-6 min-h-screen">
+    <div class="max-w-2xl w-full px-4 mb-16">
+      <p class="text-2xl font-black my-12 text-center">구장 등록</p>
+<!--      <form th:action="@{/adm/registerpro}" role="form" th:method="post" autocomplete="off" id="uploadForm"-->
+<!--            enctype="multipart/form-data">-->
+      <form th:action="@{/field/create}" th:object="${FutsalFieldRegistrationDto}" method="POST"
+            onsubmit="Validation__createField(this); return false;">
+<!--          <input type="text" name="title" placeholder="제목을 작성해주세요." class="input input-bordered w-full mt-12"/>-->
+          <input type="text" id="name" name="name" placeholder="구장명을 입력하세요" class="input input-bordered w-full mt-12"/>
+
+          <input type="text" name="location" placeholder="위치를 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <input type="text" name="price" placeholder="가격을 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <input type="time" name="openTime" placeholder="영업 시작 시간을 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <input type="time" name="closeTime" placeholder="영업 종료 시간을 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <input type="text" name="courtCount" placeholder="구장 수를 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <input type="text" name="registNum" placeholder="사업자 등록 번호를 입력하세요"
+                 class="input input-bordered w-full mt-12"/>
+
+          <button type="submit" class="btn btn-error w-full mb-12">등록</button>
+      </form>
+
+
+<!--      <form th:object="${createForm}" th:action="@{/field/create}" method="POST" enctype="multipart/form-data">-->
+
+<!--        <input type="text" name="name" required placeholder="구장명을 입력하세요" class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="text" name="location" required placeholder="위치를 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="text" name="price" required placeholder="가격을 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="time" name="openTime" required placeholder="영업 시작 시간을 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="time" name="closeTime" required placeholder="영업 종료 시간을 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="text" name="count" required placeholder="구장 수를 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="text" name="registNum" required placeholder="사업자 등록 번호를 입력하세요"-->
+<!--               class="input input-bordered w-full mt-12"/>-->
+
+<!--        <input type="file" name="images"-->
+<!--               class="file-input w-full my-12" id="images" multiple/>-->
+
+<!--        <form th:action="@{/matches/name}" method="get">-->
+<!--          <button type="submit" onclick="showSuccessMessage()" id="registBtn" class="btn btn-error w-full mb-12">등록</button>-->
+<!--        </form>-->
+
+<!--      </form>-->
     </div>
-</form>
+  </div>
+
+
+
+
+<!--<h1 style="text-align: center">구장 등록</h1>-->
+<!--<form th:object="${createForm}" th:action="@{/field/create}" method="POST" enctype="multipart/form-data">-->
+
+<!--    <div class="card">-->
+<!--      <label>이름</label>-->
+<!--      <input type="text" name="name" required><br>-->
+
+<!--      <label>위치</label>-->
+<!--      <input type="text" name="location" required><br>-->
+
+<!--      <label>가격</label>-->
+<!--      <input type="number" name="price" required><br>-->
+
+<!--      <label>영업 시작 시간</label>-->
+<!--      <input type="time" name="openTime" required><br>-->
+
+<!--      <label>영업 종료 시간</label>-->
+<!--      <input type="time" name="closeTime" required><br>-->
+
+<!--      <label>구장 개수</label>-->
+<!--      <input type="number" name="count" required><br>-->
+
+<!--      <label>등록번호</label>-->
+<!--      <input type="text" name="registNum" required><br>-->
+
+<!--&lt;!&ndash;      <label for="images" style="text-align: left">구장 이미지 업로드</label>&ndash;&gt;-->
+<!--&lt;!&ndash;      <input type="file" class="file-input w-full max-w-xs" id="images" name="images" multiple><br><br>&ndash;&gt;-->
+
+<!--      <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">-->
+
+<!--&lt;!&ndash; !!!!!!!!!!!!!!!!한솔님 여기 action 태그 값 바꿔주셔야해요!!&ndash;&gt;-->
+<!--        <form th:action="@{/matches/name}" method="get">-->
+<!--          <button class="submit-button" onclick="showSuccessMessage()" id="registBtn" style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px" >등록하기</button>-->
+<!--        </form>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</form>-->
 <script>
     function showSuccessMessage() {
         toastNotice("입력하신 시설이 등록되었습니다.")
     }
 </script>
+</main>
 </body>
 </html>
