@@ -1,9 +1,9 @@
 package com.matchUpSports.base.security;
 
-import com.matchUpSports.base.security.social.SocialUserFactory;
-import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
+import com.matchUpSports.base.security.social.SocialUserFactory;
+import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -27,10 +27,6 @@ public class CustomOAuth2Login extends DefaultOAuth2UserService {
 
         Member member = memberService.saveOAuth2Member(customOAuth2User);
 
-//        return new CustomOAuth2User(member.getUsername(), member.getPassword(), member.getAuthorities());
         return new CustomOAuth2User(member.getUsername(), member.getAuthorities());
     }
-
-
-
 }
