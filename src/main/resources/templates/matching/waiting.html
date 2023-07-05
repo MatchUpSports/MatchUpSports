@@ -20,6 +20,12 @@
         <td th:text="${match.fieldLocation}">장소</td>
         <td th:text="${match.stadium}">이름</td>
         <td th:text="${match.participantCount}">참가자 수</td>
+        <td>
+            <form th:action="@{/match/cancel}" method="post">
+                <input type="hidden" th:value="${match.id}" name="matchId"/>
+                <button type="submit">취소하기</button>
+            </form>
+        </td>
     </tr>
 </table>
 </body>

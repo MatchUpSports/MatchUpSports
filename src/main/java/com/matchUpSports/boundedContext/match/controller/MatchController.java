@@ -54,4 +54,18 @@ public class MatchController {
         return "matching/waiting";
     }
 
+    @PostMapping("/cancel")
+    public String cancelMatch(@RequestParam long matchId, Model model) {
+        long memberId = rq.getMemberId();
+        RsData<String> result = matchService.cancelMatch(memberId, matchId);
+
+        if (result.isSuccess()) {
+            return "redirect:/match/waiting";
+        } else {
+            model.addAttribute("message", result.getMsg());
+            return "matching/waiting";
+        }
+    }
+
+
 }
