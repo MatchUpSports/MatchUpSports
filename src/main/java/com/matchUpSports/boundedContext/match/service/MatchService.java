@@ -161,4 +161,30 @@ public class MatchService {
         return matches;
     }
 
+    //취소 메서드
+    @Transactional
+    public RsData<String> cancelMatch(long memberId, long matchId) {
+        // Member와 Match를 찾아옵니다.
+        Member member = memberRepository.findById(memberId).orElse(null);
+        Match match = matchRepository.findById(matchId).orElse(null);
+        if (member == null || match == null) {
+            return RsData.of("F-1", "멤버 또는 매치를 찾을 수 없습니다.");
+        }
+
+        // MatchMember를 찾아옵니다.
+        MatchMember matchMember = matchMemberRepository.findByMemberAndMatch(member, match);
+        if (matchMember == null) {
+            return RsData.of("F-2", "해당 매치에 참가하고 있지 않습니다.");
+        }
+
+        // MatchMember를 삭제하고 참가자 수를 갱신합니다.
+        matchMemberRepository.delete(matchMember);
+        match.setParticipantCount(match.getParticipantCount() - 1);
+        matchRepository.save(match);
+
+        // 매치 취소 성공
+        return RsData.successOf("매치 취소에 성공했습니다.");
+    }
+
+
 }
