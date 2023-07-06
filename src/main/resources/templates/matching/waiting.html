@@ -26,6 +26,15 @@
                 <button type="submit">취소하기</button>
             </form>
         </td>
+
+        <!-- 확정하기 버튼을 추가하고, 참가자 수가 2명일 때만 표시되도록 합니다 -->
+        <td th:if="${match.participantCount} == 2">
+            <form th:action="@{/match/confirm}" method="post">
+                <input type="hidden" th:value="${match.id}" name="matchId"/>
+                <button type="submit">확정하기</button>
+            </form>
+        </td>
+
     </tr>
 </table>
 </body>

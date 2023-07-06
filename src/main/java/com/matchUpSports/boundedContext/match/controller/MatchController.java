@@ -54,6 +54,7 @@ public class MatchController {
         return "matching/waiting";
     }
 
+    //매치에 관해서 삭제하는 메서드_하드 딜리트 방식
     @PostMapping("/cancel")
     public String cancelMatch(@RequestParam long matchId, Model model) {
         long memberId = rq.getMemberId();
@@ -67,5 +68,17 @@ public class MatchController {
         }
     }
 
+    @PostMapping("/confirm")
+    public String confirmMatch(@RequestParam long matchId, Model model) {
+        long memberId = rq.getMemberId();
+        RsData<String> result = matchService.confirmMatch(memberId, matchId);
+
+        if (result.isSuccess()) {
+            return "redirect:/match/waiting";
+        } else {
+            model.addAttribute("message", result.getMsg());
+            return "matching/waiting";
+        }
+    }
 
 }
