@@ -3,9 +3,10 @@ package com.matchUpSports.boundedContext.member.dto;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder
 public class ModifyingDisplaying {
     @Email
     private String email;

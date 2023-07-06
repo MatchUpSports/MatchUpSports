@@ -1,5 +1,7 @@
 package com.matchUpSports.base.security.config;
 
+import com.matchUpSports.base.security.social.inter.OAuth2SuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -13,11 +15,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    @Autowired
+    private OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.oauth2Login(oauth -> oauth.loginPage("/member/login"))
+        http.oauth2Login(oauth -> oauth
+                        .loginPage("/member/login")
+                        .successHandler(oAuth2SuccessHandler))
                 .formLogin(form -> form.loginPage("/member/login"))
                 .logout(logout -> logout
                         .invalidateHttpSession(true));
