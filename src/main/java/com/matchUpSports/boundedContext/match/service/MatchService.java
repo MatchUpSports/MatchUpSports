@@ -99,7 +99,7 @@ public class MatchService {
 
         //테스트를 위해서 2명에서 1명으로 수정함
         for (int i = 1; i <= maxSubStadiumCount; i++) {
-            if (subStadiumMembers[i] < 1) {
+            if (subStadiumMembers[i] < 2) {
                 for (Match existingMatch : matches) {
                     if (existingMatch.getSubStadiumCount() == i) {
                         return new MatchAndSubStadium(existingMatch, i);
@@ -161,7 +161,7 @@ public class MatchService {
         return matches;
     }
 
-    //취소 메서드
+    //취소 부분
     @Transactional
     public RsData<String> cancelMatch(long memberId, long matchId) {
         // Member와 Match를 찾아옵니다.
@@ -186,5 +186,28 @@ public class MatchService {
         return RsData.successOf("매치 취소에 성공했습니다.");
     }
 
+    //확정하기위해서 토스 결제 + 카카오톡 보내기
+    @Transactional
+    public RsData<String> confirmMatch(long memberId, long matchId) {
+        // Member와 Match를 찾아옵니다.
+        Member member = memberRepository.findById(memberId).orElse(null);
+        Match match = matchRepository.findById(matchId).orElse(null);
+        if (member == null || match == null) {
+            return RsData.of("F-1", "멤버 또는 매치를 찾을 수 없습니다.");
+        }
+
+        // MatchMember를 찾아옵니다.
+        MatchMember matchMember = matchMemberRepository.findByMemberAndMatch(member, match);
+        if (matchMember == null) {
+            return RsData.of("F-2", "해당 매치에 참가하고 있지 않습니다.");
+        }
+
+        // 매치 상태를 "확정"으로 변경합니다.
+        match.setProgressStatus("1");
+        matchRepository.save(match);
+
+        // 매치 확정 성공
+        return RsData.successOf("매치 확정에 성공했습니다.");
+    }
 
 }
