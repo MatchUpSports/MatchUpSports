@@ -68,7 +68,7 @@ public class MemberService {
         }
 
         if (!tiers.contains(joiningForm.getTier())) {
-            throw new RuntimeException("잘못된 족구 실력 양식입니다");
+            throw new RuntimeException("잘못된 풋살 실력 양식입니다");
         }
 
         if (joiningForm.getBigDistrict() == null || joiningForm.getBigDistrict().equals("")) {
