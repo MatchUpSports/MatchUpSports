@@ -29,6 +29,7 @@ public class MatchService {
     private final FieldRepository fieldRepository;
     private final MemberRepository memberRepository;
 
+    // 매치 생성 메서드
     @Transactional
     public RsData<Match> createMatch(MatchForm matchForm, long loggedInMemberId) {
 
@@ -69,6 +70,7 @@ public class MatchService {
         return RsData.successOf(newOrExistingMatch);
     }
 
+    //매치 경기장과 서브 경기장(=field부분에 courtCount)
     private static class MatchAndSubStadium {
         Match match;
         int subStadium;
@@ -79,6 +81,7 @@ public class MatchService {
         }
     }
 
+    // 사용 가능한 매치 및 서브 스타디움 찾기 (내부 사용)
     private MatchAndSubStadium findAvailableMatchAndSubStadium(MatchForm matchForm) {
         List<Match> matches = matchRepository.findByStadiumAndMatchDateAndUsageTime(
                 matchForm.getStadium(),
@@ -112,10 +115,12 @@ public class MatchService {
         return new MatchAndSubStadium(null, -1);
     }
 
+    // 로그인한 사용자 가져오기 (내부 사용)
     private Member getLoggedInMember(long memberId) {
         return memberRepository.findById(memberId).orElse(null);
     }
 
+    // 중복 매치 확인 (내부 사용)
     private boolean isDuplicateMatch(MatchForm matchForm, Member loggedInMember) {
         List<MatchMember> matchMembers = matchMemberRepository.findByMember(loggedInMember);
 
@@ -130,10 +135,12 @@ public class MatchService {
         return false;
     }
 
+    // 누락된 값 확인 (내부 사용)
     private boolean hasMissingValues(MatchForm matchForm) {
         return Objects.isNull(matchForm.getStadium()) || Objects.isNull(matchForm.getMatchDate()) || Objects.isNull(matchForm.getUsageTime());
     }
 
+    // 새로운 매치 생성 및 저장 (내부 사용)
     private Match createAndSaveMatch(MatchForm matchForm, int availableSubStadium) {
         Match newMatch = matchForm.toEntity();
         newMatch.setParticipantCount(1);
@@ -142,6 +149,7 @@ public class MatchService {
         return newMatch;
     }
 
+    // 매치에 멤버 추가 (내부 사용)
     private void addMatchMember(Member loggedInMember, Match newMatch) {
         MatchMember matchMember = new MatchMember();
         matchMember.setMember(loggedInMember);
@@ -161,7 +169,7 @@ public class MatchService {
         return matches;
     }
 
-    //취소 부분
+    // 매치 취소 메서드
     @Transactional
     public RsData<String> cancelMatch(long memberId, long matchId) {
         // Member와 Match를 찾아옵니다.
@@ -186,7 +194,7 @@ public class MatchService {
         return RsData.successOf("매치 취소에 성공했습니다.");
     }
 
-    //확정하기위해서 토스 결제 + 카카오톡 보내기
+    // 매치 확정을 위한 메서드 (토스 결제 및 카카오톡 메시지 전송)
     @Transactional
     public RsData<String> confirmMatch(long memberId, long matchId) {
         // Member와 Match를 찾아옵니다.

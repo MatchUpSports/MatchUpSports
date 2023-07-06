@@ -24,6 +24,7 @@ public class MemberService {
     private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
     private static final List<String> tiers = new ArrayList<>(Arrays.asList("하수", "중수", "고수"));
+
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }

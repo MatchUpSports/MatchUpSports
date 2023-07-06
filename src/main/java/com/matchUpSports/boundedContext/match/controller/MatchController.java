@@ -22,6 +22,7 @@ public class MatchController {
     private final FieldService fieldService;
     private final Rq rq;
 
+    //매치를 위한 조건 페이지를 보여준다.
     @GetMapping("/filter")
     public String showMatchingFilter(@RequestParam(required = false) String fieldLocation, Model model) {
         model.addAttribute("fields", fieldService.findFieldsByLocation(fieldLocation));
@@ -29,6 +30,7 @@ public class MatchController {
         return "matching/filterPage";
     }
 
+    //매치 생성및 있는 매치가 있다면 참여하는 메서드
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     public String addMatch(@ModelAttribute MatchForm matchForm, Model model) {
@@ -43,7 +45,7 @@ public class MatchController {
         }
     }
 
-    //웨이팅 페이지 작업해야함
+    //현재 매치를 기다리는 모든 부분을 보여주도록
     @GetMapping("/waiting")
     public String showWaiting(Model model) {
         long memberId = rq.getMemberId(); // 현재 사용자의 memberId를 가져옵니다.
@@ -54,7 +56,7 @@ public class MatchController {
         return "matching/waiting";
     }
 
-    //매치에 관해서 삭제하는 메서드_하드 딜리트 방식
+    //매치를 취소하는 메서드_하드 딜리트 방식
     @PostMapping("/cancel")
     public String cancelMatch(@RequestParam long matchId, Model model) {
         long memberId = rq.getMemberId();
@@ -68,6 +70,7 @@ public class MatchController {
         }
     }
 
+    //진호님 부분 ==> 확정하기 버튼누르면 결제+카카오톡 관련 메서드 실행
     @PostMapping("/confirm")
     public String confirmMatch(@RequestParam long matchId, Model model) {
         long memberId = rq.getMemberId();
