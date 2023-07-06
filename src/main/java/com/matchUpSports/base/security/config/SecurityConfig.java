@@ -39,7 +39,6 @@ public class SecurityConfig {
 
         // "/match/**" 경로 추가
         http.csrf(c -> c.ignoringRequestMatchers("/product/more/**", "/match/**"));
-//        http.csrf(c -> c.ignoringRequestMatchers("/product/more/**"));
         return http.build();
     }
 
