@@ -13,4 +13,6 @@ public interface MatchMemberRepository extends JpaRepository<MatchMember, Long> 
     List<MatchMember> findByMemberId(Long memberId);
 
     MatchMember findByMemberAndMatch(Member member, Match match);
+
+    List<MatchMember> findAllByMatch(Match match);
 }

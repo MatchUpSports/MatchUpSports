@@ -20,6 +20,8 @@ public class MatchMember {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    private boolean Confirmed; // 확정 상태를 나타내는 새로운 필드 추가
+
     private int voteCount;
 
 }

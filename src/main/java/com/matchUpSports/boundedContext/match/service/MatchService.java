@@ -210,12 +210,21 @@ public class MatchService {
             return RsData.of("F-2", "해당 매치에 참가하고 있지 않습니다.");
         }
 
-        // 매치 상태를 "확정"으로 변경합니다.
-        match.setProgressStatus("1");
-        matchRepository.save(match);
+        // 해당 참가자의 확정 상태를 업데이트합니다.
+        matchMember.setConfirmed(true);
+        matchMemberRepository.save(matchMember);
 
-        // 매치 확정 성공
+        // 모든 참가자의 확정 여부를 확인합니다.
+        List<MatchMember> confirmedMembers = matchMemberRepository.findAllByMatch(match);
+        boolean isAllConfirmed = confirmedMembers.stream().allMatch(MatchMember::isConfirmed);
+
+        // 모든 참가자가 확정되었을 경우에만 `ProgressStatus`를 변경합니다.
+        if (isAllConfirmed) {
+            match.setProgressStatus("1");
+            matchRepository.save(match);
+        }
         return RsData.successOf("매치 확정에 성공했습니다.");
     }
 
 }
+

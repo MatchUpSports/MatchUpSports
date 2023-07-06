@@ -32,10 +32,7 @@ public class Match {
 
     private String progressStatus;  // 진행 상태 (타입에 관해서 추후에 생각해봐야 함)
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Field field;                    // 시설
-
-    //아래의 4가지 데이터는 field에서 받아와야할 데이터 입니다
+    //아래의 4가지 데이터는 field에서 받아와서 저장하는 데이터
     private String fieldLocation; // 구장 위치 = fieldLocation
     private String stadium; //구장 이름 = fieldName
     private int subStadiumCount; //그 구장에 있는 구장 수 = courtCount

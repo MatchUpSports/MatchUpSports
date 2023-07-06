@@ -39,10 +39,6 @@ public class SecurityConfig {
 
         // "/match/**" 경로 추가
         http.csrf(c -> c.ignoringRequestMatchers("/product/more/**", "/match/**"));
-<<<<<<< HEAD
-=======
-
->>>>>>> cbb97ad (init : match part set up)
         return http.build();
     }
 
