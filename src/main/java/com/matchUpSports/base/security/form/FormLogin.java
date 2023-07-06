@@ -1,8 +1,8 @@
 package com.matchUpSports.base.security.form;
 
+import com.matchUpSports.base.security.CustomOAuth2User;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
-import com.matchUpSports.base.security.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

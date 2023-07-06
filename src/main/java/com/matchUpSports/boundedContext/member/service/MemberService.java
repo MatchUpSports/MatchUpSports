@@ -2,14 +2,12 @@ package com.matchUpSports.boundedContext.member.service;
 
 import com.matchUpSports.base.Role;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
-import com.matchUpSports.boundedContext.member.dto.BasicUserInfoForm;
-import com.matchUpSports.boundedContext.member.dto.JoiningForm;
-import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
-import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
+import com.matchUpSports.boundedContext.member.dto.*;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +48,7 @@ public class MemberService {
     public Member createJoiningForm(JoiningForm joiningForm, Member member) {
         validateUserInput(joiningForm);
 
-        String authorities = joiningForm.getAuthorities();
-        Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(authorities)));
+        Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
             .email(joiningForm.getEmail())
             .phoneNumber(joiningForm.getPhone())
@@ -111,6 +108,34 @@ public class MemberService {
                 .tier(tierClassifier.get(modifyingForm.getTier()))
                     .build();
         return memberRepository.save(modifiedMember);
+    }
+
+    public MyPage showMyPage(Member member) {
+        return MyPage.builder()
+                .email(member.getEmail())
+                .phone(member.getPhoneNumber())
+                .bigDistrict(member.getBigDistrict())
+                .smallDistrict(member.getSmallDistrict())
+                .tier(tierUnpacker.get(member.getTier()))
+                .createdDate(member.getCreatedDate().toLocalDate())
+                .username(member.getUsername())
+                .winningRate(convertWinningRateToString(member.getWinningRate()))
+                .authorities(convertAuthoritiesToString(member.getAuthorities()))
+                .build();
+    }
+
+    private String convertWinningRateToString(int winningRate) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(winningRate);
+        stringBuffer.append("%");
+        return stringBuffer.toString();
+    }
+
+    private List<String> convertAuthoritiesToString(List<? extends GrantedAuthority> simpleGrantedAuthorities) {
+        return simpleGrantedAuthorities.stream()
+                .map(simpleGrantedAuthority -> simpleGrantedAuthority.getAuthority().substring(5
+                                                        , simpleGrantedAuthority.getAuthority().length()))
+                .toList();
     }
 }
 

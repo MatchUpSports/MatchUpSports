@@ -5,9 +5,11 @@ import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.boundedContext.member.dto.JoiningForm;
 import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
 import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
+import com.matchUpSports.boundedContext.member.dto.MyPage;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +28,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
     private final MemberService memberService;
     @Value("${custom.site.baseUrl}")
-    private static String domain;
+    private String domain;
     private final Rq rq;
     @Autowired
     private Districts districts;
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myInformation")
+    public String showMyPage(Model model) {
+        Member member = rq.getMember();
+        if (member == null) {
+            return "redirect:/member/login";
+        }
+
+        MyPage myPage = memberService.showMyPage(member);
+        model.addAttribute("myInformation", myPage);
+        return "member/my_information";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/joiningForm")
-    public String writeJoiningForm(Model model) {
-        String area = rq.getMember().getBigDistrict();
-        if (area != null) {
+    public String writeJoiningForm(Model model, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+        boolean isModifiedTier = member.getTier() != 0;
+        if (isModifiedTier) {
             return "redirect:/";
         }
 
