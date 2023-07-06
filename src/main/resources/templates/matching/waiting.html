@@ -20,6 +20,11 @@
             font-weight: bold;
             margin-bottom: 1.5rem;
         }
+        .card-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+        }
         .card {
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 1.5rem;
@@ -57,25 +62,27 @@
 <div layout:fragment="main" class="container mt-5">
     <h1 class="text-center page-title">매칭 대기중</h1>
 
-    <th:block th:each="match : ${matches}">
-        <div class="card mx-auto">
-            <p class="card-text mb-1 match-date">날짜: <span th:text="${match.matchDate}">날짜</span></p>
-            <h5 class="card-title" th:text="${match.stadium}">Stadium</h5>
-            <p class="card-text mb-1">이용 시간: <span th:text="${match.usageTime}">이용 시간</span> 타임</p>
-            <p class="card-text mb-1">장소: <span th:text="${match.fieldLocation}">장소</span></p>
-            <p class="card-text mb-1">참가자 수: <span th:text="${match.participantCount}">참가자 수</span></p>
-            <div class="btn-container">
-                <form th:action="@{/match/cancel}" method="post">
-                    <input type="hidden" th:value="${match.id}" name="matchId" />
-                    <button type="submit" class="btn btn-cancel">취소하기</button>
-                </form>
-                <form th:action="@{/match/confirm}" method="post" th:if="${match.participantCount} == 2">
-                    <input type="hidden" th:value="${match.id}" name="matchId" />
-                    <button type="submit" class="btn btn-confirm">확정하기</button>
-                </form>
+    <div class="card-container">
+        <th:block th:each="match : ${matches}">
+            <div class="card mx-auto">
+                <p class="card-text mb-1 match-date">날짜: <span th:text="${match.matchDate}">날짜</span></p>
+                <h5 class="card-title" th:text="${match.stadium}">Stadium</h5>
+                <p class="card-text mb-1">이용 시간: <span th:text="${match.usageTime}">이용 시간</span></p>
+                <p class="card-text mb-1">장소: <span th:text="${match.fieldLocation}">장소</span></p>
+                <p class="card-text mb-1">참가자 수: <span th:text="${match.participantCount}">참가자 수</span></p>
+                <div class="btn-container">
+                    <form th:action="@{/match/cancel}" method="post">
+                        <input type="hidden" th:value="${match.id}" name="matchId" />
+                        <button type="submit" class="btn btn-cancel">취소하기</button>
+                    </form>
+                    <form th:action="@{/match/confirm}" method="post" th:if="${match.participantCount} == 2">
+                        <input type="hidden" th:value="${match.id}" name="matchId" />
+                        <button type="submit" class="btn btn-confirm">확정하기</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </th:block>
+        </th:block>
+    </div>
 </div>
 </body>
 </html>
