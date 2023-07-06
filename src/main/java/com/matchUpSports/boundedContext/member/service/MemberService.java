@@ -24,6 +24,7 @@ public class MemberService {
     private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
     private static final List<String> tiers = new ArrayList<>(Arrays.asList("하수", "중수", "고수"));
+
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -50,12 +51,12 @@ public class MemberService {
 
         Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
-            .email(joiningForm.getEmail())
-            .phoneNumber(joiningForm.getPhone())
-            .authorities(memberAuthorities)
-            .bigDistrict(joiningForm.getBigDistrict())
-            .smallDistrict(joiningForm.getSmallDistrict())
-            .tier(tierClassifier.get(joiningForm.getTier()))
+                .email(joiningForm.getEmail())
+                .phoneNumber(joiningForm.getPhone())
+                .authorities(memberAuthorities)
+                .bigDistrict(joiningForm.getBigDistrict())
+                .smallDistrict(joiningForm.getSmallDistrict())
+                .tier(tierClassifier.get(joiningForm.getTier()))
                 .build();
 
         return memberRepository.save(memberWithUserInput);
@@ -106,7 +107,7 @@ public class MemberService {
                 .bigDistrict(modifyingForm.getBigDistrict())
                 .smallDistrict(modifyingForm.getSmallDistrict())
                 .tier(tierClassifier.get(modifyingForm.getTier()))
-                    .build();
+                .build();
         return memberRepository.save(modifiedMember);
     }
 
@@ -134,8 +135,7 @@ public class MemberService {
     private List<String> convertAuthoritiesToString(List<? extends GrantedAuthority> simpleGrantedAuthorities) {
         return simpleGrantedAuthorities.stream()
                 .map(simpleGrantedAuthority -> simpleGrantedAuthority.getAuthority().substring(5
-                                                        , simpleGrantedAuthority.getAuthority().length()))
+                        , simpleGrantedAuthority.getAuthority().length()))
                 .toList();
     }
 }
-

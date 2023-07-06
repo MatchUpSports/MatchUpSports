@@ -1,7 +1,6 @@
 package com.matchUpSports.base.security.social;
 
 import com.matchUpSports.base.exception.NotSupportUserLoginException;
-import com.matchUpSports.base.security.social.OAuth2Provider;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
 import com.matchUpSports.base.security.social.user.GoogleUser;
 import com.matchUpSports.base.security.social.user.KakaoUser;

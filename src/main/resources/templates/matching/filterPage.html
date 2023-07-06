@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
+<head>
+    <title>Filter Page</title>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            const getQueryParam = (name) => {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name);
+            };
+
+            // url에서 msg 파라미터를 받아와 alert 창 띄우기
+            const msg = getQueryParam('msg');
+            if (msg) {
+                alert(msg);
+            }
+
+            // Datepicker 설정
+            $("#startDate").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: 0,
+                showButtonPanel: true,
+                closeText: "Close",
+                currentText: "Today",
+                onSelect: (dateText, inst) => console.log("Selected date: " + dateText)
+            });
+
+            $("#startDatePickerButton").click(function () {
+                $("#startDate").datepicker("show");
+            });
+
+            $("#location").change(function () {
+                const location = $(this).val();
+                window.location.href = location ? `/match/filter?fieldLocation=${location}` : "/match/filter";
+            }).val(getQueryParam('fieldLocation'));
+
+            const fields = JSON.parse(`<th:block th:utext="${fields}"></th:block>`);
+
+            const updateStartAndFinishTimes = (selectedField) => {
+                ["startTime", "finishTime"].forEach((timeType) => {
+                    let timeSelect = $(`#${timeType}`).empty().append(`<option value=''>Select ${timeType.split('T')[0]} time</option>`);
+
+                    if (selectedField) {
+                        for (let currentTime = selectedField.openTime; currentTime <= selectedField.closeTime; currentTime.setMinutes(currentTime.getMinutes() + 30)) {
+                            timeSelect.append(`<option value='${currentTime}'>${currentTime}</option>`);
+                        }
+                    }
+                });
+            };
+
+            $("#location").change(function () {
+                let location = $(this).val();
+                let filteredFields = fields.filter(field => field.fieldLocation === location);
+                let venueDropdown = $("#venue").empty().append("<option value=''>Select venue</option>");
+
+                for (let field of filteredFields) {
+                    venueDropdown.append(`<option value="${field.fieldName}">${field.fieldName}</option>`);
+                }
+
+                updateStartAndFinishTimes(null);
+            });
+
+            $("#venue").change(function () {
+                let selectedFieldName = $(this).val();
+                let selectedField = selectedFieldName ? fields.find(field => field.fieldName === selectedFieldName) : null;
+                updateStartAndFinishTimes(selectedField);
+            });
+        });
+    </script>
+
+
+    <style>
+        .filter-page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-container {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        button[type="submit"] {
+            margin-top: 1.5rem;
+            background-color: #007BFF;
+            color: #FFF;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0069d9;
+        }
+
+        .datepicker-container {
+            display: flex;
+        }
+
+        .datepicker-input {
+            flex-grow: 1;
+        }
+
+        #startDatePickerButton {
+            margin-left: 5px;
+        }
+    </style>
+
+    <script>
+        // 기존 자바스크립트 코드는 여기에 위치합니다.
+    </script>
+
+</head>
+<body>
+<div layout:fragment="main" class="container mt-5">
+    <!-- 에러 확인용 메시지 - 1.필수정보 미 입력 2.매치에 사람이 꽉 찻을 때 -->
+    <div th:if="${message}" th:text="${message}" style="color:red;"></div>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <h1 class="filter-page-title">조건 페이지</h1>
+
+            <div class="form-container">
+                <form method="post" action="/match">
+
+                    <div class="form-group">
+                        <label for="location">fieldLocation:</label>
+                        <select id="location" name="fieldLocation" class="form-control">
+                            <option value="">Select location</option>
+                            <option value="서울">서울</option>
+                            <option value="수원">수원</option>
+                            <option value="포항">포항</option>
+                            <option value="울산">울산</option>
+                            <option value="강원도">강원도</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="venue">Stadium:</label>
+                        <select id="venue" name="stadium" class="form-control">
+                            <option value="">Select venue</option>
+                            <th:block th:each="field : ${fields}" th:if="${selectedLocation eq field.fieldLocation}">
+                                <option th:value="${field.fieldName}" th:text="${field.fieldName}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <div class="datepicker-container">
+                            <input type="text" id="startDate" name="matchDate" readonly
+                                   class="form-control datepicker-input"/>
+                            <button type="button" id="startDatePickerButton" class="btn btn-outline-secondary">Select
+                                Date
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usageTime">Usage Time:</label>
+                        <select id="usageTime" name="usageTime" class="form-control">
+                            <option value=''>Select usage time</option>
+                            <option value="1">1타임</option>
+                            <option value="2">2타임</option>
+                            <option value="3">3타임</option>
+                            <option value="4">4타임</option>
+                            <option value="5">5타임</option>
+                            <option value="6">6타임</option>
+                            <option value="7">7타임</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">빠른 매칭!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

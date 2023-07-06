@@ -51,4 +51,13 @@ public class FieldService {
             e.printStackTrace();
         }
     }
+
+    //해당 지역에 있는 스타디움 찾는 로직
+    public List<Field> findFieldsByLocation(String location) {
+        if (location == null || location.isEmpty()) {
+            return fieldRepository.findAll();
+        }
+        return fieldRepository.findByFieldLocation(location);
+    }
+
 }
