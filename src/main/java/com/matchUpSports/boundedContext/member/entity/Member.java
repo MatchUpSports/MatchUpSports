@@ -35,10 +35,10 @@ public class Member {
     private LocalDateTime modifiedDate;
     private LocalDateTime deleteDate;
     private String username;
-//    private String password;
+    //    private String password;
     private String email;
     private String phoneNumber;
-//    private String authorities;
+    //    private String authorities;
     private int winningRate;
     private String bigDistrict;
     private String smallDistrict;

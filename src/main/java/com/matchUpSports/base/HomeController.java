@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HomeController {
 
-
     @GetMapping("/")
     public String every() {
         return "member/home.html";
@@ -30,7 +29,7 @@ public class HomeController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
 
         new SecurityContextLogoutHandler()
-                .logout(request,response, SecurityContextHolder.getContext().getAuthentication());
+                .logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 
         return "redirect:/";
     }

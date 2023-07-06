@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waiting</title>
+</head>
+<body>
+<h1>매칭 대기중</h1>
+<table>
+    <tr>
+        <th>날짜</th>
+        <th>이용 시간</th>
+        <th>장소</th>
+        <th>이름</th>
+        <th>참가자 수</th>
+    </tr>
+    <tr th:each="match : ${matches}">
+        <td th:text="${match.matchDate}">날짜</td>
+        <td th:text="${match.usageTime}">이용 시간</td>
+        <td th:text="${match.fieldLocation}">장소</td>
+        <td th:text="${match.stadium}">이름</td>
+        <td th:text="${match.participantCount}">참가자 수</td>
+        <td>
+            <form th:action="@{/match/cancel}" method="post">
+                <input type="hidden" th:value="${match.id}" name="matchId"/>
+                <button type="submit">취소하기</button>
+            </form>
+        </td>
+
+        <!-- 확정하기 버튼을 추가하고, 참가자 수가 2명일 때만 표시되도록 합니다 -->
+        <td th:if="${match.participantCount} == 2">
+            <form th:action="@{/match/confirm}" method="post">
+                <input type="hidden" th:value="${match.id}" name="matchId"/>
+                <button type="submit">확정하기</button>
+            </form>
+        </td>
+
+    </tr>
+</table>
+</body>
+</html>

@@ -2,7 +2,9 @@ package com.matchUpSports.base.districts;
 
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class Districts {
@@ -24,26 +26,27 @@ public class Districts {
     private static final List<String> GYEONGNAM = Arrays.asList("창원시", "진주시", "통영시", "사천시", "김해시", "밀양시", "거제시", "양산시", "의령군", "함안군", "창녕군", "고성군", "남해군", "하동군", "산청군", "함양군", "거창군", "합천군");
     private static final List<String> JEJU = Arrays.asList("제주시, 서귀포시");
     private static final Map<String, List<String>> SMALL_DISTRICTS = Map.ofEntries(Map.entry("서울", SEOUL)
-                                                                , Map.entry("부산", BUSAN)
-                                                                , Map.entry("대구", DAEGU)
-                                                                , Map.entry("인천", INCHEON)
-                                                                , Map.entry("광주", GWANGJU)
-                                                                , Map.entry("대전", DAEJEON)
-                                                                , Map.entry("울산", ULSAN)
-                                                                , Map.entry("세종", SEJONG)
-                                                                , Map.entry("경기", GYEONGI)
-                                                                , Map.entry("강원", KANGWON)
-                                                                , Map.entry("충북", CHUNGBUK)
-                                                                , Map.entry("충남", CHUNGNAM)
-                                                                , Map.entry("전북", JEONBUK)
-                                                                , Map.entry("전남", JEONNAM)
-                                                                , Map.entry("경북", GYEONGBUK)
-                                                                , Map.entry("경남", GYEONGNAM)
-                                                                , Map.entry("제주", JEJU));
+            , Map.entry("부산", BUSAN)
+            , Map.entry("대구", DAEGU)
+            , Map.entry("인천", INCHEON)
+            , Map.entry("광주", GWANGJU)
+            , Map.entry("대전", DAEJEON)
+            , Map.entry("울산", ULSAN)
+            , Map.entry("세종", SEJONG)
+            , Map.entry("경기", GYEONGI)
+            , Map.entry("강원", KANGWON)
+            , Map.entry("충북", CHUNGBUK)
+            , Map.entry("충남", CHUNGNAM)
+            , Map.entry("전북", JEONBUK)
+            , Map.entry("전남", JEONNAM)
+            , Map.entry("경북", GYEONGBUK)
+            , Map.entry("경남", GYEONGNAM)
+            , Map.entry("제주", JEJU));
 
     private static final List<String> BIG_DISTRICTS = Arrays.asList("서울", "부산", "대구", "인천", "광주", "대전", "울산"
-                                                                    , "세종", "경기", "강원", "충북", "충남", "전북", "전남"
-                                                                    , "경북", "경남", "제주");
+            , "세종", "경기", "강원", "충북", "충남", "전북", "전남"
+            , "경북", "경남", "제주");
+
     public Map<String, List<String>> getSmallDistricts() {
         return SMALL_DISTRICTS;
     }

@@ -20,7 +20,7 @@ public class CustomConverter implements AttributeConverter<Set<Role>, String> {
 
     @Override
     public Set<Role> convertToEntityAttribute(String dbData) {
-        return StringUtils.hasText(dbData) ?  convertToSet(dbData) : new HashSet<>();
+        return StringUtils.hasText(dbData) ? convertToSet(dbData) : new HashSet<>();
     }
 
     private Set<Role> convertToSet(String dbData) {
