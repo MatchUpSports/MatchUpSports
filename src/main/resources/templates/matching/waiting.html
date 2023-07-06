@@ -1,41 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waiting</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        body {
+            background-color: #f7f7f7;
+        }
+        .page-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #ffffff;
+            margin-bottom: 1.5rem;
+        }
+        .card-title, .match-date {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .card-text {
+            margin-bottom: 0.5rem;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+        }
+        .btn-cancel, .btn-confirm {
+            background-color: #ffffff;
+            color: #007BFF;
+            padding: 0.5rem 1rem;
+            border: 1px solid #007BFF;
+            transition: all 0.3s;
+            border-radius: 0.5rem;
+        }
+        .btn-cancel:hover, .btn-confirm:hover {
+            background-color: #007BFF;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
-<h1>매칭 대기중</h1>
-<table>
-    <tr>
-        <th>날짜</th>
-        <th>이용 시간</th>
-        <th>장소</th>
-        <th>이름</th>
-        <th>참가자 수</th>
-    </tr>
-    <tr th:each="match : ${matches}">
-        <td th:text="${match.matchDate}">날짜</td>
-        <td th:text="${match.usageTime}">이용 시간</td>
-        <td th:text="${match.fieldLocation}">장소</td>
-        <td th:text="${match.stadium}">이름</td>
-        <td th:text="${match.participantCount}">참가자 수</td>
-        <td>
-            <form th:action="@{/match/cancel}" method="post">
-                <input type="hidden" th:value="${match.id}" name="matchId"/>
-                <button type="submit">취소하기</button>
-            </form>
-        </td>
+<div layout:fragment="main" class="container mt-5">
+    <h1 class="text-center page-title">매칭 대기중</h1>
 
-        <!-- 확정하기 버튼을 추가하고, 참가자 수가 2명일 때만 표시되도록 합니다 -->
-        <td th:if="${match.participantCount} == 2">
-            <form th:action="@{/match/confirm}" method="post">
-                <input type="hidden" th:value="${match.id}" name="matchId"/>
-                <button type="submit">확정하기</button>
-            </form>
-        </td>
-
-    </tr>
-</table>
+    <th:block th:each="match : ${matches}">
+        <div class="card mx-auto">
+            <p class="card-text mb-1 match-date">날짜: <span th:text="${match.matchDate}">날짜</span></p>
+            <h5 class="card-title" th:text="${match.stadium}">Stadium</h5>
+            <p class="card-text mb-1">이용 시간: <span th:text="${match.usageTime}">이용 시간</span> 타임</p>
+            <p class="card-text mb-1">장소: <span th:text="${match.fieldLocation}">장소</span></p>
+            <p class="card-text mb-1">참가자 수: <span th:text="${match.participantCount}">참가자 수</span></p>
+            <div class="btn-container">
+                <form th:action="@{/match/cancel}" method="post">
+                    <input type="hidden" th:value="${match.id}" name="matchId" />
+                    <button type="submit" class="btn btn-cancel">취소하기</button>
+                </form>
+                <form th:action="@{/match/confirm}" method="post" th:if="${match.participantCount} == 2">
+                    <input type="hidden" th:value="${match.id}" name="matchId" />
+                    <button type="submit" class="btn btn-confirm">확정하기</button>
+                </form>
+            </div>
+        </div>
+    </th:block>
+</div>
 </body>
 </html>
