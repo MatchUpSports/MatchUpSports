@@ -5,24 +5,15 @@ import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
-import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
-import com.matchUpSports.base.rsData.RsData;
-import com.matchUpSports.boundedContext.match.VoteForm.VoteForm;
-import com.matchUpSports.boundedContext.match.controller.MatchController;
-import com.matchUpSports.boundedContext.match.entity.Match;
-import com.matchUpSports.boundedContext.match.entity.MatchMember;
+import com.matchUpSports.boundedContext.match.Form.MatchForm;
+import com.matchUpSports.boundedContext.match.Form.VoteForm;
 import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
 import com.matchUpSports.boundedContext.match.repository.MatchRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import com.matchUpSports.boundedContext.match.repository.MatchVoteRepository;
-import com.matchUpSports.boundedContext.member.entity.Member;
-import com.matchUpSports.boundedContext.member.repository.MemberRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,7 +110,7 @@ public class MatchService {
 
         //테스트를 위해서 2명에서 1명으로 수정함
         for (int i = 1; i <= maxSubStadiumCount; i++) {
-            if (subStadiumMembers[i] < 2) {
+            if (subStadiumMembers[i] < 10) {
                 for (Match existingMatch : matches) {
                     if (existingMatch.getSubStadiumCount() == i) {
                         return new MatchAndSubStadium(existingMatch, i);
@@ -134,11 +125,12 @@ public class MatchService {
     private final MatchVoteRepository matchVoteRepository;
 
     @Transactional
-    public RsData<Match> join(int usageTime, FutsalField field){
+    public RsData<Match> join(int usageTime, FutsalField field, LocalDate matchDate){
         Match match = Match.builder()
                 .usageTime(usageTime)
                 .matchDate(LocalDate.now())
                 .field(field)
+                .matchDate(matchDate)
                 .progressStatus("진행")
                 .build();
 
@@ -148,15 +140,15 @@ public class MatchService {
     }
 
     @Transactional
-    public RsData<MatchMember> matching(Match match, Member member, boolean myVote, int voteCount, int team){
+    public RsData<MatchMember> matching(Match match, Member member, boolean myVote, int votedCount, int team){
 
         MatchMember matchMember = MatchMember.builder()
                 .myVote(myVote)
                 .member(member)
                 .match(match)
-                .votedCount(voteCount)
+                .votedCount(votedCount)
                 .team(team)
-                        .build();
+                .build();
 
         matchMemberRepository.save(matchMember);
 
@@ -237,7 +229,7 @@ public class MatchService {
     }
 
     // 매치에 멤버 추가 (내부 사용)
-    private void addMatchMember(Member loggedInMember, Match newMatch) {
+    public void addMatchMember(Member loggedInMember, Match newMatch) {
         MatchMember matchMember = new MatchMember();
         matchMember.setMember(loggedInMember);
         matchMember.setMatch(newMatch);

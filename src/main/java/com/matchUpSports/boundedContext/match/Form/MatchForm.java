@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.match.matchFormDto;
+package com.matchUpSports.boundedContext.match.Form;
 
 import com.matchUpSports.boundedContext.match.entity.Match;
 import lombok.AllArgsConstructor;
