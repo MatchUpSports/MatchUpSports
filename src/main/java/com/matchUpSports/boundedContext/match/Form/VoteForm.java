@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.match.VoteForm;
+package com.matchUpSports.boundedContext.match.Form;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

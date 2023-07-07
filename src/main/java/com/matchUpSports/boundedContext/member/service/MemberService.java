@@ -171,4 +171,16 @@ public class MemberService {
                         , simpleGrantedAuthority.getAuthority().length()))
                 .toList();
     }
+
+    @Transactional
+    public RsData<Member> join(String email, String userName, int tier){
+        Member member = Member.builder()
+                .email(email)
+                .username(userName)
+                .tier(tier)
+                .build();
+        memberRepository.save(member);
+
+        return RsData.of("S-1", "회원가입 완료", member);
+    }
 }
