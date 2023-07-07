@@ -6,11 +6,23 @@ import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldReposi
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
+import com.matchUpSports.base.rsData.RsData;
+import com.matchUpSports.boundedContext.match.VoteForm.VoteForm;
+import com.matchUpSports.boundedContext.match.controller.MatchController;
+import com.matchUpSports.boundedContext.match.entity.Match;
+import com.matchUpSports.boundedContext.match.entity.MatchMember;
+import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
 import com.matchUpSports.boundedContext.match.repository.MatchRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
+import com.matchUpSports.boundedContext.match.repository.MatchVoteRepository;
+import com.matchUpSports.boundedContext.member.entity.Member;
+import com.matchUpSports.boundedContext.member.repository.MemberRepository;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -114,6 +131,76 @@ public class MatchService {
 
         return new MatchAndSubStadium(null, -1);
     }
+    private final MatchVoteRepository matchVoteRepository;
+
+    @Transactional
+    public RsData<Match> join(int usageTime, FutsalField field){
+        Match match = Match.builder()
+                .usageTime(usageTime)
+                .matchDate(LocalDate.now())
+                .field(field)
+                .progressStatus("진행")
+                .build();
+
+        matchRepository.save(match);
+
+        return RsData.of("S-1", "매치가 만들어졌습니다.", match);
+    }
+
+    @Transactional
+    public RsData<MatchMember> matching(Match match, Member member, boolean myVote, int voteCount, int team){
+
+        MatchMember matchMember = MatchMember.builder()
+                .myVote(myVote)
+                .member(member)
+                .match(match)
+                .votedCount(voteCount)
+                .team(team)
+                        .build();
+
+        matchMemberRepository.save(matchMember);
+
+        return RsData.of("S-1", "매치에" + member.getUsername() + "이 추가되었습니다.", matchMember);
+    }
+
+    public List<MatchMember> getMatchMemberList(Long matchId){
+        List<MatchMember> matchMemberList = matchMemberRepository.findAllByMatchId(matchId);
+
+        return matchMemberList;
+    }
+
+    public Match getMatch(Long id){
+        Optional<Match> match = matchRepository.findById(id);
+
+        // 존재하지 않는 매치의 id로 입력받은 경우 예외처리
+        if (!match.isPresent()) throw new NoSuchElementException("해당 매치는 존재하지 않는 매치입니다.");
+
+        return match.get();
+    }
+
+    public List<MatchMember> findMVP(){
+        List<MatchMember> MVP = matchMemberRepository.findMaxVotedMember();
+
+        return MVP;
+    }
+
+    @Transactional
+    public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm){
+        MatchMember matchMember = matchMemberRepository.findById(voteForm.getToVote()).get();
+
+        MatchVote matchVote = MatchVote.builder()
+                .fromVoteMember(fromVoteMember)
+                .toVoteMember(matchMember)
+                .voteTypeCode(voteForm.getVoteTypeCode())
+                .build();
+        matchVoteRepository.save(matchVote);
+
+        //fromVoteMember.setVoteCount(fromVoteMember.getVoteCount() + 1);
+
+        //matchMemberRepository.save(fromVoteMember);
+
+        return RsData.of("S-1", "투표를 완료했습니다.", matchVote);
+    }
 
     // 로그인한 사용자 가져오기 (내부 사용)
     private Member getLoggedInMember(long memberId) {
@@ -154,7 +241,7 @@ public class MatchService {
         MatchMember matchMember = new MatchMember();
         matchMember.setMember(loggedInMember);
         matchMember.setMatch(newMatch);
-        matchMember.setVoteCount(0);
+        matchMember.setVotedCount(0);
         matchMemberRepository.save(matchMember);
     }
 

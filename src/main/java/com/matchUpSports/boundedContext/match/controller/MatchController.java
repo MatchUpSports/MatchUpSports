@@ -5,14 +5,30 @@ import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.matchFormDto.MatchForm;
+import com.matchUpSports.boundedContext.match.VoteForm.VoteForm;
+import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.service.MatchService;
+import com.matchUpSports.boundedContext.member.service.MemberService;
+import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -83,5 +99,64 @@ public class MatchController {
             return "matching/waiting";
         }
     }
+    private final MemberService memberService;
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String vote(@PathVariable("id") Long id, Model model){
+
+        Match match = matchService.getMatch(id);
+        List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
+
+        model.addAttribute("match", match);
+        model.addAttribute("matchMembers", matchMemberList);
+
+        return "matches/vote";
+
+    }
+
+    //@PreAuthorize("isAuthenticated()")
+    @PostMapping("/vote/{id}")
+    public String vote(@PathVariable("id") Long id, @AuthenticationPrincipal User user, VoteForm voteForm){
+        Match match = matchService.getMatch(id);
+        List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
+
+        // 현재 투표 post 요청한 유저가 이 매치에 멤버가 아니라면 redirect
+        Stream<MatchMember> matchMemberStream = matchMemberList.stream().filter(matchMember -> matchMember.getMember().getUsername().equals(user.getUsername()));
+
+        List<MatchMember> matchMembers = matchMemberStream.collect(Collectors.toList());
+
+        if (matchMembers.size() != 1){
+            return rq.historyBack("투표를 할 권한이 없습니다.");
+        }
+
+        // 투표를 보낸 사람
+        MatchMember fromMatchMember = matchMembers.get(0);
+
+        if(fromMatchMember.isMyVote() == true){
+            return rq.historyBack("이미 투표를 완료한 경기입니다.");
+        }
+
+        RsData<MatchVote> voteRsData = matchService.vote(fromMatchMember, voteForm);
+
+        if (voteRsData.isFail()) {
+            return rq.historyBack(voteRsData);
+        }
+        /*  매치가 없는 매치이면 전 페이지로 이동
+        if (match == null){
+            return "";
+        }*/
+
+        return rq.redirectWithMsg("matches/matchResult/" + id, "투표 완료");
+    }
+
+    @GetMapping("/result/{id}")
+    public String matchResult(@PathVariable("id") Long id, Model model){
+        Match match = matchService.getMatch(id);
+        List<MatchMember> matchMVPMembers = matchService.findMVP();
+
+        model.addAttribute("match", match);
+        model.addAttribute("MVPs", matchMVPMembers);
+        return "matches/matchResult";
+    }
 }
