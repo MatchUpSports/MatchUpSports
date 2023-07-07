@@ -29,7 +29,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
 
-        Member member = memberService.findByUsername(token.getPrincipal().getName()).get();
+        Member member = memberService.findByUsername(token.getPrincipal().getName());
         if (member != null) {
             if (member.getTier() == 0) {
                 HttpSession session = request.getSession();

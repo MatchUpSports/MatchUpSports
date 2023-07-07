@@ -1,6 +1,7 @@
 package com.matchUpSports.boundedContext.futsalField.service;
 
 import com.matchUpSports.base.exception.handler.DataNotFoundException;
+import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldModifyDto;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldRegistrationDto;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
@@ -82,6 +83,20 @@ public class FutsalFieldService {
     public void delete(FutsalField futsalField) {
         futsalField.setDeleteDate(LocalDateTime.now());
         futsalFieldRepository.save(futsalField);
+    }
+
+    @Transactional
+    public RsData<FutsalField> join(String name, String registNum, int price, int courtCount, String fieldLocation){
+        FutsalField field = FutsalField.builder()
+                .fieldName(name)
+                .registNum(registNum)
+                .price(price)
+                .courtCount(courtCount)
+                .fieldLocation(fieldLocation)
+                .build();
+
+        futsalFieldRepository.save(field);
+        return RsData.of("S-1", "시설 등록 완료", field);
     }
 
     // hard-delete

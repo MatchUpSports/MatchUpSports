@@ -4,10 +4,12 @@ import com.matchUpSports.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder(toBuilder = true)
 public class MatchMember {
 
     @Id
@@ -20,8 +22,18 @@ public class MatchMember {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    private boolean Confirmed; // 확정 상태를 나타내는 새로운 필드 추가
+    private boolean confirmed;
 
-    private int voteCount;
+    private int votedCount;
+
+    private boolean myVote;
+
+    private int team;
+
+    private boolean ispaid;
+
+    public MatchMember() {
+
+    }
 
 }

@@ -2,8 +2,15 @@ package com.matchUpSports.boundedContext.member.service;
 
 import com.matchUpSports.base.Role;
 import com.matchUpSports.base.exception.handler.DataNotFoundException;
+import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
 import com.matchUpSports.boundedContext.member.dto.*;
+import com.matchUpSports.boundedContext.match.entity.MatchMember;
+import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
+import com.matchUpSports.boundedContext.member.dto.BasicUserInfoForm;
+import com.matchUpSports.boundedContext.member.dto.JoiningForm;
+import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
+import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +28,7 @@ import java.util.regex.Pattern;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final MatchMemberRepository matchMemberRepository;
     private static final Map<String, Integer> tierClassifier = new HashMap<>(Map.of("하수", 1, "중수", 2, "고수", 3));
     private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
@@ -140,6 +148,22 @@ public class MemberService {
         stringBuffer.append("%");
         return stringBuffer.toString();
     }
+
+    // 김진호 수정
+//    @Transactional
+//    public RsData<Member> join(String area, String email, String userName, int tier){
+//        Member member = Member.builder()
+//                .email(email)
+//                .area(area)
+//                .username(userName)
+//                .tier(tier)
+//                .build();
+//        memberRepository.save(member);
+//
+//        return RsData.of("S-1", "회원가입 완료", member);
+//    }
+
+//}
 
     private List<String> convertAuthoritiesToString(List<? extends GrantedAuthority> simpleGrantedAuthorities) {
         return simpleGrantedAuthorities.stream()
