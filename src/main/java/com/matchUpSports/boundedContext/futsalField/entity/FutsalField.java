@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.futsalField.entity;
 
+import com.matchUpSports.base.entity.BaseEntity;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,14 +13,10 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
-public class FutsalField {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class FutsalField extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="futsalFields")
     private Member member;
-    private String memberUsername;
     private String fieldName;
 
     private String fieldLocation;
