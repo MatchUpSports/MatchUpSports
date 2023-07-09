@@ -44,7 +44,7 @@ public class HomeController {
 
     @ResponseBody
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin")
+    @GetMapping("/adm")
     public String admin() {
         return "ADMIN";
     }

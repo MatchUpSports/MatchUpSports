@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true));
 
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/adm/**").hasRole("ADMIN")
                 .requestMatchers("/management/**").hasRole("MANAGE")
                 .requestMatchers("/member/login").anonymous()
                 .requestMatchers("/member/**").hasAnyRole("USER", "ADMIN", "MANAGE")
