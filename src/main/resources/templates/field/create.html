@@ -56,35 +56,33 @@
         }
     </script>
 
-    <div class="w-full bg-no-repeat bg-cover flex flex-col items-center justify-center gap-6 min-h-screen">
-        <div class="max-w-2xl w-full px-4 mb-16">
-            <p class="text-2xl font-black my-12 text-center">구장 등록</p>
-            <form th:action="@{/field/create}" th:object="${FutsalFieldRegistrationDto}" method="POST"
-                  onsubmit="Validation__createField(this); return false;">
-                <input type="text" id="name" name="name" placeholder="구장명을 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+    <div class="max-w-2xl w-full px-4 mb-20">
+        <p class="text-2xl font-black my-10 text-center">구장 등록</p>
+        <form th:action="@{/field/create}" th:object="${FutsalFieldRegistrationDto}" method="POST"
+              onsubmit="Validation__createField(this); return false;">
+            <input type="text" id="name" name="name" placeholder="구장명을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="text" name="location" placeholder="위치를 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="text" name="location" placeholder="위치를 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="text" name="price" placeholder="가격을 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="text" name="price" placeholder="가격을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="time" name="openTime" placeholder="영업 시작 시간을 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="time" name="openTime" placeholder="영업 시작 시간을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="time" name="closeTime" placeholder="영업 종료 시간을 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="time" name="closeTime" placeholder="영업 종료 시간을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="text" name="courtCount" placeholder="구장 수를 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="text" name="courtCount" placeholder="구장 수를 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <input type="text" name="registNum" placeholder="사업자 등록 번호를 입력하세요"
-                       class="input input-bordered w-full mt-12"/>
+            <input type="text" name="registNum" placeholder="사업자 등록 번호를 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-                <button type="submit" class="btn btn-error w-full mb-12">등록</button>
-            </form>
-        </div>
+            <button type="submit" class="btn btn-error w-full mt-12">등록</button>
+        </form>
     </div>
 
 
@@ -126,11 +124,11 @@
     <!--    </div>-->
     <!--  </div>-->
     <!--</form>-->
-<!--    <script>-->
-<!--        function showSuccessMessage() {-->
-<!--            toastNotice("입력하신 시설이 등록되었습니다.")-->
-<!--        }-->
-<!--    </script>-->
+    <!--    <script>-->
+    <!--        function showSuccessMessage() {-->
+    <!--            toastNotice("입력하신 시설이 등록되었습니다.")-->
+    <!--        }-->
+    <!--    </script>-->
 </main>
 </body>
 </html>

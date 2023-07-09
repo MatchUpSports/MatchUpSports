@@ -1,82 +1,82 @@
 <!DOCTYPE html>
 <html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
-  <meta charset="UTF-8">
-  <title>구장 수정</title>
+    <meta charset="UTF-8">
+    <title>구장 수정</title>
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
-  <script>
+    <script>
 
-    function Validation__modifyField(form) {
-      form.name = document.getElementById("name").value;
+        function Validation__modifyField(form) {
+            form.name = document.getElementById("name").value;
 
-      if (form.name.value.trim().length == 0) {
-        toastWarning("구장명을 작성해주세요.");
-        form.name.focus();
-        return;
-      }
+            if (form.name.value.trim().length == 0) {
+                toastWarning("구장명을 작성해주세요.");
+                form.name.focus();
+                return;
+            }
 
-      if (form.location.value.trim().length == 0) {
-        toastWarning("지역을 작성해주세요.");
-        form.location.focus();
-        return;
-      }
+            if (form.location.value.trim().length == 0) {
+                toastWarning("지역을 작성해주세요.");
+                form.location.focus();
+                return;
+            }
 
-      if (form.price.value.trim().length == 0) {
-        toastWarning("이용료를 작성해주세요.");
-        form.price.focus();
-        return;
-      }
+            if (form.price.value.trim().length == 0) {
+                toastWarning("이용료를 작성해주세요.");
+                form.price.focus();
+                return;
+            }
 
-      if (form.openTime.value.trim().length == 0) {
-        toastWarning("영업 시작 시간을 작성해주세요.");
-        form.openTime.focus();
-        return;
-      }
+            if (form.openTime.value.trim().length == 0) {
+                toastWarning("영업 시작 시간을 작성해주세요.");
+                form.openTime.focus();
+                return;
+            }
 
-      if (form.closeTime.value.trim().length == 0) {
-        toastWarning("영업 종료 시간을 작성해주세요.");
-        form.closeTime.focus();
-        return;
-      }
+            if (form.closeTime.value.trim().length == 0) {
+                toastWarning("영업 종료 시간을 작성해주세요.");
+                form.closeTime.focus();
+                return;
+            }
 
-      if (form.courtCount.value.trim().length == 0) {
-        toastWarning("구장 수를 작성해주세요.");
-        form.courtCount.focus();
-        return;
-      }
+            if (form.courtCount.value.trim().length == 0) {
+                toastWarning("구장 수를 작성해주세요.");
+                form.courtCount.focus();
+                return;
+            }
 
-      form.submit();
-    }
-  </script>
+            form.submit();
+        }
+    </script>
 
-  <div class="w-full bg-no-repeat bg-cover flex flex-col items-center justify-center gap-6 min-h-screen">
-    <div class="max-w-2xl w-full px-4 mb-16">
-      <p class="text-2xl font-black my-12 text-center">구장 수정</p>
-      <form th:action="@{/field/modify/{id}(id=${futsalField.getId()})}" th:object="${FutsalFieldModifyDto}" method="POST"
-            onsubmit="Validation__modifyField(this); return false;">
-          <input th:value="${futsalField.getFieldName()}" type="text" id="name" name="name" placeholder="구장명을 입력하세요" class="input input-bordered w-full mt-12"/>
+    <div class="max-w-2xl w-full px-4 mb-20">
+        <p class="text-2xl font-black my-12 text-center">구장 수정</p>
+        <form th:action="@{/field/modify/{id}(id=${futsalField.getId()})}" th:object="${FutsalFieldModifyDto}"
+              method="POST"
+              onsubmit="Validation__modifyField(this); return false;">
+            <input th:value="${futsalField.getFieldName()}" type="text" id="name" name="name" placeholder="구장명을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input th:value="${futsalField.getFieldLocation()}" type="text" name="location" placeholder="위치를 입력하세요"
-                 class="input input-bordered w-full mt-12"/>
+            <input th:value="${futsalField.getFieldLocation()}" type="text" name="location" placeholder="위치를 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input th:value="${futsalField.getPrice()}" type="text" name="price" placeholder="가격을 입력하세요"
-                 class="input input-bordered w-full mt-12"/>
+            <input th:value="${futsalField.getPrice()}" type="text" name="price" placeholder="가격을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input th:value="${futsalField.getOpenTime()}" type="time" name="openTime" placeholder="영업 시작 시간을 입력하세요"
-                 class="input input-bordered w-full mt-12"/>
+            <input th:value="${futsalField.getOpenTime()}" type="time" name="openTime" placeholder="영업 시작 시간을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input th:value="${futsalField.getCloseTime()}" type="time" name="closeTime" placeholder="영업 종료 시간을 입력하세요"
-                 class="input input-bordered w-full mt-12"/>
+            <input th:value="${futsalField.getCloseTime()}" type="time" name="closeTime" placeholder="영업 종료 시간을 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input th:value="${futsalField.getCourtCount()}" type="text" name="courtCount" placeholder="구장 수를 입력하세요"
-                 class="input input-bordered w-full mt-12"/>
+            <input th:value="${futsalField.getCourtCount()}" type="text" name="courtCount" placeholder="구장 수를 입력하세요"
+                   class="input input-bordered w-full mt-12"/>
 
-          <input type="submit" value="수정하기" class="btn btn-outline w-full my-12">
-      </form>
+            <input type="submit" value="수정하기" class="btn btn-outline w-full mt-12">
+        </form>
     </div>
-  </div>
 </main>
 </body>
 </html>
