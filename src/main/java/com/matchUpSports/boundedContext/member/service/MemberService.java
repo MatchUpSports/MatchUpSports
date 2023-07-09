@@ -34,6 +34,10 @@ public class MemberService {
                 .orElseThrow(() -> new DataNotFoundException("존재하지 않는 유저입니다."));
     }
 
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
     @Transactional
     public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
@@ -166,6 +170,13 @@ public class MemberService {
                         , simpleGrantedAuthority.getAuthority().length()))
                 .toList();
     }
+
+    @Transactional
+    public void deleteHard(Long id) {
+        memberRepository.deleteHardById(id);
+    }
+
+}
 
     @Transactional
     public RsData<Member> join(String email, String userName, int tier) {
