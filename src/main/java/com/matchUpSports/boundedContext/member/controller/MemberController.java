@@ -38,7 +38,7 @@ public class MemberController {
     public String showMyPage(Model model) {
         Member member = rq.getMember();
         if (member == null) {
-            return "redirect:/member/login";
+            return "redirect:member/login";
         }
 
         MyPage myPage = memberService.showMyPage(member);
@@ -52,14 +52,14 @@ public class MemberController {
         Member member = (Member) session.getAttribute("member");
         boolean isModifiedTier = member.getTier() != 0;
         if (isModifiedTier) {
-            return "redirect:/";
+            return "redirect:";
         }
 
         model.addAttribute("httpMethod", "POST");
         model.addAttribute("bigDistricts", districts.getBigDistricts());
         model.addAttribute("smallDistricts", districts.getSmallDistricts());
 
-        return "/member/joining_info_form";
+        return "member/joining_info_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -73,7 +73,7 @@ public class MemberController {
             return "redirect:" + referer;
         }
 
-        return "redirect:/";
+        return "redirect:";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -81,7 +81,7 @@ public class MemberController {
     public String modifyUserInfo(Model model) {
         Member member = rq.getMember();
         if (member.getTier() == 0) {
-            return "redirect:/member/joiningForm";
+            return "redirect:member/joiningForm";
         }
         long memberId = member.getId();
         ModifyingDisplaying modifyingForm = memberService.showModifyingForm(memberId);
@@ -94,7 +94,7 @@ public class MemberController {
         model.addAttribute("httpMethod", "PUT");
         model.addAttribute("bigDistricts", districts.getBigDistricts());
         model.addAttribute("smallDistricts", districts.getSmallDistricts());
-        return "/member/joining_info_form";
+        return "member/joining_info_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -108,6 +108,6 @@ public class MemberController {
             return "redirect:" + referer;
         }
 
-        return "redirect:/";
+        return "redirect:";
     }
 }
