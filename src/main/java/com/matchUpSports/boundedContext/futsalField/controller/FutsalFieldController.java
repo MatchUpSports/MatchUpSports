@@ -1,6 +1,7 @@
 package com.matchUpSports.boundedContext.futsalField.controller;
 
 import com.matchUpSports.base.rq.Rq;
+import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldModifyDto;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldRegistrationDto;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.form.CreateFutsalFieldForm;
@@ -32,15 +33,6 @@ public class FutsalFieldController {
     private final MemberService memberService;
     private final Rq rq;
 
-//    @GetMapping("")
-//    public String showManageMain(Model model) {
-//        Member currentMember = rq.getMember();
-//        List<FutsalField> myFields = futsalFieldService.getFutsalFieldsOfCurrentUser(currentMember);
-//
-//        model.addAttribute("myFields", myFields);
-//        return "field/management";  // HTML 뷰의 이름
-//    }
-
     @GetMapping("/myFields")
     public String getMyFutsalFields(Model model) {
         Member currentMember = rq.getMember();
@@ -56,8 +48,9 @@ public class FutsalFieldController {
     }
 
     @GetMapping("/detail/{id}")
-    public String showDetailFutsalField(@PathVariable Long id, Model model){
-
+    public String showDetailFutsalField(@PathVariable Long id, Model model) {
+        FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
+        model.addAttribute("futsalField", futsalField);
         return "field/futsalFieldDetail";
     }
 
@@ -76,6 +69,36 @@ public class FutsalFieldController {
         FutsalField futsalField = futsalFieldService.create(member, dto);
         return rq.redirectWithMsg("/field/myFields".formatted(futsalField.getId()), "등록되었습니다");
     }
+
+    @GetMapping("/modify/{id}")
+    public String modify(@PathVariable Long id, Model model) {
+        FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
+        model.addAttribute("futsalField", futsalField);
+        return "field/modify";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modify(@PathVariable Long id, FutsalFieldModifyDto dto) {
+        FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
+
+        if (dto.isSame(futsalField)) rq.historyBack("수정된 내용이 없습니다.");
+
+        futsalFieldService.modify(futsalField, dto);
+        return rq.redirectWithMsg("/field/detail/%s".formatted(futsalField.getId()), "시설 정보가 수정하였습니다.");
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
+
+        if(!futsalField.getMember().getUsername().equals(rq.getUsername())) {
+            return rq.historyBack("접근 권한이 없습니다.");
+        }
+
+        futsalFieldService.delete(futsalField);
+        return rq.redirectWithMsg("/field/myFields", "문의글을 삭제하였습니다.");
+    }
+
 
 //    @PostMapping("/create")
 //    public String createField(Member member, @Validated CreateFutsalFieldForm createForm, @AuthenticationPrincipal User user, BindingResult bindingResult, Model model) {

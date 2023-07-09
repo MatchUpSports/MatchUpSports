@@ -1,11 +1,15 @@
 package com.matchUpSports.boundedContext.futsalField.service;
 
+import com.matchUpSports.base.exception.handler.DataNotFoundException;
+import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldModifyDto;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldRegistrationDto;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.form.CreateFutsalFieldForm;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldImageRepository;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +37,11 @@ public class FutsalFieldService {
         return futsalFieldRepository.findByMember(member);
     }
 
+    public FutsalField findByIdAndDeleteDateIsNull(Long id) {
+        return futsalFieldRepository.findByIdAndDeleteDateIsNull(id)
+                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
+    }
+
     public FutsalField create(Member member, FutsalFieldRegistrationDto dto) {
         FutsalField futsalField = FutsalField.builder()
                 .member(member)
@@ -46,6 +56,7 @@ public class FutsalFieldService {
         return futsalFieldRepository.save(futsalField);
     }
 
+<<<<<<< HEAD
     //해당 지역에 있는 스타디움 찾는 로직
     public List<FutsalField> findFieldsByLocation(String location) {
         if (location == null || location.isEmpty()) {
@@ -55,6 +66,33 @@ public class FutsalFieldService {
     }
 
 }
+=======
+    @Transactional
+    public FutsalField modify(FutsalField futsalField, FutsalFieldModifyDto dto) {
+        futsalField.setFieldName(dto.getName());
+        futsalField.setFieldLocation(dto.getLocation());
+        futsalField.setPrice(dto.getPrice());
+        futsalField.setOpenTime(dto.getOpenTime());
+        futsalField.setCloseTime(dto.getCloseTime());
+        futsalField.setCourtCount(dto.getCourtCount());
+
+        return futsalFieldRepository.save(futsalField);
+    }
+
+    // soft-delete
+    @Transactional
+    public void delete(FutsalField futsalField) {
+        futsalField.setDeleteDate(LocalDateTime.now());
+        futsalFieldRepository.save(futsalField);
+    }
+
+
+    // hard-delete
+    public void deleteHard(FutsalField futsalField) {
+        futsalFieldRepository.delete(futsalField);
+    }
+
+>>>>>>> 7599b97 (feat: 시설 수정 삭제 구현 및 baseEntity 추가)
 //    @Transactional
 //    public void create(@Valid CreateFutsalFieldForm createForm, Member member) {
 //        try {
