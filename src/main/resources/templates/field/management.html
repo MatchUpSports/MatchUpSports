@@ -5,9 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-<main layout:fragment="main" class="flex-grow flex items-center justify-center max-w-2xl mx-auto bg-base-100">
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
         <!-- 시설 등록이 없을 경우 -->
-        <div th:if="${#lists.isEmpty(myFields)}" class="hero min-h-screen" style="background-image: url(https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80);">
+        <div th:if="${#lists.isEmpty(myFields)}" class="hero min-h-screen max-w-2xl w-full" style="background-image: url(https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80);">
             <div class="hero-overlay bg-opacity-60"></div>
             <div class="hero-content text-center text-neutral-content">
                 <div class="max-w-md">
