@@ -27,14 +27,21 @@
                     <tbody>
                     <tr th:each="field : ${myFields}" class="mb-4 border-0">
                         <td class="w-full border-0">
-                            <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-block btn-outline gap-1 w-full" href="">
-                                <span th:text="${field.getFieldName()}" class="normal-case"></span><br>
-                                <span th:text="${field.getFieldLocation()}" class="normal-case"></span>
-                            </a>
+                            <div class="card w-full bg-base-100 shadow-xl image-full">
+                                <figure><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg" alt="Shoes" /></figure>
+                                <div class="card-body">
+                                    <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                    <p th:text="${field.getFieldLocation()}"></p>
+                                    <div class="card-actions justify-end">
+                                        <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-ghost" href="">상세 정보 보기</a>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+                <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>
             </div>
         </div>
     </div>
