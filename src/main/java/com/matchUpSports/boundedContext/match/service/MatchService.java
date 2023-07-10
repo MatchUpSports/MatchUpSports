@@ -1,6 +1,5 @@
 package com.matchUpSports.boundedContext.match.service;
 
-import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
@@ -38,7 +37,6 @@ public class MatchService {
     private final MatchVoteRepository matchVoteRepository;
     private final MemberService memberService;
     private final KakaoTalkMessageService kakaoTalkMessageService;
-    private final Rq rq;
 
     // 매치 생성 메서드
     @Transactional
@@ -111,8 +109,6 @@ public class MatchService {
             subStadiumMembers[currentSubStadium] = currentParticipantCount;
         }
 
-        //테스트를 위해서 2명에서 1명으로 수정함
-        // 10명으로 늘림
         for (int i = 1; i <= maxSubStadiumCount; i++) {
             if (subStadiumMembers[i] < 10) {
                 for (Match existingMatch : matches) {
@@ -367,7 +363,6 @@ public class MatchService {
                 System.out.println("카카오톡 토큰 에러");
             }
 
-            //String message = user.getUsername() + "님\n" + match.getMatchDate() + "\n" + match.getFieldLocation() + " - " + match.getStadium() + "\n" + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
             String message = user.getUsername() + "님   " + match.getMatchDate() + "   " + match.getFieldLocation() + " - " + match.getStadium() + "   " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
 
             // 액세스 토큰과 메시지로 REST API 요청하는 메서드

@@ -48,7 +48,7 @@ public class MatchController {
         return "matching/filterPage";
     }
 
-    //매치 생성및 있는 매치가 있다면 참여하는 메서드
+    //매치 생성 또는 있는 매치가 있다면 참여하는 메서드
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     public String addMatch(@ModelAttribute MatchForm matchForm, Model model) {
@@ -88,7 +88,6 @@ public class MatchController {
         }
     }
 
-    //진호님 부분 ==> 확정하기 버튼누르면 결제+카카오톡 관련 메서드 실행
     @PostMapping("/confirm")
     public String confirmMatch(@RequestParam long matchId, Model model) {
         long memberId = rq.getMemberId();
