@@ -2,7 +2,7 @@
 <html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>시설 관리자</title>
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
@@ -14,18 +14,45 @@
             <div class="max-w-md">
                 <h1 class="mb-5 text-3xl font-bold">시설 관리자 페이지</h1>
                 <p class="mb-5">풋살장을 쉽게 관리해보세요</p>
-                <button class="btn btn-primary" onclick="window.location.href='/field/create'">시작하기</button>
+                <button class="btn btn-primary" onclick="window.location.href='/field/create'">시작 하기</button>
             </div>
         </div>
     </div>
     <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
     <div th:if="${!#lists.isEmpty(myFields)}" class="min-h-screen mt-10">
-        <div class="max-w-2xl w-full px-4 mb-20">
+        <div class="max-w-2xl w-full mb-20">
             <h1 class="mb-5 text-3xl font-bold text-left">시설 관리자 페이지</h1>
-            <p class="mb-5">풋살장을 관리해보세요</p>
+            <p class="mt-5">심사 중</p>
             <table class="table w-full border-0">
                 <tbody>
-                <tr th:each="field : ${myFields}" class="mb-4 border-0">
+                <tr th:each="field : ${pending}" class="mb-4 border-0">
+                    <td class="w-full border-0">
+                        <div class="card w-full bg-base-100 shadow-xl">
+                            <div class="card-body items-center text-center">
+                                <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                <ul class="steps">
+                                    <li class="step step-primary">등록</li>
+                                    <li class="step step-primary">심사 중</li>
+                                    <li class="step">승인</li>
+                                </ul>
+                                <div class="card-actions justify-end">
+                                    <a th:href="@{/field/modify/{id}(id=${field.getId()})}"
+                                       class="btn btn-ghost">수정 하기</a>
+                                    <a th:href="@{/field/delete/{id}(id=${field.getId()})}"
+                                       class="btn btn-ghost">취소 하기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <p class="mt-5">승인된 시설</p>
+            </div>
+            <table class="table w-full border-0">
+                <tbody>
+                <tr th:each="field : ${approved}" class="mb-4 border-0">
                     <td class="w-full border-0">
                         <div class="card w-full bg-base-100 shadow-xl image-full">
                             <figure><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg" alt="Shoes"/>
@@ -40,7 +67,7 @@
                             </div>
                         </div>
                     </td>
-                </tr>
+                <tr>
                 </tbody>
             </table>
             <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>

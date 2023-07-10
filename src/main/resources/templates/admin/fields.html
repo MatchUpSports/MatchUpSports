@@ -1,40 +1,88 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{admin/layout.html}">
+<html lang="ko" layout:decorate="~{admin/adminLayout.html}">
+<!--<html lang="ko" layout:decorate="~{common/layout.html}">-->
 <head>
     <meta charset="UTF-8">
     <title>시설 승인</title>
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
-    <!-- 시설 등록이 없을 경우 -->
-    <div th:if="${#lists.isEmpty(pending)}" class="hero min-h-screen max-w-2xl w-full">
+    <div th:if="${#lists.isEmpty(fields)}" class="hero min-h-screen max-w-2xl w-full">
         <h1 class="mb-5 text-3xl font-bold">등록된 시설이 없습니다.</h1>
     </div>
-    <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
-    <div th:if="${!#lists.isEmpty(pending)}" class="min-h-screen">
-            <div class="max-w-2xl w-full px-4 mb-20">
-                <h1 class="mb-5 text-3xl font-bold text-left">시설 승인</h1>
-                <p class="mb-5">시설 승인 페이지입니다.</p>
-                <table class="table w-full border-0">
-                    <tbody>
-                    <tr th:each="field : ${pending}" class="mb-4 border-0">
-                        <td class="w-full border-0">
-                            <div class="card w-full bg-base-100 shadow-xl image-full">
-                                <figure><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg" alt="Shoes" /></figure>
+    <div th:if="${!#lists.isEmpty(fields)}" class="min-h-screen">
+        <div class="max-w-2xl w-full">
+            <h1 class="mb-5 text-3xl font-bold text-left mx-5">시설 관리</h1>
+            <p class="mb-5 mx-5">시설 승인 목록</p>
+            <table class="table w-full border-0">
+                <tbody>
+                <tr th:each="field : ${pending}" class="mb-4 border-0">
+                    <td th:if="${field.getDeleteDate() == null}" class="w-full border-0">
+                        <div class="card w-full bg-base-100 shadow-xl">
+                            <div class="indicator">
+                                <span class="indicator-item badge badge-error">new</span>
                                 <div class="card-body">
+                                    <h2 th:text="${field.getMember().getUsername()}" class="card-title"></h2>
                                     <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
                                     <p th:text="${field.getFieldLocation()}"></p>
                                     <div class="card-actions justify-end">
-                                        <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-ghost" href="">상세 정보 보기</a>
+                                        <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
+                                           class="btn btn-outline">상세 정보 보기</a>
+                                        <a th:href="@{/admin/approve/{id}(id=${field.getId()})}"
+                                           class="btn btn-outline">승인</a>
                                     </div>
                                 </div>
                             </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>
+                        </div>
+                    </td>
+                    <td th:if="${field.getDeleteDate() != null}" class="w-full border-0">
+                        <div class="card w-full bg-base-100 shadow-xl">
+                            <div class="card-body">
+                                <h2 class="card-title text-error">승인 취소 한 시설입니다</h2>
+                                <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                <p th:text="${field.getFieldLocation()}"></p>
+<!--                                <p th:if="${field.getDeleteDate() != null}">삭제된 시설입니다.</p>-->
+                                <div class="card-actions justify-end">
+                                    <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
+                                       class="btn btn-outline"
+                                       href="">상세 정보 보기</a>
+                                    <a th:href="@{/field/delete/hard/{id}(id=${field.getId()})}"
+                                       class="btn btn-outline">삭제 하기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div>
+                <p class="my-5 mx-5">시설 목록</p>
             </div>
+            <table class="table w-full border-0">
+                <tbody>
+                <tr th:each="field : ${approved}" class="mb-4 border-0">
+                    <td class="w-full border-0">
+                        <div class="card w-full bg-base-100 shadow-xl image-full">
+                            <figure><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg" alt="Shoes"/>
+                            </figure>
+                            <div class="card-body">
+                                <h2 th:text="${field.getMember().getUsername()}" class="card-title"></h2>
+                                <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                <p th:text="${field.getFieldLocation()}"></p>
+                                <div class="card-actions justify-end">
+                                    <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-ghost"
+                                       href="">상세 정보 보기</a>
+                                    <a th:href="@{/field/delete/hard/{id}(id=${field.getId()})}" class="btn btn-ghost"
+                                       href="">삭제 하기</a>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>
+        </div>
     </div>
 </main>
 </body>

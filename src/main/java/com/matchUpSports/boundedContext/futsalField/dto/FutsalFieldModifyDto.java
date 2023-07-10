@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -28,8 +29,16 @@ public class FutsalFieldModifyDto {
 //    private  String imageUrl;
 
     public boolean isSame(FutsalField futsalField) {
-        return name.equals(futsalField.getFieldName()) && (location == (futsalField.getFieldLocation())) && (price == (futsalField.getPrice())) &&
+        return name.equals(futsalField.getFieldName()) && (Objects.equals(location, futsalField.getFieldLocation())) && (price == (futsalField.getPrice())) &&
                 openTime.equals(futsalField.getOpenTime()) && closeTime.equals(futsalField.getCloseTime()) &&
                 (courtCount == (futsalField.getCourtCount()));
     }
+//    public boolean isSame(FutsalField futsalField) {
+//        return name.equalsIgnoreCase(futsalField.getFieldName()) &&
+//                location.equals(futsalField.getFieldLocation()) &&
+//                price.equals(futsalField.getPrice()) &&
+//                openTime.equals(futsalField.getOpenTime()) &&
+//                closeTime.equals(futsalField.getCloseTime()) &&
+//                courtCount.equals(futsalField.getCourtCount());
+//    }
 }

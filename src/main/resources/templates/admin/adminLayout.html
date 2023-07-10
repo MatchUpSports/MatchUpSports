@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.2.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.2.1/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/87140d707c.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -22,35 +22,42 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 
-<body class="min-h-screen w-screen flex flex-col">
-<div class="btm-nav pb-0 max-w-2xl mx-auto bg-base-100 fixed h-16 z-50">
-    <button id="projectBtn" onclick="activateButton('projectBtn'); window.location.href='/match/filter'">
-        <i class="fa-solid fa-diagram-project"></i>
-    </button>
-    <button id="homeBtn" class="active" onclick="activateButton('homeBtn'); window.location.href='/'">
-        <i class="fa-solid fa-house"></i>
-    </button>
-    <button id="userBtn" onclick="activateButton('userBtn'); window.location.href='/member/myInformation'">
-        <i class="fa-solid fa-user"></i>
-    </button>
-</div>
-
-
+<!--<body class="min-h-screen flex flex-col pb-10">-->
+<body>
 <div class="min-h-screen flex flex-col pb-10">
+    <div class="sticky top-0 z-50">
+        <div class="navbar max-w-2xl mx-auto bg-base-100">
+            <div class="navbar-start">
+                <div class="dropdown">
+                    <label tabindex="0" class="btn btn-ghost btn-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 12h16M4 18h7"/>
+                        </svg>
+                    </label>
+                    <ul tabindex="0"
+                        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-64">
+                        <li><a onclick="window.location.href='/admin'">관리자 메인 페이지</a></li>
+                        <li><a onclick="window.location.href='/admin/members'">회원 관리</a></li>
+                        <li><a onclick="window.location.href='/admin/fields'">시설 등록 승인</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar-center">
+<!--                <a class="btn btn-ghost normal-case text-xl">MatchUpSports</a>-->
+            </div>
+            <div class="navbar-end">
+                <a href="/" class="btn btn-ghost normal-case text-xl">
+                    <span>MatchUpSports admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <main layout:fragment="main"></main>
 </div>
-
 <script th:inline="javascript">
-    function activateButton(id) {
-        // 모든 버튼의 active 클래스를 제거
-        document.getElementById('projectBtn').classList.remove('active');
-        document.getElementById('homeBtn').classList.remove('active');
-        document.getElementById('userBtn').classList.remove('active');
-
-        // 클릭된 버튼에 active 클래스를 추가
-        document.getElementById(id).classList.add('active');
-    }
-
     if (params.msg) {
         toastNotice(params.msg[0]);
     }

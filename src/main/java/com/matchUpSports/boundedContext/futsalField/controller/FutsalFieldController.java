@@ -34,8 +34,11 @@ public class FutsalFieldController {
     public String getMyFutsalFields(Model model) {
         Member currentMember = rq.getMember();
         List<FutsalField> myFields = futsalFieldService.getFutsalFieldsOfCurrentUser(currentMember);
-
+        List<FutsalField> approved = futsalFieldService.findByMemberAndApprovalStatus(currentMember);
+        List<FutsalField> pending = futsalFieldService.findByMemberAndPendingStatus(currentMember);
         model.addAttribute("myFields", myFields);
+        model.addAttribute("approved", approved);
+        model.addAttribute("pending", pending);
         return "field/management";  // HTML 뷰의 이름
     }
 
@@ -82,7 +85,7 @@ public class FutsalFieldController {
         if (dto.isSame(futsalField)) rq.historyBack("수정된 내용이 없습니다.");
 
         futsalFieldService.modify(futsalField, dto);
-        return rq.redirectWithMsg("/field/detail/%s".formatted(futsalField.getId()), "시설 정보가 수정하였습니다.");
+        return rq.redirectWithMsg("/field/myFields", "시설 정보가 수정하였습니다.");
     }
 
     @GetMapping("/delete/{id}")
@@ -94,7 +97,14 @@ public class FutsalFieldController {
         }
 
         futsalFieldService.delete(futsalField);
-        return rq.redirectWithMsg("/field/myFields", "문의글을 삭제하였습니다.");
+        return rq.redirectWithMsg("/field/myFields", "시설을 삭제하였습니다.");
+    }
+
+    @GetMapping("/delete/hard/{id}")
+    public String deleteHard(@PathVariable Long id) {
+        FutsalField futsalField = futsalFieldService.findById(id);
+        futsalFieldService.deleteHard(futsalField);
+        return rq.redirectWithMsg("/admin/fields", "시설을 영구 삭제하였습니다.");
     }
 
 

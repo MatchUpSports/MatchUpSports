@@ -30,6 +30,25 @@ public class FutsalFieldService {
         return futsalFieldRepository.findByMember(member);
     }
 
+    public FutsalField findById(Long id) {
+        return futsalFieldRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
+    }
+
+    public  List<FutsalField> findAll(){
+        return futsalFieldRepository.findAll();
+    }
+
+//    @Transactional(readOnly = true)
+    public List<FutsalField> findByMemberAndApprovalStatus(Member member) {
+        return futsalFieldRepository.findByMemberAndApprovalStatus(member, FutsalField.ApprovalStatus.APPROVED);
+    }
+
+//    @Transactional(readOnly = true)
+    public List<FutsalField> findByMemberAndPendingStatus(Member member) {
+        return futsalFieldRepository.findByMemberAndApprovalStatus(member, FutsalField.ApprovalStatus.PENDING);
+    }
+
     public FutsalField findByIdAndDeleteDateIsNull(Long id) {
         return futsalFieldRepository.findByIdAndDeleteDateIsNull(id)
                 .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
@@ -43,10 +62,10 @@ public class FutsalFieldService {
         return futsalFieldRepository.findAllByApprovalStatus(FutsalField.ApprovalStatus.PENDING);
     }
 
-
+    @Transactional
     public void approveFutsalField(Long id) {
         FutsalField futsalField = futsalFieldRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid field ID: " + id));
+                .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
 
         futsalField.setApprovalStatus(FutsalField.ApprovalStatus.APPROVED);
 
@@ -113,6 +132,7 @@ public class FutsalFieldService {
     }
 
     // hard-delete
+    @Transactional
     public void deleteHard(FutsalField futsalField) {
         futsalFieldRepository.delete(futsalField);
     }
