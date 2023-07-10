@@ -34,6 +34,9 @@ public class FutsalField extends BaseEntity {
 
     private String registNum;
 
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus approvalStatus;
+
 //    private  String imageUrl;
 
     public FutsalField() {
@@ -45,5 +48,8 @@ public class FutsalField extends BaseEntity {
         this.courtCount = 0;
         this.registNum = null;
         this.member = null;
+    }
+    public enum ApprovalStatus {
+        PENDING, APPROVED
     }
 }

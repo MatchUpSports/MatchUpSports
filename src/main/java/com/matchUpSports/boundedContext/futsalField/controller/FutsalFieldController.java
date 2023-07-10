@@ -64,6 +64,7 @@ public class FutsalFieldController {
     public String create(@Valid FutsalFieldRegistrationDto dto) {
         Member member = memberService.findByUsername(rq.getMember().getUsername());
         FutsalField futsalField = futsalFieldService.create(member, dto);
+
         return rq.redirectWithMsg("/field/myFields".formatted(futsalField.getId()), "등록되었습니다");
     }
 

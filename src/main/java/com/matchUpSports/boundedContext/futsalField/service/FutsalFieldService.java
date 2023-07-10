@@ -35,6 +35,25 @@ public class FutsalFieldService {
                 .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
     }
 
+    public List<FutsalField> getAllApprovedFutsalFields() {
+        return futsalFieldRepository.findAllByApprovalStatus(FutsalField.ApprovalStatus.APPROVED);
+    }
+
+    public List<FutsalField> getAllPendingFutsalFields() {
+        return futsalFieldRepository.findAllByApprovalStatus(FutsalField.ApprovalStatus.PENDING);
+    }
+
+
+    public void approveFutsalField(Long id) {
+        FutsalField futsalField = futsalFieldRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid field ID: " + id));
+
+        futsalField.setApprovalStatus(FutsalField.ApprovalStatus.APPROVED);
+
+        futsalFieldRepository.save(futsalField);
+    }
+
+
     public FutsalField create(Member member, FutsalFieldRegistrationDto dto) {
         FutsalField futsalField = FutsalField.builder()
                 .member(member)
@@ -46,6 +65,7 @@ public class FutsalFieldService {
                 .courtCount(dto.getCourtCount())
                 .registNum(dto.getRegistNum())
                 .build();
+        futsalField.setApprovalStatus(FutsalField.ApprovalStatus.PENDING);
         return futsalFieldRepository.save(futsalField);
     }
 
