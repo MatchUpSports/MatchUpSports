@@ -14,6 +14,7 @@ public interface FutsalFieldRepository extends JpaRepository<FutsalField, Long> 
     List<FutsalField> findByFieldLocation(String location);
 
     FutsalField findByFieldName(String fieldName);
+
     Optional<FutsalField> findByIdAndDeleteDateIsNull(Long id);
 
     @Query("SELECT f FROM FutsalField f WHERE f.member =:member AND f.deleteDate IS NULL")

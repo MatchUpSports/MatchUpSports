@@ -5,16 +5,16 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $(".submit-button").click(function() {
+        $(document).ready(function () {
+            $(".submit-button").click(function () {
                 // 선택된 체크박스와 드롭다운의 값을 추출
                 var selectedValues = [];
                 var checkboxes = $(".checkbox:checked");
-                checkboxes.each(function() {
+                checkboxes.each(function () {
                     var checkboxId = $(this).attr("id");
                     var dropdownId = "dropdown" + checkboxId.substring(8); // 체크박스의 id에서 "checkbox"를 제외한 부분
                     var dropdownValue = $("#" + dropdownId).val();
-                    var selectedValue = { checkboxId: checkboxId, dropdownValue: dropdownValue };
+                    var selectedValue = {checkboxId: checkboxId, dropdownValue: dropdownValue};
                     selectedValues.push(selectedValue);
                 });
                 // 추출된 값 확인
@@ -23,6 +23,7 @@
                 // 서버로 전송 또는 추가 동작 수행
             });
         });
+
         function checkboxChanged(checkbox) {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
@@ -30,14 +31,14 @@
             if (checkbox.checked) {
                 for (var i = 0; i < checkboxes.length; i++) {
                     checkboxes[i].disabled = true;
-                    checkboxes[i].nextElementSibling.nextElementSibling.nextElementSibling.disabled=true;
+                    checkboxes[i].nextElementSibling.nextElementSibling.nextElementSibling.disabled = true;
                 }
                 checkbox.disabled = false;
-                checkbox.nextElementSibling.nextElementSibling.nextElementSibling.disabled= false;
+                checkbox.nextElementSibling.nextElementSibling.nextElementSibling.disabled = false;
             } else {    // 체크가 풀리면 다시 활성화
                 for (var j = 0; j < checkboxes.length; j++) {
                     checkboxes[j].disabled = false;
-                    checkboxes[j].nextElementSibling.nextElementSibling.nextElementSibling.disabled= false;
+                    checkboxes[j].nextElementSibling.nextElementSibling.nextElementSibling.disabled = false;
                 }
             }
         }
@@ -53,7 +54,7 @@
             margin: 10px;
         }
 
-        .card-big{
+        .card-big {
             width: 660px;
             margin: 10px;
             align-items: center;
@@ -98,8 +99,7 @@
         }
 
         .thumb-button {
-            margin-left: 10px;
-            ;
+            margin-left: 10px;;
         }
     </style>
 </head>
@@ -120,10 +120,14 @@
                     </div>
                     <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==1}">
                         <div class="result-row">
-                            <input type="checkbox" th:value="${matchMember.getId()}" th:name="'checkbox' + ${matchMember.getId()}" th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1" onchange="checkboxChanged(this)">
+                            <input type="checkbox" th:value="${matchMember.getId()}"
+                                   th:name="'checkbox' + ${matchMember.getId()}"
+                                   th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1"
+                                   onchange="checkboxChanged(this)">
                             <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
                             <label th:for="'dropdown' + ${matchMember.getId()}"></label>
-                            <select th:name="'dropdown' + ${matchMember.getId()}" th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
+                            <select th:name="'dropdown' + ${matchMember.getId()}"
+                                    th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
                                 <option name="voteTypeCode" value="1">드리블</option>
                                 <option name="voteTypeCode" value="2">패스</option>
                                 <option name="voteTypeCode" value="3">슈팅</option>
@@ -141,10 +145,14 @@
                     </div>
                     <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==2}">
                         <div class="result-row">
-                            <input type="checkbox" th:value="${matchMember.getId()}" th:name="'checkbox' + ${matchMember.getId()}" th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1" onchange="checkboxChanged(this)">
+                            <input type="checkbox" th:value="${matchMember.getId()}"
+                                   th:name="'checkbox' + ${matchMember.getId()}"
+                                   th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1"
+                                   onchange="checkboxChanged(this)">
                             <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
                             <label th:for="'dropdown' + ${matchMember.getId()}"></label>
-                            <select th:name="'dropdown' + ${matchMember.getId()}" th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
+                            <select th:name="'dropdown' + ${matchMember.getId()}"
+                                    th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
                                 <option name="voteTypeCode" value="1">드리블</option>
                                 <option name="voteTypeCode" value="2">패스</option>
                                 <option name="voteTypeCode" value="3">슈팅</option>
@@ -167,7 +175,7 @@
             function checkVoteForm(form) {
                 const $checked = $('.checkbox-type-1:checked');
 
-                if ( $checked.length == 0 ) {
+                if ($checked.length == 0) {
                     alert('한 명을 선택해주세요.');
                     return;
                 }

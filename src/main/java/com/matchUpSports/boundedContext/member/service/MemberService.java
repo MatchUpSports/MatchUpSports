@@ -4,13 +4,8 @@ import com.matchUpSports.base.Role;
 import com.matchUpSports.base.exception.handler.DataNotFoundException;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
-import com.matchUpSports.boundedContext.member.dto.*;
-import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
-import com.matchUpSports.boundedContext.member.dto.BasicUserInfoForm;
-import com.matchUpSports.boundedContext.member.dto.JoiningForm;
-import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
-import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
+import com.matchUpSports.boundedContext.member.dto.*;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -138,7 +133,7 @@ public class MemberService {
     }
 
     @Transactional
-    public String getAccessToken(String userName){
+    public String getAccessToken(String userName) {
         return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
@@ -173,7 +168,7 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> join(String email, String userName, int tier){
+    public RsData<Member> join(String email, String userName, int tier) {
         Member member = Member.builder()
                 .email(email)
                 .username(userName)
