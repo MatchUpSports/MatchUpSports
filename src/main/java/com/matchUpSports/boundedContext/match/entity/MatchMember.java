@@ -36,4 +36,17 @@ public class MatchMember {
 
     }
 
+    public void updateIsPaid(){this.ispaid=true;}
+
+    public void setTeam(int team){
+        this.team = team;
+    }
+
+    public void voting(){
+        this.myVote = true;
+    }
+
+    public void voted(){
+        this.votedCount++;
+    }
 }

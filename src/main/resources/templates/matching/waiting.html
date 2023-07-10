@@ -75,7 +75,13 @@
                         <input type="hidden" th:value="${match.id}" name="matchId" />
                         <button type="submit" class="btn btn-cancel">취소하기</button>
                     </form>
-                    <form th:action="@{/match/confirm}" method="post" th:if="${match.participantCount} == 10">
+<!--                    결제하기 버튼-->
+                    <form th:action="@{'/match/pay/' + ${match.id}}" method="get" th:if="${match.participantCount == 10 and match.getProgressStatus() == '1'}">
+                        <input type="hidden" th:value="${match.id}"/>
+                        <button type="submit" class="btn btn-confirm">결제하기</button>
+                    </form>
+
+                    <form th:action="@{/match/confirm}" method="post" th:if="${match.participantCount == 10 and match.getProgressStatus() == '0'}">
                         <input type="hidden" th:value="${match.id}" name="matchId" />
                         <button type="submit" class="btn btn-confirm">확정하기</button>
                     </form>
