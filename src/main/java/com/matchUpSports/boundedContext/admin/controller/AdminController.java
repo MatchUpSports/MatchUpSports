@@ -41,21 +41,26 @@ public class AdminController {
 
     @GetMapping("/fields")
     public String showField(Model model) {
+        List<FutsalField> fields = futsalFieldService.findAll();
         List<FutsalField> pending = futsalFieldService.getAllPendingFutsalFields();
+        List<FutsalField> approved = futsalFieldService.getAllApprovedFutsalFields();
+        model.addAttribute("fields", fields);
+        model.addAttribute("approved", approved);
         model.addAttribute("pending", pending);
         return "admin/fields";
     }
 
     @GetMapping("/approve/{id}")
-    public String approveFacility(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String approveFacility(@PathVariable Long id) {
         try {
             futsalFieldService.approveFutsalField(id);
-            rq.redirectWithMsg("/admin", "Facility approved successfully.");
+            rq.redirectWithMsg("/admin/fields", "%d번 시설을 승인하였습니다.".formatted(id));
         } catch (Exception e) {
-            rq.redirectWithMsg("/admin", "Error approving facility");
+            rq.redirectWithMsg("/admin/fields", "%d번 시설을 승인 실패하였습니다.".formatted(id));
         }
+        futsalFieldService.approveFutsalField(id);
 
-        return "redirect:/admin/facilities";
+        return "redirect:/admin/fields";
     }
 
     @GetMapping("/deleteMember/{id}")
