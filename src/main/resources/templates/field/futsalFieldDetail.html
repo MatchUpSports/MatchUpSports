@@ -3,70 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>시설 상세 정보</title>
+    <script>
+        function goBack() {
+            var referrer = document.referrer;
+            if (referrer.includes('/admin')) {
+                window.history.back();
+            } else {
+                window.location.href='/field/myFields';
+            }
+        }
+    </script>
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <div class="max-w-2xl w-full px-4 mb-20">
-        <i class="fa-solid fa-chevron-left fa-xl mt-10 mb-10" onclick="window.location.href='/field/myFields'"></i>
-        <h1 class="mb-5 text-xl font-bold text-left" th:text="${futsalField.getFieldName()}"></h1>
-        <p class="mb-5">풋살장을 관리해보세요</p>
-        <p>매치 목록</p>
-        <div class="carousel carousel-center w-full p-2 space-x-4 rounded-box mb-5">
-            <div class="carousel-item">
-                <div class="card w-full bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">2023.07.10</h2>
-                        <p>18:00 ~ 20:00</p>
-                        <div class="card-actions justify-end">
-                            <p>A 구장</p>
+            <i class="fa-solid fa-chevron-left fa-xl mt-10 mb-10" onclick="goBack()"></i>
+            <h1 class="mb-5 text-xl font-bold text-left" th:text="${futsalField.getFieldName()}"></h1>
+            <p class="mb-5">풋살장을 관리해보세요</p>
+            <p>매치 목록</p>
+            <div class="carousel carousel-center w-full p-2 space-x-4 rounded-box mb-5">
+                <div class="carousel-item">
+                    <div class="card w-full bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h2 class="card-title">2023.07.10</h2>
+                            <p>18:00 ~ 20:00</p>
+                            <div class="card-actions justify-end">
+                                <p>A 구장</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card w-full bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h2 class="card-title">2023.07.10</h2>
+                            <p>18:00 ~ 20:00</p>
+                            <div class="card-actions justify-end">
+                                <p>B 구장</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card w-full bg-base-100 shadow-xl">
+                        <div class="card-body">
+                            <h2 class="card-title">Card title!</h2>
+                            <p>If a dog chews</p>
+                            <div class="card-actions justify-end">
+                                <button class="btn btn-primary">Buy Now</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="card w-full bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">2023.07.10</h2>
-                        <p>18:00 ~ 20:00</p>
-                        <div class="card-actions justify-end">
-                            <p>B 구장</p>
-                        </div>
+            <div class="card w-full bg-base-100 shadow-xl">
+                <figure class="px-10 pt-10"><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg"
+                                                 alt="Shoes" class="rounded-xl"/></figure>
+                <div class="card-body">
+                    <h2 th:text="${futsalField.getFieldName()}" class="card-title"></h2>
+                    <p>지역: <span th:text="${futsalField.getFieldLocation()}"></span></p>
+                    <p>가격: <span th:text="${futsalField.getPrice()}"></span></p>
+                    <p>영업 시작 시간: <span th:text="${futsalField.getOpenTime()}"></span></p>
+                    <p>영업 종료 시간: <span th:text="${futsalField.getCloseTime()}"></span></p>
+                    <p>구장 수: <span th:text="${futsalField.getCourtCount()}"></span></p>
+                    <p>사업자등록번호: <span th:text="${futsalField.getRegistNum()}"></span></p>
+                    <div class="card-actions flex justify-center">
+                        <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
+                           th:href="@{/field/modify/{id}(id=${futsalField.getId()})}"
+                           class="btn btn-outline btn-error btn-sm">수정하기</a>
+                        <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
+                           th:href="@{/field/delete/{id}(id=${futsalField.getId()})}"
+                           class="btn btn-outline btn-error btn-sm">삭제하기</a>
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="card w-full bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title!</h2>
-                        <p>If a dog chews</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card w-full bg-base-100 shadow-xl">
-            <figure class="px-10 pt-10"><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg"
-                                             alt="Shoes" class="rounded-xl"/></figure>
-            <div class="card-body">
-                <h2 th:text="${futsalField.getFieldName()}" class="card-title"></h2>
-                <p>지역: <span th:text="${futsalField.getFieldLocation()}"></span></p>
-                <p>가격: <span th:text="${futsalField.getPrice()}"></span></p>
-                <p>영업 시작 시간: <span th:text="${futsalField.getOpenTime()}"></span></p>
-                <p>영업 종료 시간: <span th:text="${futsalField.getCloseTime()}"></span></p>
-                <p>구장 수: <span th:text="${futsalField.getCourtCount()}"></span></p>
-                <p>사업자등록번호: <span th:text="${futsalField.getRegistNum()}"></span></p>
-                <div class="card-actions flex justify-center">
-                    <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
-                       th:href="@{/field/modify/{id}(id=${futsalField.getId()})}"
-                       class="btn btn-outline btn-error btn-sm">수정하기</a>
-                    <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
-                       th:href="@{/field/delete/{id}(id=${futsalField.getId()})}"
-                       class="btn btn-outline btn-error btn-sm">삭제하기</a>
-                </div>
-            </div>
-        </div>
     </div>
 </main>
 </body>
