@@ -52,7 +52,7 @@ public class MemberController {
         Member member = (Member) session.getAttribute("member");
         boolean isModifiedTier = member.getTier() != 0;
         if (isModifiedTier) {
-            return "redirect:";
+            return "redirect:/";
         }
 
         model.addAttribute("httpMethod", "POST");
@@ -73,7 +73,7 @@ public class MemberController {
             return "redirect:" + referer;
         }
 
-        return "redirect:";
+        return "redirect:/";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -108,6 +108,6 @@ public class MemberController {
             return "redirect:" + referer;
         }
 
-        return "redirect:";
+        return "redirect:/";
     }
 }

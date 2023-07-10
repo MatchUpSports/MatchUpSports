@@ -1,6 +1,5 @@
 package com.matchUpSports.boundedContext.match.entity;
 
-import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

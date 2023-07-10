@@ -5,24 +5,16 @@ import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldModifyDto;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldRegistrationDto;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
-import com.matchUpSports.boundedContext.futsalField.form.CreateFutsalFieldForm;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldImageRepository;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -86,13 +78,14 @@ public class FutsalFieldService {
     }
 
     @Transactional
-    public RsData<FutsalField> join(String name, String registNum, int price, int courtCount, String fieldLocation){
+    public RsData<FutsalField> join(String name, String registNum, int price, int courtCount, String fieldLocation, Member member) {
         FutsalField field = FutsalField.builder()
                 .fieldName(name)
                 .registNum(registNum)
                 .price(price)
                 .courtCount(courtCount)
                 .fieldLocation(fieldLocation)
+                .member(member)
                 .build();
 
         futsalFieldRepository.save(field);

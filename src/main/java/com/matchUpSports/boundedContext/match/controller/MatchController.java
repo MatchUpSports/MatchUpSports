@@ -3,14 +3,14 @@ package com.matchUpSports.boundedContext.match.controller;
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
-import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.Form.MatchForm;
 import com.matchUpSports.boundedContext.match.Form.VoteForm;
+import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
+import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import com.matchUpSports.boundedContext.match.service.MatchService;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
-import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,16 +27,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -114,7 +104,7 @@ public class MatchController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
-    public String vote(@PathVariable("id") Long id, Model model){
+    public String vote(@PathVariable("id") Long id, Model model) {
 
         Match match = matchService.getMatch(id);
         List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
@@ -128,7 +118,7 @@ public class MatchController {
 
     //@PreAuthorize("isAuthenticated()")
     @PostMapping("/vote/{id}")
-    public String vote(@PathVariable("id") Long id, @AuthenticationPrincipal User user, VoteForm voteForm){
+    public String vote(@PathVariable("id") Long id, @AuthenticationPrincipal User user, VoteForm voteForm) {
         Match match = matchService.getMatch(id);
         List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
 
@@ -137,14 +127,14 @@ public class MatchController {
 
         List<MatchMember> matchMembers = matchMemberStream.collect(Collectors.toList());
 
-        if (matchMembers.size() != 1){
+        if (matchMembers.size() != 1) {
             return rq.historyBack("투표를 할 권한이 없습니다.");
         }
 
         // 투표를 보낸 사람
         MatchMember fromMatchMember = matchMembers.get(0);
 
-        if(fromMatchMember.isMyVote() == true){
+        if (fromMatchMember.isMyVote() == true) {
             return rq.historyBack("이미 투표를 완료한 경기입니다.");
         }
 
@@ -162,7 +152,7 @@ public class MatchController {
     }
 
     @GetMapping("/result/{id}")
-    public String matchResult(@PathVariable("id") Long id, Model model){
+    public String matchResult(@PathVariable("id") Long id, Model model) {
         Match match = matchService.getMatch(id);
         List<MatchMember> matchMVPMembers = matchService.findMVP();
 
@@ -172,7 +162,7 @@ public class MatchController {
     }
 
     @GetMapping("/pay/{matchId}")
-    public String pay(@PathVariable Long matchId, @AuthenticationPrincipal User user, Model model){
+    public String pay(@PathVariable Long matchId, @AuthenticationPrincipal User user, Model model) {
         Match match = matchService.getMatch(matchId);
         Member member = memberService.findByUsername(user.getUsername());
 
@@ -233,16 +223,16 @@ public class MatchController {
         model.addAttribute("responseStr", jsonObject.toJSONString());
         System.out.println(jsonObject.toJSONString());
 
-        model.addAttribute("method",  jsonObject.get("method"));
+        model.addAttribute("method", jsonObject.get("method"));
         model.addAttribute("orderName", jsonObject.get("orderName"));
 
         if ((jsonObject.get("method")) != null) {
             if ((jsonObject.get("method")).equals("카드")) {
-                model.addAttribute("cardNumber",  ((JSONObject) jsonObject.get("card")).get("number"));
+                model.addAttribute("cardNumber", ((JSONObject) jsonObject.get("card")).get("number"));
             } else if ((jsonObject.get("method")).equals("계좌이체")) {
                 model.addAttribute("bank", ((JSONObject) jsonObject.get("transfer")).get("bank"));
             } else if ((jsonObject.get("method")).equals("휴대폰")) {
-                model.addAttribute("customerMobilePhone",  ((JSONObject) jsonObject.get("mobilePhone")).get("customerMobilePhone"));
+                model.addAttribute("customerMobilePhone", ((JSONObject) jsonObject.get("mobilePhone")).get("customerMobilePhone"));
             }
         } else {
             model.addAttribute("code", jsonObject.get("code"));
@@ -257,7 +247,7 @@ public class MatchController {
             Model model,
             @RequestParam(value = "message") String message,
             @RequestParam(value = "code") Integer code
-    ){
+    ) {
         model.addAttribute("code", code);
         model.addAttribute("message", message);
         return "payment/fail";
@@ -275,7 +265,7 @@ public class MatchController {
 
         model.addAttribute("match", match);
         model.addAttribute("matchMembers", matchMemberList);
-        return  "matches/ongoing";
+        return "matches/ongoing";
     }
 
 }

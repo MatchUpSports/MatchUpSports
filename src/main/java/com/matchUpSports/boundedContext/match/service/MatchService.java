@@ -5,16 +5,16 @@ import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.kakao.KakaoTalkMessageService;
-import com.matchUpSports.boundedContext.match.entity.Match;
-import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.Form.MatchForm;
 import com.matchUpSports.boundedContext.match.Form.VoteForm;
+import com.matchUpSports.boundedContext.match.entity.Match;
+import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
 import com.matchUpSports.boundedContext.match.repository.MatchRepository;
+import com.matchUpSports.boundedContext.match.repository.MatchVoteRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
-import com.matchUpSports.boundedContext.match.repository.MatchVoteRepository;
 import com.matchUpSports.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.*;
-
 import java.time.LocalDate;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -132,7 +128,7 @@ public class MatchService {
     }
 
     @Transactional
-    public RsData<Match> join(int usageTime, FutsalField field, LocalDate matchDate){
+    public RsData<Match> join(int usageTime, FutsalField field, LocalDate matchDate) {
         Match match = Match.builder()
                 .usageTime(usageTime)
                 .matchDate(LocalDate.now())
@@ -147,7 +143,7 @@ public class MatchService {
     }
 
     @Transactional
-    public RsData<MatchMember> matching(Match match, Member member, boolean myVote, int votedCount, int team){
+    public RsData<MatchMember> matching(Match match, Member member, boolean myVote, int votedCount, int team) {
 
         MatchMember matchMember = MatchMember.builder()
                 .myVote(myVote)
@@ -162,13 +158,13 @@ public class MatchService {
         return RsData.of("S-1", "매치에" + member.getUsername() + "이 추가되었습니다.", matchMember);
     }
 
-    public List<MatchMember> getMatchMemberList(Long matchId){
+    public List<MatchMember> getMatchMemberList(Long matchId) {
         List<MatchMember> matchMemberList = matchMemberRepository.findAllByMatchId(matchId);
 
         return matchMemberList;
     }
 
-    public Match getMatch(Long id){
+    public Match getMatch(Long id) {
         Optional<Match> match = matchRepository.findById(id);
 
         // 존재하지 않는 매치의 id로 입력받은 경우 예외처리
@@ -298,14 +294,14 @@ public class MatchService {
         return RsData.successOf("매치 확정에 성공했습니다.");
     }
 
-    public List<MatchMember> findMVP(){
+    public List<MatchMember> findMVP() {
         List<MatchMember> MVP = matchMemberRepository.findMaxVotedMember();
 
         return MVP;
     }
 
     @Transactional
-    public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm){
+    public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm) {
         MatchMember toVoteMember = matchMemberRepository.findById(voteForm.getToVote()).get();
 
         // 자신에게 투표하는 예외처리 해야함
@@ -325,11 +321,11 @@ public class MatchService {
     }
 
     @Transactional
-    public void paySuccess(String matchId, String userName, int amount){
+    public void paySuccess(String matchId, String userName, int amount) {
         List<MatchMember> matchMemberList = this.getMatchMemberList(Long.valueOf(matchId));
 
         // 시설 관리자에게 결제한 금액 포인트 추가
-        this.getMatch(Long.valueOf(matchId)).getField().getFieldOwner().receivePaidPoints(amount);
+        this.getMatch(Long.valueOf(matchId)).getField().getMember().receivePaidPoints(amount);
 
         Optional<MatchMember> optionalMatchMember = matchMemberList.stream().filter(matchMember -> matchMember.getMember().getUsername().equals(userName)).findFirst();
 
@@ -337,7 +333,7 @@ public class MatchService {
     }
 
     @Transactional
-    public void setMatchMemberTeams(List<MatchMember> matchMemberList){
+    public void setMatchMemberTeams(List<MatchMember> matchMemberList) {
         // 리스트를 섞기 위해 랜덤 객체 생성
         Random random = new Random();
 
@@ -361,7 +357,7 @@ public class MatchService {
         List<MatchMember> paidMatchMembers = matchMemberRepository.findAllByMatch(match);
         boolean isAllPaid = paidMatchMembers.stream().allMatch(MatchMember::isIspaid);
 
-        if (isAllPaid){
+        if (isAllPaid) {
             // 멤버의 액세스 토큰을 저장
             String tokenValue = memberService.getAccessToken(user.getUsername());
 
