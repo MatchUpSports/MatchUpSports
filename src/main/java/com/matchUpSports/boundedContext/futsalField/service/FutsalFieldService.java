@@ -56,7 +56,6 @@ public class FutsalFieldService {
         return futsalFieldRepository.save(futsalField);
     }
 
-<<<<<<< HEAD
     //해당 지역에 있는 스타디움 찾는 로직
     public List<FutsalField> findFieldsByLocation(String location) {
         if (location == null || location.isEmpty()) {
@@ -65,8 +64,7 @@ public class FutsalFieldService {
         return futsalFieldRepository.findByFieldLocation(location);
     }
 
-}
-=======
+
     @Transactional
     public FutsalField modify(FutsalField futsalField, FutsalFieldModifyDto dto) {
         futsalField.setFieldName(dto.getName());
@@ -86,13 +84,11 @@ public class FutsalFieldService {
         futsalFieldRepository.save(futsalField);
     }
 
-
     // hard-delete
     public void deleteHard(FutsalField futsalField) {
         futsalFieldRepository.delete(futsalField);
     }
-
->>>>>>> 7599b97 (feat: 시설 수정 삭제 구현 및 baseEntity 추가)
+}
 //    @Transactional
 //    public void create(@Valid CreateFutsalFieldForm createForm, Member member) {
 //        try {
