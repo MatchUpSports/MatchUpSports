@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{admin/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>시설 승인</title>
+</head>
+<body>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <!-- 시설 등록이 없을 경우 -->
+    <div th:if="${#lists.isEmpty(pending)}" class="hero min-h-screen max-w-2xl w-full">
+        <h1 class="mb-5 text-3xl font-bold">등록된 시설이 없습니다.</h1>
+    </div>
+    <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
+    <div th:if="${!#lists.isEmpty(pending)}" class="min-h-screen">
+            <div class="max-w-2xl w-full px-4 mb-20">
+                <h1 class="mb-5 text-3xl font-bold text-left">시설 승인</h1>
+                <p class="mb-5">시설 승인 페이지입니다.</p>
+                <table class="table w-full border-0">
+                    <tbody>
+                    <tr th:each="field : ${pending}" class="mb-4 border-0">
+                        <td class="w-full border-0">
+                            <div class="card w-full bg-base-100 shadow-xl image-full">
+                                <figure><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg" alt="Shoes" /></figure>
+                                <div class="card-body">
+                                    <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                    <p th:text="${field.getFieldLocation()}"></p>
+                                    <div class="card-actions justify-end">
+                                        <a th:href="@{/field/detail/{id}(id=${field.getId()})}" class="btn btn-ghost" href="">상세 정보 보기</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>
+            </div>
+    </div>
+</main>
+</body>
+</html>
