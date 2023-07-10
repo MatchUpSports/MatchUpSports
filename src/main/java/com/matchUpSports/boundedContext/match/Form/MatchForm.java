@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.match.Form;
 
+import com.matchUpSports.boundedContext.field.entity.Field;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ public class MatchForm {
     private Integer usageTime; // 이용시간
     private Long memberId;
     private String userEmail; // 추가된 속성: 사용자 이메일
+    private Field field;
 
     //팩토리 메서드
     public Match toEntity() {
@@ -27,6 +29,7 @@ public class MatchForm {
                 .participantCount(1)
                 .usageTime(usageTime)
                 .progressStatus("0")
+                .field(field)
                 .build();
     }
 

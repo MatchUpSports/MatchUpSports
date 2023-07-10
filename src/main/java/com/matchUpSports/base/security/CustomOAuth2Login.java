@@ -25,6 +25,8 @@ public class CustomOAuth2Login extends DefaultOAuth2UserService {
 
         // 카카오 로그인 액세스 토큰
         String accessToken = userRequest.getAccessToken().getTokenValue().toString();
+        
+        // 카카오 로그인 갱신 토큰 발급 받아야 함
 
         DivideOAuth2User customOAuth2User = SocialUserFactory.create(providerName, oAuth2User);
 

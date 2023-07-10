@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="ko">
 
+<html lang="ko">
 <head>
-  <title>구매하기</title>
+  <title>시설 이용료 결제하기</title>
   <meta charset="UTF-8" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="stylesheet" href="/bulma.min.css">
+  <link rel="stylesheet" href="/resource/common/bulma.min.css">
 
   <script src="https://js.tosspayments.com/v1"></script>
 </head>
@@ -36,8 +35,17 @@
 </section>
 </body>
 
-<script>
-  let amount = 50000;
+<script th:inline="javascript">
+  // let price = [[${price}]];
+  // let amount = parseInt(price);
+  // let orderName = [[${stadium}]];
+  // let customerName = [[${name}]];
+  let price = [[${match.field.price}]];
+  let amount = parseInt(price) / 10;
+  let orderName = [[${match.stadium}]];
+  let customerName = [[${member.username}]];
+  let userId = [[${member.id}]];
+  let matchId = [[${match.id}]];
 
   let tossPayments = TossPayments("test_ck_ODnyRpQWGrNZKDBQLbgrKwv1M9EN");
 
@@ -55,24 +63,24 @@
             });
   }
 
-  let path = "/pay";
+  let path = "/match/pay";
   let successUrl = window.location.origin + path + "/success";
   let failUrl = window.location.origin + path + "/fail";
   let callbackUrl = window.location.origin + path + "va_callback";
-  let orderId = new Date().getTime();
+  let orderId = matchId + "_" + userId + "-" + new Date().getTime();
 
   let jsons = {
     "card": {
       "amount": amount,
-      "orderId": "sample-" + orderId,
-      "orderName": "토스 티셔츠 외 2건",
+      "orderId": "matchUp_" + orderId,
+      "orderName": orderName + " 시설 이용료",
       "successUrl": successUrl,
       "failUrl": failUrl,
       "cardCompany": null,
       "cardInstallmentPlan": null,
       "maxCardInstallmentPlan": null,
       "useCardPoint": false,
-      "customerName": "박토스",
+      "customerName": customerName,
       "customerEmail": null,
       "customerMobilePhone": null,
       "taxFreeAmount": null,
@@ -84,11 +92,11 @@
     "transfer": { //계좌이체 결제창
 
       "amount": amount,
-      "orderId": "sample-" + orderId,
-      "orderName": "토스 티셔츠 외 2건",
+      "orderId": "matchUp-" + orderId,
+      "orderName": orderName + "시설 이용료",
       "successUrl": successUrl,
       "failUrl": failUrl,
-      "customerName": "박토스",
+      "customerName": customerName,
       "customerEmail": null,
       "customerMobilePhone": null,
       "taxFreeAmount": null,
@@ -101,8 +109,8 @@
     "phone": { // 휴대폰 결제창
 
       "amount": amount,
-      "orderId": "sample-" + orderId,
-      "orderName": "토스 티셔츠 외 2건",
+      "orderId": "matchUp-" + orderId,
+      "orderName": orderName + "시설 이용료",
       "successUrl": successUrl,
       "failUrl": failUrl,
       "mobileCarrier": null

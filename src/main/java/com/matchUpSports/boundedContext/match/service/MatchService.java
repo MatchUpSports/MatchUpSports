@@ -1,8 +1,10 @@
 package com.matchUpSports.boundedContext.match.service;
 
+import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
+import com.matchUpSports.boundedContext.kakao.KakaoTalkMessageService;
 import com.matchUpSports.boundedContext.match.entity.Match;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.Form.MatchForm;
@@ -13,14 +15,15 @@ import com.matchUpSports.boundedContext.match.repository.MatchRepository;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import com.matchUpSports.boundedContext.match.repository.MatchVoteRepository;
+import com.matchUpSports.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,6 +39,10 @@ public class MatchService {
     private final MatchMemberRepository matchMemberRepository;
     private final FutsalFieldRepository fieldRepository;
     private final MemberRepository memberRepository;
+    private final MatchVoteRepository matchVoteRepository;
+    private final MemberService memberService;
+    private final KakaoTalkMessageService kakaoTalkMessageService;
+    private final Rq rq;
 
     // 매치 생성 메서드
     @Transactional
@@ -109,6 +116,7 @@ public class MatchService {
         }
 
         //테스트를 위해서 2명에서 1명으로 수정함
+        // 10명으로 늘림
         for (int i = 1; i <= maxSubStadiumCount; i++) {
             if (subStadiumMembers[i] < 10) {
                 for (Match existingMatch : matches) {
@@ -122,7 +130,6 @@ public class MatchService {
 
         return new MatchAndSubStadium(null, -1);
     }
-    private final MatchVoteRepository matchVoteRepository;
 
     @Transactional
     public RsData<Match> join(int usageTime, FutsalField field, LocalDate matchDate){
@@ -168,30 +175,6 @@ public class MatchService {
         if (!match.isPresent()) throw new NoSuchElementException("해당 매치는 존재하지 않는 매치입니다.");
 
         return match.get();
-    }
-
-    public List<MatchMember> findMVP(){
-        List<MatchMember> MVP = matchMemberRepository.findMaxVotedMember();
-
-        return MVP;
-    }
-
-    @Transactional
-    public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm){
-        MatchMember matchMember = matchMemberRepository.findById(voteForm.getToVote()).get();
-
-        MatchVote matchVote = MatchVote.builder()
-                .fromVoteMember(fromVoteMember)
-                .toVoteMember(matchMember)
-                .voteTypeCode(voteForm.getVoteTypeCode())
-                .build();
-        matchVoteRepository.save(matchVote);
-
-        //fromVoteMember.setVoteCount(fromVoteMember.getVoteCount() + 1);
-
-        //matchMemberRepository.save(fromVoteMember);
-
-        return RsData.of("S-1", "투표를 완료했습니다.", matchVote);
     }
 
     // 로그인한 사용자 가져오기 (내부 사용)
@@ -293,6 +276,12 @@ public class MatchService {
         matchMember.setConfirmed(true);
         matchMemberRepository.save(matchMember);
 
+        // 테스트 용으로 내가 확정 누르면 `ProgressStatus`를 변경 - 김진호
+        if (matchMember.getMember().getUsername().equals("KAKAO__2884083653")) {
+            match.setProgressStatus("1");
+            matchRepository.save(match);
+        }
+
         // 모든 참가자의 확정 여부를 확인합니다.
         List<MatchMember> confirmedMembers = matchMemberRepository.findAllByMatch(match);
         boolean isAllConfirmed = confirmedMembers.stream().allMatch(MatchMember::isConfirmed);
@@ -302,7 +291,92 @@ public class MatchService {
             match.setProgressStatus("1");
             matchRepository.save(match);
         }
+
+        // 랜덤으로 1팀 또는 2팀으로 나누기
+        this.setMatchMemberTeams(confirmedMembers);
+
         return RsData.successOf("매치 확정에 성공했습니다.");
+    }
+
+    public List<MatchMember> findMVP(){
+        List<MatchMember> MVP = matchMemberRepository.findMaxVotedMember();
+
+        return MVP;
+    }
+
+    @Transactional
+    public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm){
+        MatchMember toVoteMember = matchMemberRepository.findById(voteForm.getToVote()).get();
+
+        // 자신에게 투표하는 예외처리 해야함
+
+        MatchVote matchVote = MatchVote.builder()
+                .fromVoteMember(fromVoteMember)
+                .toVoteMember(toVoteMember)
+                .voteTypeCode(voteForm.getVoteTypeCode())
+                .build();
+        matchVoteRepository.save(matchVote);
+
+        fromVoteMember.voting();
+
+        toVoteMember.voted();
+
+        return RsData.of("S-1", "투표를 완료했습니다.", matchVote);
+    }
+
+    @Transactional
+    public void paySuccess(String matchId, String userName, int amount){
+        List<MatchMember> matchMemberList = this.getMatchMemberList(Long.valueOf(matchId));
+
+        // 시설 관리자에게 결제한 금액 포인트 추가
+        this.getMatch(Long.valueOf(matchId)).getField().getFieldOwner().receivePaidPoints(amount);
+
+        Optional<MatchMember> optionalMatchMember = matchMemberList.stream().filter(matchMember -> matchMember.getMember().getUsername().equals(userName)).findFirst();
+
+        optionalMatchMember.get().updateIsPaid();
+    }
+
+    @Transactional
+    public void setMatchMemberTeams(List<MatchMember> matchMemberList){
+        // 리스트를 섞기 위해 랜덤 객체 생성
+        Random random = new Random();
+
+        // confirmedMembers 리스트 섞기
+        Collections.shuffle(matchMemberList, random);
+
+        // 첫 5명에게 team 1 지정
+        for (int i = 0; i < 5; i++) {
+            MatchMember member = matchMemberList.get(i);
+            member.setTeam(1);
+        }
+
+        // 나머지 5명에게 team 2 지정
+        for (int i = 5; i < 10; i++) {
+            MatchMember member = matchMemberList.get(i);
+            member.setTeam(2);
+        }
+    }
+
+    public void sendKakaoMessage(User user, Match match) throws IOException {
+        List<MatchMember> paidMatchMembers = matchMemberRepository.findAllByMatch(match);
+        boolean isAllPaid = paidMatchMembers.stream().allMatch(MatchMember::isIspaid);
+
+        if (isAllPaid){
+            // 멤버의 액세스 토큰을 저장
+            String tokenValue = memberService.getAccessToken(user.getUsername());
+
+            if (tokenValue == null) {
+                // 카카오 로그인 필요하다고 토스트 메시지 같은 거 띄우면 됨
+                //return rq.redirectWithMsg("/kakao/login","카카오 로그인 필요");
+                System.out.println("카카오톡 토큰 에러");
+            }
+
+            //String message = user.getUsername() + "님\n" + match.getMatchDate() + "\n" + match.getFieldLocation() + " - " + match.getStadium() + "\n" + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
+            String message = user.getUsername() + "님   " + match.getMatchDate() + "   " + match.getFieldLocation() + " - " + match.getStadium() + "   " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
+
+            // 액세스 토큰과 메시지로 REST API 요청하는 메서드
+            kakaoTalkMessageService.sendTextMessage(tokenValue, message);
+        }
     }
 
 }

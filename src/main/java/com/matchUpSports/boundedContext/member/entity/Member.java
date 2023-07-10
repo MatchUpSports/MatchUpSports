@@ -65,4 +65,8 @@ public class Member {
     public void addRole(Role role) {
         this.authorities.add(role);
     }
+
+    public void receivePaidPoints(int point){
+        this.point = getPoint() + point;
+    }
 }
