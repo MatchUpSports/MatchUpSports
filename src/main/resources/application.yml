@@ -1,12 +1,10 @@
-server:
-  port: 8080
 spring:
   profiles:
     active: dev
     include: secret
   thymeleaf:
     cache: false
-    prefix: file:src/main/resources/templates/
+    prefix: classpath:/templates/
   devtools:
     livereload:
       enabled: true
@@ -52,7 +50,3 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.security: debug
-
-custom:
-  site:
-    baseUrl: 'localhost'
