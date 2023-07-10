@@ -10,19 +10,14 @@ import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -91,7 +86,7 @@ public class FutsalFieldController {
     public String delete(@PathVariable Long id) {
         FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
 
-        if(!futsalField.getMember().getUsername().equals(rq.getUsername())) {
+        if (!futsalField.getMember().getUsername().equals(rq.getUsername())) {
             return rq.historyBack("접근 권한이 없습니다.");
         }
 
