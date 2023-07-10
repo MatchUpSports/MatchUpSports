@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/match_up_sports__dev?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: root
-    password:
+    url:  '${custom.dev_db_url}'
+    username: '${custom.dev_db_username}'
+    password: '${custom.dev_db_password}'
   jpa:
     hibernate:
       ddl-auto: create
