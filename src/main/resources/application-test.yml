@@ -16,3 +16,7 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+custom:
+  site:
+    baseUrl: 'localhost'

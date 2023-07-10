@@ -16,7 +16,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String every() {
-        return "member/home.html";
+        return "member/home";
     }
 
     @GetMapping("/member/login")
@@ -31,7 +31,7 @@ public class HomeController {
         new SecurityContextLogoutHandler()
                 .logout(request, response, SecurityContextHolder.getContext().getAuthentication());
 
-        return "redirect:/";
+        return "redirect:";
     }
 
     @ResponseBody
