@@ -19,4 +19,6 @@ public interface FutsalFieldRepository extends JpaRepository<FutsalField, Long> 
 
     @Query("SELECT f FROM FutsalField f WHERE f.member =:member AND f.deleteDate IS NULL")
     List<FutsalField> findByMember(@Param("member") Member member);
+
+    List<FutsalField> findAllByApprovalStatus(FutsalField.ApprovalStatus status);
 }
