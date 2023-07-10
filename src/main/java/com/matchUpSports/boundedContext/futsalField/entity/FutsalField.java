@@ -3,6 +3,8 @@ package com.matchUpSports.boundedContext.futsalField.entity;
 import com.matchUpSports.base.entity.BaseEntity;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
+import com.matchUpSports.boundedContext.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +19,7 @@ public class FutsalField extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="futsalFields")
     private Member member;
+
     private String fieldName;
 
     private String fieldLocation;
@@ -41,5 +44,6 @@ public class FutsalField extends BaseEntity {
         this.openTime = LocalTime.now();
         this.courtCount = 0;
         this.registNum = null;
+        this.member = null;
     }
 }

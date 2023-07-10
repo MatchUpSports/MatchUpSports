@@ -29,6 +29,8 @@ public class KakaoTalkMessageService {      // 메시지를 전송하는 REST AP
                 "\",\"mobile_web_url\":\"" + encodedMobileUrl +
                 "\"},\"button_title\":\"바로 확인\"}";
 
+        System.out.println("카카오톡 requestBodyString: " + requestBodyString);
+
         RequestBody requestBody = RequestBody.create(FORM_URL_ENCODED, requestBodyString);
 
         // Authorization 헤더, Content-Type 헤더를 설정하고 Post 요청

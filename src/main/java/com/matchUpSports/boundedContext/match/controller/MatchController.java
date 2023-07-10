@@ -8,14 +8,25 @@ import com.matchUpSports.boundedContext.match.Form.MatchForm;
 import com.matchUpSports.boundedContext.match.Form.VoteForm;
 import com.matchUpSports.boundedContext.match.entity.MatchMember;
 import com.matchUpSports.boundedContext.match.service.MatchService;
+import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.service.MemberService;
 import com.matchUpSports.boundedContext.match.entity.MatchVote;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +46,7 @@ import java.util.stream.Stream;
 @RequestMapping("/match")
 public class MatchController {
     private final MatchService matchService;
+    private final MemberService memberService;
     private final FutsalFieldService fieldService;
     private final Rq rq;
 
@@ -99,7 +111,6 @@ public class MatchController {
             return "matching/waiting";
         }
     }
-    private final MemberService memberService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/vote/{id}")
@@ -147,7 +158,7 @@ public class MatchController {
             return "";
         }*/
 
-        return rq.redirectWithMsg("matches/matchResult/" + id, "투표 완료");
+        return rq.redirectWithMsg("/match/result/" + id, "투표 완료");
     }
 
     @GetMapping("/result/{id}")
@@ -159,4 +170,110 @@ public class MatchController {
         model.addAttribute("MVPs", matchMVPMembers);
         return "matches/matchResult";
     }
+
+    @GetMapping("/pay/{matchId}")
+    public String pay(@PathVariable Long matchId, @AuthenticationPrincipal User user, Model model){
+        Match match = matchService.getMatch(matchId);
+        Member member = memberService.findByUsername(user.getUsername());
+
+        model.addAttribute("match", match);
+        model.addAttribute("member", member);
+
+        return "payment/payment";
+    }
+
+
+    @GetMapping("/pay/success")
+    public String paymentSuccess(
+            Model model,
+            @RequestParam(value = "orderId") String orderId,
+            @RequestParam(value = "amount") Integer amount,
+            @RequestParam(value = "paymentKey") String paymentKey,
+            @AuthenticationPrincipal User user) throws Exception {
+
+        String secretKey = "test_sk_jkYG57Eba3GwB6zqY2z3pWDOxmA1:";
+
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode(secretKey.getBytes("UTF-8"));
+        String authorizations = "Basic " + new String(encodedBytes, 0, encodedBytes.length);
+
+        URL url = new URL("https://api.tosspayments.com/v1/payments/" + paymentKey);
+
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        JSONObject obj = new JSONObject();
+        obj.put("orderId", orderId);
+        obj.put("amount", amount);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(obj.toString().getBytes("UTF-8"));
+
+        int code = connection.getResponseCode();
+        boolean isSuccess = code == 200 ? true : false;
+        model.addAttribute("isSuccess", isSuccess);
+
+        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+
+        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        responseStream.close();
+
+        // MatchId 추출
+        int startIndex = orderId.indexOf("_");
+        int endIndex = orderId.indexOf("_", startIndex + 1);
+        String matchId = orderId.substring(startIndex + 1, endIndex);
+
+        // 매치 멤버 결제 완료 필드 update
+        matchService.paySuccess(matchId, user.getUsername(), amount);
+
+        model.addAttribute("responseStr", jsonObject.toJSONString());
+        System.out.println(jsonObject.toJSONString());
+
+        model.addAttribute("method",  jsonObject.get("method"));
+        model.addAttribute("orderName", jsonObject.get("orderName"));
+
+        if ((jsonObject.get("method")) != null) {
+            if ((jsonObject.get("method")).equals("카드")) {
+                model.addAttribute("cardNumber",  ((JSONObject) jsonObject.get("card")).get("number"));
+            } else if ((jsonObject.get("method")).equals("계좌이체")) {
+                model.addAttribute("bank", ((JSONObject) jsonObject.get("transfer")).get("bank"));
+            } else if ((jsonObject.get("method")).equals("휴대폰")) {
+                model.addAttribute("customerMobilePhone",  ((JSONObject) jsonObject.get("mobilePhone")).get("customerMobilePhone"));
+            }
+        } else {
+            model.addAttribute("code", jsonObject.get("code"));
+            model.addAttribute("message", jsonObject.get("message"));
+        }
+
+        return rq.redirectWithMsg("/match/ongoing/" + matchId, "시설 이용료를 지불하였습니다.");
+    }
+
+    @GetMapping("/pay/fail")
+    public String paymentFail(
+            Model model,
+            @RequestParam(value = "message") String message,
+            @RequestParam(value = "code") Integer code
+    ){
+        model.addAttribute("code", code);
+        model.addAttribute("message", message);
+        return "payment/fail";
+    }
+
+    @GetMapping("/ongoing/{matchId}")
+    public String onGoing(@PathVariable Long matchId, @AuthenticationPrincipal User user, Model model) throws IOException {
+
+        Match match = matchService.getMatch(matchId);
+
+        // 매치 멤버의 ispaid 필드를 확인해서 모두 true이면
+        // 카카오톡 메시지로 해당 멤버에게 채팅 메시지 보내기
+        matchService.sendKakaoMessage(user, match);
+
+        model.addAttribute("match", match);
+        return  "matches/ongoing";
+    }
+
 }

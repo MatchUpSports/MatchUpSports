@@ -1,0 +1,56 @@
+<html layout:decorate="~{common/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>매칭 완료</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <style>
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bolder;
+            margin-bottom: 20px;
+        }
+        .card {
+            width: 400px;
+            min-height: 600px;
+            margin: 10px;
+        }
+        .result-id button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .submit-button {
+            width: 150px;
+            height: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="main" class="d-flex flex-column align-items-center max-w-3xl mx-auto" style="text-align: center">
+    <h1 class="card-title">매칭이 완료되었습니다. </h1>
+    <div class="card">
+        <br>
+        <h3 class="card-title" style="margin-top: 200px">풋살 경기 진행 후 투표하기 버튼을 눌러서 MVP를 선정해주세요</h3>
+        <br>
+
+        <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">
+            <form th:action="@{'/match/vote/' + ${match.getId()}}" method="get">
+                <button class="submit-button" id="voteBtn" style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px" >투표하기</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
