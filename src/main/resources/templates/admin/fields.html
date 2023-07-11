@@ -12,25 +12,23 @@
     </div>
     <div th:if="${!#lists.isEmpty(fields)}" class="min-h-screen">
         <div class="max-w-2xl w-full">
-            <h1 class="mb-5 text-3xl font-bold text-left mx-5">시설 관리</h1>
-            <p class="mb-5 mx-5">시설 승인 목록</p>
+            <h1 class="mb-5 text-2xl font-bold text-left mx-5">시설 관리</h1>
+            <p class="mt-5 mx-5">심사 목록</p>
             <table class="table w-full border-0">
                 <tbody>
                 <tr th:each="field : ${pending}" class="mb-4 border-0">
                     <td th:if="${field.getDeleteDate() == null}" class="w-full border-0">
                         <div class="card w-full bg-base-100 shadow-xl">
-                            <div class="indicator">
-                                <span class="indicator-item badge badge-error">new</span>
-                                <div class="card-body">
-                                    <h2 th:text="${field.getMember().getUsername()}" class="card-title"></h2>
-                                    <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
-                                    <p th:text="${field.getFieldLocation()}"></p>
-                                    <div class="card-actions justify-end">
-                                        <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
-                                           class="btn btn-outline">상세 정보 보기</a>
-                                        <a th:href="@{/admin/approve/{id}(id=${field.getId()})}"
-                                           class="btn btn-outline">승인</a>
-                                    </div>
+
+                            <div class="card-body">
+                                <h2 th:text="${field.getMember().getUsername()}" class="card-title"></h2>
+                                <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
+                                <p th:text="${field.getFieldLocation()}"></p>
+                                <div class="card-actions justify-end">
+                                    <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
+                                       class="btn btn-outline">상세 정보 보기</a>
+                                    <a th:href="@{/admin/approve/{id}(id=${field.getId()})}"
+                                       class="btn btn-outline">승인</a>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +39,7 @@
                                 <h2 class="card-title text-error">승인 취소 한 시설입니다</h2>
                                 <h2 th:text="${field.getFieldName()}" class="card-title"></h2>
                                 <p th:text="${field.getFieldLocation()}"></p>
-<!--                                <p th:if="${field.getDeleteDate() != null}">삭제된 시설입니다.</p>-->
+                                <!--                                <p th:if="${field.getDeleteDate() != null}">삭제된 시설입니다.</p>-->
                                 <div class="card-actions justify-end">
                                     <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
                                        class="btn btn-outline"
@@ -56,7 +54,7 @@
                 </tbody>
             </table>
             <div>
-                <p class="my-5 mx-5">시설 목록</p>
+                <p class="mt-5 mx-5">시설 목록</p>
             </div>
             <table class="table w-full border-0">
                 <tbody>
@@ -81,7 +79,6 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-ghost w-full" onclick="window.location.href='/field/create'">시설 추가하기</button>
         </div>
     </div>
 </main>
