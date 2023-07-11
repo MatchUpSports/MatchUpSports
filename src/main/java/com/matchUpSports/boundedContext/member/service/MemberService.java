@@ -189,7 +189,6 @@ public class MemberService {
         memberRepository.deleteHardById(id);
     }
 
-}
 
     @Transactional
     public RsData<Member> join(String email, String userName, int tier) {

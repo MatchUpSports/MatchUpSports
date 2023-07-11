@@ -11,7 +11,8 @@
             <div class="px-4 py-2">
                 <div class="flex justify-between items-center">
                     <div class="text-2xl font-bold">내 정보</div>
-                    <button th:if="${myInformation.getAuthorities().contains('MANAGE')}" onclick="location.href='/field'"
+                    <button th:if="${myInformation.getAuthorities().contains('MANAGE')}"
+                            onclick="location.href='/field'"
                             class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
                         구장 관리
                     </button>
