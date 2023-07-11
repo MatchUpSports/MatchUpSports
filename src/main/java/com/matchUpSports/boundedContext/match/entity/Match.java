@@ -3,12 +3,17 @@ package com.matchUpSports.boundedContext.match.entity;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@DynamicUpdate // 변경감지를 해도 전체가 다 들어가는데 변경된 부분만 부분적으로 업데이트 할 수 있도록 할 수 있다.
+@OptimisticLocking(type = OptimisticLockType.DIRTY) // 변경 감지를 할 때 한번 더 체크를 한다.
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
