@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>가입시 필수 양식</title>
-</head>
-<body>
-<main layout:fragment="main">
+
     <style>
         .card {
             margin-bottom: 30px;
@@ -24,50 +22,55 @@
             height: 50px;
         }
     </style>
-
-    <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="validate(this); return false;">
-        <div>
-            <div class="vertical_distance">이메일을 입력해 주세요</div>
-            <input type="text" id="email" name="email" class="card input"
-                   th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
-
-            <div class="vertical_distance">전화번호를 입력해 주세요 ('-' 미포함, 010으로 시작)</div>
-            <input type="text" id="phone" name="phone" class="card input"
-                   th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
-
-            <div th:block th:if="${modifyingForm == null}">
-                <div>회원 종류를 입력해 주세요</div>
-                <select id="authorities" name="authorities" class="card">
-                    <option value="일반 유저">일반 유저</option>
-                    <option value="시설 주인">시설 주인</option>
-                </select>
-            </div>
-
-
-            <div class="card">
-                <div class="vertical-distance">사는 지역을 입력해 주세요</div>
-                <select name="bigDistrict" id="bigDistrict" onchange="updateSmallDistricts()">
-                    <option th:each="big : ${bigDistricts}" th:value="${big}" th:text="${big}"></option>
-                </select>
-
-                <select name="smallDistrict" id="smallDistrict">
-                    <!-- 초기 옵션은 없음 -->
-                </select>
-            </div>
-
+</head>
+<body>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="max-w-2xl w-full px-4 mb-20">
+        <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="validate(this); return false;">
             <div>
-                <div class="vertical-distance">자신이 생각하는 풋살 실력을 입력해주세요</div>
-                <select id="tier" name="tier" class="card">
-                    <option value="하수" th:selected="${modifyingForm == null || modifyingForm.tier == '하수'}">하수</option>
-                    <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수</option>
-                    <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수</option>
-                </select>
+                <div class="vertical_distance">이메일을 입력해 주세요</div>
+                <input type="text" id="email" name="email" class="card input"
+                       th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
+
+                <div class="vertical_distance">전화번호를 입력해 주세요 ('-' 미포함, 010으로 시작)</div>
+                <input type="text" id="phone" name="phone" class="card input"
+                       th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
+
+                <div th:block th:if="${modifyingForm == null}">
+                    <div>회원 종류를 입력해 주세요</div>
+                    <select id="authorities" name="authorities" class="card">
+                        <option value="일반 유저">일반 유저</option>
+                        <option value="시설 주인">시설 주인</option>
+                    </select>
+                </div>
+
+
+                <div class="card">
+                    <div class="vertical-distance">사는 지역을 입력해 주세요</div>
+                    <select name="bigDistrict" id="bigDistrict" onchange="updateSmallDistricts()">
+                        <option th:each="big : ${bigDistricts}" th:value="${big}" th:text="${big}"></option>
+                    </select>
+
+                    <select name="smallDistrict" id="smallDistrict">
+                        <!-- 초기 옵션은 없음 -->
+                    </select>
+                </div>
+
+                <div>
+                    <div class="vertical-distance">자신이 생각하는 풋살 실력을 입력해주세요</div>
+                    <select id="tier" name="tier" class="card">
+                        <option value="하수" th:selected="${modifyingForm == null || modifyingForm.tier == '하수'}">하수</option>
+                        <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수</option>
+                        <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
 
-        <button class="btn" type="submit">제출</button>
-    </form>
+            <button class="btn" type="submit">제출</button>
+        </form>
+    </div>
+
     <script th:inline="javascript">
         function validate(form) {
             const emailValidate = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");

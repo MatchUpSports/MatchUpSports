@@ -5,75 +5,73 @@
     <title>마이페이지</title>
 </head>
 <body>
-<main layout:fragment="main">
-    <div class="border-gray-600 rounded-3xl">
-        <div class="px-4 py-2">
-            <div class="flex justify-between items-center">
-                <div class="text-2xl font-bold">내 정보</div>
-                <button th:if="${myInformation.getAuthorities().contains('MANAGE')}" onclick="location.href='/field'"
-                        class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
-                    구장 관리
-                </button>
-                <button onclick="location.href='/member/modifyForm'"
-                        class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
-                    수정하기
-                </button>
-            </div>
-        </div>
-        <div class="px-4 py-4 flex-row content-around">
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">유저ID:</div>
-                <div th:text="${myInformation.getUsername()}"></div>
-            </div>
-
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">가입날짜:</div>
-                <div th:text="${myInformation.getCreatedDate()}"></div>
-            </div>
-
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">회원 유형:</div>
-                <div th:text="${myInformation.getAuthorities()}"></div>
-            </div>
-
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">이메일:</div>
-                <div th:text="${myInformation.getEmail()}"></div>
-            </div>
-
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">전화번호:</div>
-                <div th:text="${myInformation.getPhone()}"></div>
-            </div>
-
-            <div class="flex py-4 items-center border-b border-gray-500">
-                <div class="font-semibold text-lg mr-2">지역:</div>
-                <div th:text="|${myInformation.getBigDistrict()}  ${myInformation.getSmallDistrict()}|"></div>
-            </div>
-
-            <div class="px-4 py-4">
-                <div class="flex justify-between px-8">
-                    <div class="flex px-4">
-                        <div class="font-semibold text-lg">승률:</div>
-                        <div th:text="${myInformation.getWinningRate()}"></div>
-                    </div>
-
-                    <div class="flex px-4">
-                        <div class="font-semibold text-lg">티어:</div>
-                        <div th:text="${myInformation.getTier()}"></div>
-                    </div>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="max-w-2xl w-full px-4 mb-20">
+        <div class="border-gray-600 rounded-3xl">
+            <div class="px-4 py-2">
+                <div class="flex justify-between items-center">
+                    <div class="text-2xl font-bold">내 정보</div>
+                    <button th:if="${myInformation.getAuthorities().contains('MANAGE')}" onclick="location.href='/field'"
+                            class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+                        구장 관리
+                    </button>
+                    <button onclick="location.href='/member/modifyForm'"
+                            class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors duration-300">
+                        수정하기
+                    </button>
                 </div>
             </div>
+            <div class="px-4 py-4 flex-row content-around">
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">유저ID:</div>
+                    <div th:text="${myInformation.getUsername()}"></div>
+                </div>
 
-            <button onclick="location.href='/logout'"
-                    class="bg-red-400 hover:bg-red-600 text-white font-bold my-6 py-6 px-4 rounded transition-colors duration-300 w-full">
-                로그아웃
-            </button>
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">가입날짜:</div>
+                    <div th:text="${myInformation.getCreatedDate()}"></div>
+                </div>
+
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">회원 유형:</div>
+                    <div th:text="${myInformation.getAuthorities()}"></div>
+                </div>
+
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">이메일:</div>
+                    <div th:text="${myInformation.getEmail()}"></div>
+                </div>
+
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">전화번호:</div>
+                    <div th:text="${myInformation.getPhone()}"></div>
+                </div>
+
+                <div class="flex py-4 items-center border-b border-gray-500">
+                    <div class="font-semibold text-lg mr-2">지역:</div>
+                    <div th:text="|${myInformation.getBigDistrict()}  ${myInformation.getSmallDistrict()}|"></div>
+                </div>
+
+                <div class="px-4 py-4">
+                    <div class="flex justify-between px-8">
+                        <div class="flex px-4">
+                            <div class="font-semibold text-lg">승률:</div>
+                            <div th:text="${myInformation.getWinningRate()}"></div>
+                        </div>
+
+                        <div class="flex px-4">
+                            <div class="font-semibold text-lg">티어:</div>
+                            <div th:text="${myInformation.getTier()}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="location.href='/logout'"
+                        class="bg-red-400 hover:bg-red-600 text-white font-bold my-6 py-6 px-4 rounded transition-colors duration-300 w-full">
+                    로그아웃
+                </button>
+            </div>
         </div>
-    </div>
-
-    <div class="border-gray-600 rounded-3xl">
-
     </div>
 </main>
 </body>
