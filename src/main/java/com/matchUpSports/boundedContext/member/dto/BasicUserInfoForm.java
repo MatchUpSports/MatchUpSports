@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BasicUserInfoForm {
+    private String nickname;
     @Email
     private String email;
     private String phone;
