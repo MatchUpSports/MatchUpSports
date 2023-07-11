@@ -28,6 +28,10 @@
     <div class="max-w-2xl w-full px-4 mb-20">
         <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="validate(this); return false;">
             <div>
+                <div class="vertical_distance">사용자 닉네임을 입력해 주세요</div>
+                <input type="text" id="nickname" name="nickname" class="card input"
+                       th:value="${modifyingForm != null ? modifyingForm.nickname : nickname}"/>
+
                 <div class="vertical_distance">이메일을 입력해 주세요</div>
                 <input type="text" id="email" name="email" class="card input"
                        th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>

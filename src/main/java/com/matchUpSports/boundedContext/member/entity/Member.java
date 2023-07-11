@@ -37,6 +37,7 @@ public class Member {
     private LocalDateTime modifiedDate;
     private LocalDateTime deleteDate;
     private String username;
+    private String nickname;
     private String email;
     private String phoneNumber;
     private int winningRate;

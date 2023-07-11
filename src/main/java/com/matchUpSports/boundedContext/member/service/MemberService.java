@@ -35,12 +35,13 @@ public class MemberService {
     }
 
     @Transactional
-    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken) {
+    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken, String nickname) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
 
         if (findByName.isEmpty()) {
             Member member = Member.builder()
                     .username(customOAuth2User.getUsername())
+                    .nickname(nickname)
                     .email(customOAuth2User.getEmail())
                     .accessToken(accessToken)
                     .build();
@@ -58,6 +59,7 @@ public class MemberService {
 
         Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
+                .nickname(joiningForm.getNickname())
                 .email(joiningForm.getEmail())
                 .phoneNumber(joiningForm.getPhone())
                 .authorities(memberAuthorities)
@@ -93,6 +95,7 @@ public class MemberService {
         }
         Member member = wrappedMember.get();
         ModifyingDisplaying displayingForm = ModifyingDisplaying.builder()
+                .nickname(member.getNickname())
                 .email(member.getEmail())
                 .phone(member.getPhoneNumber())
                 .bigDistrict(member.getBigDistrict())
@@ -109,6 +112,7 @@ public class MemberService {
         validateUserInput(modifyingForm);
 
         Member modifiedMember = member.toBuilder()
+                .nickname(modifyingForm.getNickname())
                 .email(modifyingForm.getEmail())
                 .phoneNumber(modifyingForm.getPhone())
                 .bigDistrict(modifyingForm.getBigDistrict())
@@ -127,6 +131,7 @@ public class MemberService {
                 .tier(tierUnpacker.get(member.getTier()))
                 .createdDate(member.getCreatedDate().toLocalDate())
                 .username(member.getUsername())
+                .nickname(member.getNickname())
                 .winningRate(convertWinningRateToString(member.getWinningRate()))
                 .authorities(convertAuthoritiesToString(member.getAuthorities()))
                 .build();

@@ -58,6 +58,7 @@ public class MemberController {
         model.addAttribute("httpMethod", "POST");
         model.addAttribute("bigDistricts", districts.getBigDistricts());
         model.addAttribute("smallDistricts", districts.getSmallDistricts());
+        model.addAttribute("nickname", member.getNickname());
 
         return "member/joining_info_form";
     }
