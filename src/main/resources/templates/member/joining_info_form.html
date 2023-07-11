@@ -1,89 +1,69 @@
 <!DOCTYPE html>
-<html layout:decorate="~{common/layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>가입시 필수 양식</title>
-
-    <style>
-        .card {
-            margin-bottom: 30px;
-        }
-
-        .vertical_distance {
-            margin-bottom: 10px;
-        }
-
-        .input {
-            border-color: skyblue;
-        }
-
-        .btn {
-            width: 100px;
-            height: 50px;
-        }
-    </style>
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <div class="max-w-2xl w-full px-4 mb-20">
+        <p class="text-2xl font-black my-10 text-center">필수 정보 입력</p>
         <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="validate(this); return false;">
-            <div>
-                <div class="vertical_distance">사용자 닉네임을 입력해 주세요</div>
-                <input type="text" id="nickname" name="nickname" class="card input"
-                       th:value="${modifyingForm != null ? modifyingForm.nickname : nickname}"/>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하세요"
+                   class="input input-bordered w-full"
+                   th:value="${modifyingForm != null ? modifyingForm.nickname : ''}"/>
 
-                <div class="vertical_distance">이메일을 입력해 주세요</div>
-                <input type="text" id="email" name="email" class="card input"
-                       th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
+            <input type="text" id="email" name="email" placeholder="이메일을 입력하세요"
+                   class="input input-bordered w-full mt-12"
+                   th:value="${modifyingForm != null ? modifyingForm.email : ''}"/>
 
-                <div class="vertical_distance">전화번호를 입력해 주세요 ('-' 미포함, 010으로 시작)</div>
-                <input type="text" id="phone" name="phone" class="card input"
-                       th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
+            <input type="text" id="phone" name="phone" placeholder="전화번호를 입력해주세요 ('-' 미포함, 010으로 시작)"
+                   class="input input-bordered w-full mt-12"
+                   th:value="${modifyingForm != null ? modifyingForm.phone : ''}"/>
 
-                <div th:block th:if="${modifyingForm == null}">
-                    <div>회원 종류를 입력해 주세요</div>
-                    <select id="authorities" name="authorities" class="card">
-                        <option value="일반 유저">일반 유저</option>
-                        <option value="시설 주인">시설 주인</option>
-                    </select>
-                </div>
-
-
-                <div class="card">
-                    <div class="vertical-distance">사는 지역을 입력해 주세요</div>
-                    <select name="bigDistrict" id="bigDistrict" onchange="updateSmallDistricts()">
-                        <option th:each="big : ${bigDistricts}" th:value="${big}" th:text="${big}"></option>
-                    </select>
-
-                    <select name="smallDistrict" id="smallDistrict">
-                        <!-- 초기 옵션은 없음 -->
-                    </select>
-                </div>
-
-                <div>
-                    <div class="vertical-distance">자신이 생각하는 풋살 실력을 입력해주세요</div>
-                    <select id="tier" name="tier" class="card">
-                        <option value="하수" th:selected="${modifyingForm == null || modifyingForm.tier == '하수'}">하수
-                        </option>
-                        <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수
-                        </option>
-                        <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수
-                        </option>
-                    </select>
-                </div>
+            <div th:block th:if="${modifyingForm == null}">
+                <select id="authorities" name="authorities" class="select select-bordered w-full mt-12">
+                    <option disabled selected value="">가입 목적을 선택해 주십시오</option>
+                    <option value="일반 유저">일반 유저</option>
+                    <option value="시설 주인">시설 관리자</option>
+                </select>
             </div>
-
-
-            <button class="btn" type="submit">제출</button>
+            <div>
+                <select name="bigDistrict" id="bigDistrict" onchange="updateSmallDistricts()"
+                        class="select select-bordered w-full mt-12">
+                    <option disabled selected value="">사는 지역을 선택해 주십시오</option>
+                    <option th:each="big : ${bigDistricts}" th:value="${big}" th:text="${big}"></option>
+                </select>
+                <select name="smallDistrict" id="smallDistrict" class="select select-bordered w-full mt-12">>
+                    <!-- 초기 옵션은 없음 -->
+                </select>
+            </div>
+            <div>
+                <select id="tier" name="tier" class="select select-bordered w-full mt-12">
+                    <option disabled selected value="">자신이 생각하는 풋살 실력을 선택해 주십시오</option>
+                    <option value="하수" th:selected="${modifyingForm != null && modifyingForm.tier == '하수'}">하수
+                    </option>
+                    <option value="중수" th:selected="${modifyingForm != null && modifyingForm.tier == '중수'}">중수
+                    </option>
+                    <option value="고수" th:selected="${modifyingForm != null && modifyingForm.tier == '고수'}">고수
+                    </option>
+                </select>
+            </div>
+            <button class="btn btn-error w-full mt-12" type="submit">제출</button>
         </form>
     </div>
 
     <script th:inline="javascript">
         function validate(form) {
+            if (form.nickname.value.trim().length == 0) {
+                toastWarning("닉네임을 작성해주세요.");
+                form.nickname.focus();
+                return;
+            }
             const emailValidate = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
             const email = form.email;
             if (email.value.length == 0 || !emailValidate.test(email.value)) {
-                alert('올바르지 않은 이메일 형식입니다')
+                toastWarning('올바르지 않은 이메일 형식입니다')
                 email.focus();
                 return
             }
@@ -91,15 +71,29 @@
             const phoneNumberValidate = /^010[0-9]{7,8}$/;
             const phoneNumber = form.phone;
             if (phoneNumber.value.length == 0 || !phoneNumberValidate.test(phoneNumber.value)) {
-                alert('올바르지 않은 휴대전화번호 입니다')
+                toastWarning('올바르지 않은 휴대전화번호 입니다')
                 phoneNumber.focus();
                 return;
             }
 
-            const area = form.area;
-            if (area.value.length == 0) {
-                alert('사는 지역을 입력해주십시오')
-                area.focus();
+            const authorities = form.authorities;
+            if (authorities.value.length == 0 || authorities.value === "") {
+                toastWarning('가입 목적을 선택해 주십시오')
+                authorities.focus();
+                return;
+            }
+
+            const bigDistrict = form.bigDistrict;
+            if (bigDistrict.value.length == 0 || bigDistrict.value === "") {
+                toastWarning('사는 지역을 선택해 주십시오')
+                bigDistrict.focus();
+                return;
+            }
+
+            const tier = form.tier;
+            if (tier.value.length == 0 || tier.value === "") {
+                toastWarning('풋살 실력을 선택해 주십시오')
+                tier.focus();
                 return;
             }
 
