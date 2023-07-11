@@ -2,9 +2,7 @@ package com.matchUpSports.boundedContext.futsalField.entity;
 
 import com.matchUpSports.base.entity.BaseEntity;
 import com.matchUpSports.boundedContext.member.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
