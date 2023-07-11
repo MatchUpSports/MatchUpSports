@@ -1,19 +1,13 @@
 package com.matchUpSports.base.initData;
 
-import com.matchUpSports.base.Role;
-import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
-import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 @Profile({"dev", "test", "prod"})
