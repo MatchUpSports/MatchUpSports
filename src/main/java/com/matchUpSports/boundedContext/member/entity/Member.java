@@ -58,6 +58,8 @@ public class Member {
 
     private int point;
 
+    private LocalDateTime accessTokenTime;
+
     public List<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_" + i.name())).toList();
     }
@@ -69,4 +71,6 @@ public class Member {
     public void receivePaidPoints(int point) {
         this.point = getPoint() + point;
     }
+
+
 }
