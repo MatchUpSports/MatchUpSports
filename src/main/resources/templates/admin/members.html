@@ -6,19 +6,17 @@
 </head>
 <body>
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
-    <!-- 시설 등록이 없을 경우 -->
     <div th:if="${#lists.isEmpty(members)}">
         <h1 class="mb-5 text-3xl font-bold">회원이 존재하지 않습니다.</h1>
     </div>
-    <!-- 등록된 시설이 있을때(리스트로 보여주기) -->
-    <div th:if="${!#lists.isEmpty(members)}" class="min-h-screen">
+    <div th:if="${!#lists.isEmpty(members)}" class="min-h-screen max-w-2xl w-full">
         <table class="table" th:if="${!#lists.isEmpty(members)}">
             <tbody>
             <tr th:each="member: ${members}">
                 <td th:if="${member.getDeleteDate() != null}">
                     <div class="join join-vertical w-full">
                         <div class="collapse collapse-arrow join-item border border-base-300">
-                            <input type="radio" name="my-accordion-4" checked="checked" />
+                            <input type="radio" name="my-accordion-4" checked="checked"/>
                             <div class="collapse-title font-medium">
                                 <p>삭제된 유저 입니다.</p>
                             </div>
@@ -27,8 +25,10 @@
                                 <p class="mb-1"><span>ID: </span><span th:text="${member.getId()}"></span></p>
                                 <p class="mb-1"><span>지역: </span><span th:text="${member.getArea()}"></span></p>
                                 <p class="mb-1"><span>이메일: </span><span th:text="${member.getEmail()}"></span></p>
-                                <p class="mb-1"><span>휴대번호: </span><span th:text="${member.getPhoneNumber()}"></span></p>
-                                <p class="mb-1"><span>생성날짜: </span><span th:text="${member.getCreatedDate()}"></span></p>
+                                <p class="mb-1"><span>휴대번호: </span><span
+                                        th:text="${member.getPhoneNumber()}"></span></p>
+                                <p class="mb-1"><span>생성날짜: </span><span
+                                        th:text="${member.getCreatedDate()}"></span></p>
                                 <div class="flex justify-end">
                                     <button class="btn">삭제 하기</button>
                                 </div>
@@ -39,7 +39,7 @@
                 <td th:if="${member.getDeleteDate() == null}">
                     <div class="join join-vertical w-full">
                         <div class="collapse collapse-arrow join-item border border-base-300">
-                            <input type="radio" name="my-accordion-4" checked="checked" />
+                            <input type="radio" name="my-accordion-4" checked="checked"/>
                             <div class="collapse-title font-medium">
                                 <p th:text="${member.getUsername()}"></p>
                             </div>
@@ -47,28 +47,21 @@
                                 <p class="mb-1"><span>ID: </span><span th:text="${member.getId()}"></span></p>
                                 <p class="mb-1"><span>지역: </span><span th:text="${member.getArea()}"></span></p>
                                 <p class="mb-1"><span>이메일: </span><span th:text="${member.getEmail()}"></span></p>
-                                <p class="mb-1"><span>휴대번호: </span><span th:text="${member.getPhoneNumber()}"></span></p>
-                                <p class="mb-1"><span>권한: </span><span th:text="${member.getAuthorities()}"></span></p>
-                                <p class="mb-1"><span>생성날짜: </span><span th:text="${member.getCreatedDate()}"></span></p>
+                                <p class="mb-1"><span>휴대번호: </span><span
+                                        th:text="${member.getPhoneNumber()}"></span></p>
+                                <p class="mb-1">
+                                    <span>권한: </span><span th:text="${member.getAuthorities()}"></span>
+                                </p>
+                                <p class="mb-1"><span>생성날짜: </span><span
+                                        th:text="${member.getCreatedDate()}"></span></p>
                                 <div class="flex justify-end">
-                                    <a th:href="@{/admin/deleteMember/{id}(id=${member.getId()})}" class="btn">삭제 하기</a>
+                                    <a th:href="@{/admin/deleteMember/{id}(id=${member.getId()})}" class="btn">삭제
+                                        하기</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </td>
-<!--                <td th:if="${member.getDeleteDate() != null}">탈퇴한 회원</td>-->
-<!--                <td th:unless="${member.getDeleteDate() != null}"></td>-->
-<!--                <td><a href="#modal-1" class="btn btn-outline btn-sm">삭제</a></td>-->
-<!--                <div class="modal" id="modal-1">-->
-<!--                    <div class="modal-box">-->
-<!--                        <h3 class="font-bold text-lg">정말로 삭제하시겠습니까?</h3>-->
-<!--                        <div class="modal-action">-->
-<!--                            <a href="/adm/members" class="btn btn-success">취소</a>-->
-<!--                            <a th:href="@{/adm/deleteMember/{id}(id=${member.getId()})}" class="btn btn-active btn-ghost">삭제</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
             </tr>
             </tbody>
         </table>
