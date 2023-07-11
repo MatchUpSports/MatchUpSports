@@ -30,7 +30,7 @@ public class CustomOAuth2Login extends DefaultOAuth2UserService {
 
         DivideOAuth2User customOAuth2User = SocialUserFactory.create(providerName, oAuth2User);
 
-        Member member = memberService.saveOAuth2Member(customOAuth2User, accessToken);
+        Member member = memberService.saveOAuth2Member(customOAuth2User, accessToken, "annonymous");
 
         return new CustomOAuth2User(member.getUsername(), member.getAuthorities());
     }

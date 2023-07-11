@@ -37,9 +37,11 @@ public class Member {
     private LocalDateTime modifiedDate;
     private LocalDateTime deleteDate;
     private String username;
+    private String nickname;
     private String email;
     private String phoneNumber;
-    private int winningRate;
+    private int win;
+    private int lose;
     private String bigDistrict;
     private String smallDistrict;
     private int tier;

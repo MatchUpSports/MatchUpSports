@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 public class ModifyingDisplaying {
+    private String nickname;
     @Email
     private String email;
     private String phone;

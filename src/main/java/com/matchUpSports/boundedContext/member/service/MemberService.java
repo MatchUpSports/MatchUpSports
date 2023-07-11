@@ -39,12 +39,13 @@ public class MemberService {
     }
 
     @Transactional
-    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken) {
+    public Member saveOAuth2Member(DivideOAuth2User customOAuth2User, String accessToken, String nickname) {
         Optional<Member> findByName = memberRepository.findByUsername(customOAuth2User.getUsername());
 
         if (findByName.isEmpty()) {
             Member member = Member.builder()
                     .username(customOAuth2User.getUsername())
+                    .nickname(nickname)
                     .email(customOAuth2User.getEmail())
                     .accessToken(accessToken)
                     .build();
@@ -62,6 +63,7 @@ public class MemberService {
 
         Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
+                .nickname(joiningForm.getNickname())
                 .email(joiningForm.getEmail())
                 .phoneNumber(joiningForm.getPhone())
                 .authorities(memberAuthorities)
@@ -97,6 +99,7 @@ public class MemberService {
         }
         Member member = wrappedMember.get();
         ModifyingDisplaying displayingForm = ModifyingDisplaying.builder()
+                .nickname(member.getNickname())
                 .email(member.getEmail())
                 .phone(member.getPhoneNumber())
                 .bigDistrict(member.getBigDistrict())
@@ -113,6 +116,7 @@ public class MemberService {
         validateUserInput(modifyingForm);
 
         Member modifiedMember = member.toBuilder()
+                .nickname(modifyingForm.getNickname())
                 .email(modifyingForm.getEmail())
                 .phoneNumber(modifyingForm.getPhone())
                 .bigDistrict(modifyingForm.getBigDistrict())
@@ -123,6 +127,8 @@ public class MemberService {
     }
 
     public MyPage showMyPage(Member member) {
+        int win = member.getWin();
+        int lose = member.getLose();
         return MyPage.builder()
                 .email(member.getEmail())
                 .phone(member.getPhoneNumber())
@@ -131,7 +137,8 @@ public class MemberService {
                 .tier(tierUnpacker.get(member.getTier()))
                 .createdDate(member.getCreatedDate().toLocalDate())
                 .username(member.getUsername())
-                .winningRate(convertWinningRateToString(member.getWinningRate()))
+                .nickname(member.getNickname())
+                .winningRate(calculateWinningRate(win, lose))
                 .authorities(convertAuthoritiesToString(member.getAuthorities()))
                 .build();
     }
@@ -141,7 +148,13 @@ public class MemberService {
         return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
-    private String convertWinningRateToString(int winningRate) {
+    private String calculateWinningRate(int win, int lose) {
+        float winningRate = 0f;
+        float under = win + lose;
+        if (under != 0) {
+            winningRate = (Math.round(win / (under)) * 100) / 100.0f;
+        }
+
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(winningRate);
         stringBuffer.append("%");

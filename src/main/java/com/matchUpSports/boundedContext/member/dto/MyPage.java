@@ -11,6 +11,7 @@ import java.util.List;
 public class MyPage extends ModifyingDisplaying {
     private LocalDate createdDate;
     private String username;
+    private String nickname;
     private String winningRate;
     private List<String> authorities;
 }
