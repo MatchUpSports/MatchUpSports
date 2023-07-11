@@ -24,7 +24,7 @@ class MemberTest {
     @Test
     @DisplayName("멤버 엔티티 CRUD")
     void memberCrudTest() {
-        String username = "user1";
+        String username = "testuser";
         String email = "abcd@gmail.com";
         String phoneNumber = "010-1234-5678";
         String authorities = "user";
