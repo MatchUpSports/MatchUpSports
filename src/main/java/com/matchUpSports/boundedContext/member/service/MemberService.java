@@ -123,6 +123,8 @@ public class MemberService {
     }
 
     public MyPage showMyPage(Member member) {
+        int win = member.getWin();
+        int lose = member.getLose();
         return MyPage.builder()
                 .email(member.getEmail())
                 .phone(member.getPhoneNumber())
@@ -132,7 +134,7 @@ public class MemberService {
                 .createdDate(member.getCreatedDate().toLocalDate())
                 .username(member.getUsername())
                 .nickname(member.getNickname())
-                .winningRate(convertWinningRateToString(member.getWinningRate()))
+                .winningRate(calculateWinningRate(win, lose))
                 .authorities(convertAuthoritiesToString(member.getAuthorities()))
                 .build();
     }
@@ -142,7 +144,13 @@ public class MemberService {
         return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
-    private String convertWinningRateToString(int winningRate) {
+    private String calculateWinningRate(int win, int lose) {
+        float winningRate = 0f;
+        float under = win + lose;
+        if (under != 0) {
+            winningRate = (Math.round(win / (under)) * 100) / 100.0f;
+        }
+
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(winningRate);
         stringBuffer.append("%");

@@ -40,7 +40,8 @@ public class Member {
     private String nickname;
     private String email;
     private String phoneNumber;
-    private int winningRate;
+    private int win;
+    private int lose;
     private String bigDistrict;
     private String smallDistrict;
     private int tier;
