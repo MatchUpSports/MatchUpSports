@@ -35,16 +35,16 @@ public class FutsalFieldService {
                 .orElseThrow(() -> new DataNotFoundException("존재하지 않는 시설입니다."));
     }
 
-    public  List<FutsalField> findAll(){
+    public List<FutsalField> findAll() {
         return futsalFieldRepository.findAll();
     }
 
-//    @Transactional(readOnly = true)
+    //    @Transactional(readOnly = true)
     public List<FutsalField> findByMemberAndApprovalStatus(Member member) {
         return futsalFieldRepository.findByMemberAndApprovalStatus(member, FutsalField.ApprovalStatus.APPROVED);
     }
 
-//    @Transactional(readOnly = true)
+    //    @Transactional(readOnly = true)
     public List<FutsalField> findByMemberAndPendingStatus(Member member) {
         return futsalFieldRepository.findByMemberAndApprovalStatus(member, FutsalField.ApprovalStatus.PENDING);
     }
