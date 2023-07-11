@@ -1,7 +1,6 @@
 package com.matchUpSports.boundedContext.admin.controller;
 
 import com.matchUpSports.base.rq.Rq;
-import com.matchUpSports.boundedContext.admin.service.AdminService;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
 import com.matchUpSports.boundedContext.member.entity.Member;
@@ -13,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -22,7 +20,6 @@ import java.util.List;
 @RequestMapping("/admin")
 @Slf4j
 public class AdminController {
-    private final AdminService adminService;
     private final MemberService memberService;
     private final FutsalFieldService futsalFieldService;
     private final Rq rq;

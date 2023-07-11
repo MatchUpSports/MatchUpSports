@@ -49,6 +49,7 @@ public class FutsalField extends BaseEntity {
         this.registNum = null;
         this.member = null;
     }
+
     public enum ApprovalStatus {
         PENDING, APPROVED
     }
