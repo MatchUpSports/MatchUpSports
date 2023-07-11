@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.match.service;
 
+import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
 import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -37,6 +39,7 @@ public class MatchService {
     private final MatchVoteRepository matchVoteRepository;
     private final MemberService memberService;
     private final KakaoTalkMessageService kakaoTalkMessageService;
+    private final Rq rq;
 
     // 매치 생성 메서드
     @Transactional
@@ -349,7 +352,7 @@ public class MatchService {
         }
     }
 
-    public void sendKakaoMessage(User user, Match match) throws IOException {
+    public String sendKakaoMessage(User user, Match match) throws IOException {
         List<MatchMember> paidMatchMembers = matchMemberRepository.findAllByMatch(match);
         boolean isAllPaid = paidMatchMembers.stream().allMatch(MatchMember::isIspaid);
 
@@ -357,17 +360,18 @@ public class MatchService {
             // 멤버의 액세스 토큰을 저장
             String tokenValue = memberService.getAccessToken(user.getUsername());
 
-            if (tokenValue == null) {
-                // 카카오 로그인 필요하다고 토스트 메시지 같은 거 띄우면 됨
-                //return rq.redirectWithMsg("/kakao/login","카카오 로그인 필요");
-                System.out.println("카카오톡 토큰 에러");
+            // 액세스 토큰이 없거나 만료되었으면 다시 카카오 로그인
+            if (tokenValue == null || memberService.checkAccessTokenIsExpired(user.getUsername())) {
+                return rq.redirectWithMsg("/oauth2/authorization/kakao","카카오 로그인 필요");
             }
 
-            String message = user.getUsername() + "님   " + match.getMatchDate() + "   " + match.getFieldLocation() + " - " + match.getStadium() + "   " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
+            String message = user.getUsername() + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
 
             // 액세스 토큰과 메시지로 REST API 요청하는 메서드
             kakaoTalkMessageService.sendTextMessage(tokenValue, message);
         }
+
+        return "";
     }
 
 }

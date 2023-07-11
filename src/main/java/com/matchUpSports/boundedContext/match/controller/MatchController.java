@@ -265,10 +265,11 @@ public class MatchController {
 
         // 매치 멤버의 ispaid 필드를 확인해서 모두 true이면
         // 카카오톡 메시지로 해당 멤버에게 채팅 메시지 보내기
-        matchService.sendKakaoMessage(user, match);
+        String result = matchService.sendKakaoMessage(user, match);
 
         model.addAttribute("match", match);
         model.addAttribute("matchMembers", matchMemberList);
+
         return "matches/ongoing";
     }
 

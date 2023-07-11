@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,6 @@ import java.util.regex.Pattern;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final MatchMemberRepository matchMemberRepository;
     private static final Map<String, Integer> tierClassifier = new HashMap<>(Map.of("하수", 1, "중수", 2, "고수", 3));
     private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
@@ -48,6 +48,7 @@ public class MemberService {
                     .nickname(nickname)
                     .email(customOAuth2User.getEmail())
                     .accessToken(accessToken)
+                    .accessTokenTime(LocalDateTime.now())
                     .build();
             member.addRole(Role.USER);
 
@@ -148,6 +149,12 @@ public class MemberService {
         return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
+    public boolean checkAccessTokenIsExpired(String userName) {
+        LocalDateTime myTokenTime = memberRepository.findByUsername(userName).get().getAccessTokenTime();
+
+        return myTokenTime.plusHours(12).isBefore(LocalDateTime.now());
+    }
+
     private String calculateWinningRate(int win, int lose) {
         float winningRate = 0f;
         float under = win + lose;
@@ -161,21 +168,12 @@ public class MemberService {
         return stringBuffer.toString();
     }
 
-    // 김진호 수정
-//    @Transactional
-//    public RsData<Member> join(String area, String email, String userName, int tier){
-//        Member member = Member.builder()
-//                .email(email)
-//                .area(area)
-//                .username(userName)
-//                .tier(tier)
-//                .build();
-//        memberRepository.save(member);
-//
-//        return RsData.of("S-1", "회원가입 완료", member);
-//    }
-
-//}
+    private String convertWinningRateToString(int winningRate) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(winningRate);
+        stringBuffer.append("%");
+        return stringBuffer.toString();
+    }
 
     private List<String> convertAuthoritiesToString(List<? extends GrantedAuthority> simpleGrantedAuthorities) {
         return simpleGrantedAuthorities.stream()
@@ -188,7 +186,6 @@ public class MemberService {
     public void deleteHard(Long id) {
         memberRepository.deleteHardById(id);
     }
-
 
     @Transactional
     public RsData<Member> join(String email, String userName, int tier) {
