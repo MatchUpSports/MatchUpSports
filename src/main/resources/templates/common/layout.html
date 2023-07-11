@@ -23,20 +23,12 @@
 </head>
 
 <body class="min-h-screen w-screen flex flex-col">
-<!--<div class="btm-nav pb-0 max-w-2xl mx-auto bg-base-100 fixed h-16 z-50">-->
-<!--    <button id="projectBtn" onclick="activateButton('projectBtn'); window.location.href='/match/filter'">-->
-<!--        <i class="fa-solid fa-diagram-project"></i>-->
-<!--    </button>-->
-<!--    <button id="homeBtn" class="active" onclick="activateButton('homeBtn'); window.location.href='/'">-->
-<!--        <i class="fa-solid fa-house"></i>-->
-<!--    </button>-->
-<!--    <button id="userBtn" onclick="activateButton('userBtn'); window.location.href='/member/myInformation'">-->
-<!--        <i class="fa-solid fa-user"></i>-->
-<!--    </button>-->
-<!--</div>-->
 <div class="btm-nav pb-0 max-w-2xl mx-auto bg-base-100 fixed h-16 z-50">
     <button id="projectBtn" class="text-success">
         <i class="fa-solid fa-diagram-project"></i>
+    </button>
+    <button id="waitingBtn" class="text-success active">
+        <i class="fa-solid fa-clock"></i>
     </button>
     <button id="homeBtn" class="text-success active">
         <i class="fa-solid fa-house"></i>
@@ -57,11 +49,13 @@
         var projectBtn = document.getElementById('projectBtn');
         var homeBtn = document.getElementById('homeBtn');
         var userBtn = document.getElementById('userBtn');
+        var waitingBtn = document.getElementById('waitingBtn');
 
         // 모든 버튼의 active 클래스를 제거
         projectBtn.classList.remove('active');
         homeBtn.classList.remove('active');
         userBtn.classList.remove('active');
+        waitingBtn.classList.remove('active');
 
         // 버튼들에 클릭 이벤트 리스너를 추가
         projectBtn.onclick = function () {
@@ -73,6 +67,9 @@
         userBtn.onclick = function () {
             window.location.href = '/member/myInformation';
         };
+        waitingBtn.onclick = function () {
+            window.location.href = '/match/waiting';
+        };
 
         // 현재 페이지의 URL 경로에 따라 적절한 버튼에 active 클래스를 적용
         if (window.location.pathname.startsWith('/match')) {
@@ -81,6 +78,8 @@
             homeBtn.classList.add('active');
         } else if (window.location.pathname.startsWith('/member')) {
             userBtn.classList.add('active');
+        } else if (window.location.pathname.startsWith('/match/waiting')) {
+            waitingBtn.classList.add('active');
         } else {
             // 경로가 다른 경우 아무 작업도 수행하지 않음
         }
