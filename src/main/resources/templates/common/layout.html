@@ -35,13 +35,13 @@
 <!--    </button>-->
 <!--</div>-->
 <div class="btm-nav pb-0 max-w-2xl mx-auto bg-base-100 fixed h-16 z-50">
-    <button id="projectBtn">
+    <button id="projectBtn" class="text-success">
         <i class="fa-solid fa-diagram-project"></i>
     </button>
-    <button id="homeBtn">
+    <button id="homeBtn" class="text-success active">
         <i class="fa-solid fa-house"></i>
     </button>
-    <button id="userBtn">
+    <button id="userBtn" class="text-success">
         <i class="fa-solid fa-user"></i>
     </button>
 </div>
@@ -53,16 +53,6 @@
 </div>
 
 <script th:inline="javascript">
-    // function activateButton(id) {
-    //     // 모든 버튼의 active 클래스를 제거
-    //     document.getElementById('projectBtn').classList.remove('active');
-    //     document.getElementById('homeBtn').classList.remove('active');
-    //     document.getElementById('userBtn').classList.remove('active');
-    //
-    //     // 클릭된 버튼에 active 클래스를 추가
-    //     document.getElementById(id).classList.add('active');
-    // }
-
     window.onload = function() {
         // 버튼 요소를 변수에 저장
         var projectBtn = document.getElementById('projectBtn');
