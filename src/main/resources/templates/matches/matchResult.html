@@ -13,22 +13,14 @@
         }
 
         .card {
-            width: 400px;
-            height: 300px;
+            width: 390px;
+            max-height: fit-content;
             margin: 10px;
-        }
-
-        .card-big {
-            width: 460px;
-            min-height: 600px;
-            margin: 10px;
-            padding: 10px;
-            text-align: center;
         }
 
         .card-mini {
-            width: 200px;
-            height: 300px;
+            width: 170px;
+            height: fit-content;
             margin-top: 10px;
             padding: 10px;
             text-align: center;
@@ -41,56 +33,30 @@
             cursor: pointer;
             padding: 0;
         }
-
-        .space-around {
-            justify-content: space-around;
-        }
     </style>
 </head>
 <body>
 <div layout:fragment="main" style="text-align: center;">
     <div layout:fragment="content" class="d-flex flex-column align-items-center max-w-3xl mx-auto"
          style="text-align: center">
-        <h1 class="card-title" style="text-align: center">경기 결과</h1>
-        <div class="card" id="result">
-            <br>
-            <div class="d-flex flex-row space-around" id="team">
-                <h3 class="card-title">A팀</h3>
-                <h3 class="card-title">B팀</h3>
-            </div>
-            <br>
-            <div class="d-flex flex-row space-around" id="score">
-                <h3 class="card-title">score_A</h3>
-                <h3 class="card-title">:</h3>
-                <h3 class="card-title">score_B</h3>
-
-            </div>
-            <div class="d-flex flex-row space-around" id="scored_goals">
-                <div class="d-flex flex-column align-items-center">
-                    <span>A팀 골 넣은 사람1</span>
-                    <span>A팀 골 넣은 사람2</span>
-                </div>
-                <div class="d-flex flex-column align-items-center">
-                    <span>B팀 골 넣은 사람1</span>
-                    <span>B팀 골 넣은 사람2</span>
-                </div>
-            </div>
-        </div>
+        <h1 class="card-title" style="text-align: center; margin-top: 50px">경기 결과</h1>
         <div class="d-flex flex-row">
             <div class="card card-mini" id="card_mvp" style="margin-right: 10px">
+                <img src="/images/mvp.png" style="width: 120px; height: 120px">
                 <h3 class="card-title">MVP</h3>
                 <br>
                 <div th:each="mvp : ${MVPs}">
-                    <span class="fs-5" th:text="${mvp.getMember().getUsername()}"></span>
+                    <span class="fs-5" th:text="${mvp.getMember().getUsername()}" style="font-weight: bolder"></span>
                     <br>
                     <span class="fs-5" th:text="${mvp.votedCount} + 표"></span>
                 </div>
             </div>
             <div class="card card-mini" id="card_field">
+                <img src="/images/field.png" style="width: 120px; height: 120px">
                 <h3 class="card-title">경기 구장</h3>
                 <br>
-                <span class="fs-5" th:text="${match.getField().getFieldName()}"></span>
                 <span class="fs-5" th:text="${match.getField().getFieldLocation()}"></span>
+                <span class="fs-5" th:text="${match.getField().getFieldName()}"></span>
             </div>
         </div>
     </div>
