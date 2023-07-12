@@ -42,12 +42,12 @@ public class HomeController {
         return customOAuth2User;
     }
 
-    @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/adm")
-    public String admin() {
-        return "ADMIN";
-    }
+//    @ResponseBody
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/adm")
+//    public String admin() {
+//        return "ADMIN";
+//    }
 
     @ResponseBody
     @PreAuthorize("hasRole('MANAGE')")
