@@ -40,20 +40,20 @@ public class NotProd {
                 Member fieldUser = memberService.join("suwon@naver.com", "수원 풋살 시설 관리자", 0).getData();
 
 
-                FutsalField f1 = fieldService.join("수원 풋살 경기장", "등록번호123", 100000, 10, "수원", fieldUser).getData();
-                FutsalField f2 = fieldService.join("수원 풋살2", "등록번호123", 100000, 10, "수원", fieldUser).getData();
-                FutsalField f3 = fieldService.join("수원 풋살3", "등록번호123", 100000, 10, "수원", fieldUser).getData();
-                FutsalField f4 = fieldService.join("수원 풋살4", "등록번호123", 100000, 10, "수원", fieldUser).getData();
+                FutsalField f1 = fieldService.join("서울 풋살 경기장", "등록번호123", 100000, 10, "서울", fieldUser).getData();
+                FutsalField f2 = fieldService.join("서울 풋살2", "등록번호123", 100000, 10, "서울", fieldUser).getData();
+                FutsalField f3 = fieldService.join("서울 풋살3", "등록번호123", 100000, 10, "서울", fieldUser).getData();
+                FutsalField f4 = fieldService.join("서울 풋살4", "등록번호123", 100000, 10, "서울", fieldUser).getData();
 
-                MatchForm matchForm1 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m1.getId(), m1.getEmail(), f1);
-                MatchForm matchForm2 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m2.getId(), m2.getEmail(), f1);
-                MatchForm matchForm3 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m3.getId(), m3.getEmail(), f1);
-                MatchForm matchForm4 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m4.getId(), m4.getEmail(), f1);
-                MatchForm matchForm5 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m5.getId(), m5.getEmail(), f1);
-                MatchForm matchForm6 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m6.getId(), m6.getEmail(), f1);
-                MatchForm matchForm7 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m7.getId(), m7.getEmail(), f1);
-                MatchForm matchForm8 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m8.getId(), m8.getEmail(), f1);
-                MatchForm matchForm9 = new MatchForm(LocalDate.now(), "수원", "수원 풋살 경기장", 1, m9.getId(), m9.getEmail(), f1);
+                MatchForm matchForm1 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m1.getId(), m1.getEmail(), f1);
+                MatchForm matchForm2 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m2.getId(), m2.getEmail(), f1);
+                MatchForm matchForm3 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m3.getId(), m3.getEmail(), f1);
+                MatchForm matchForm4 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m4.getId(), m4.getEmail(), f1);
+                MatchForm matchForm5 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m5.getId(), m5.getEmail(), f1);
+                MatchForm matchForm6 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m6.getId(), m6.getEmail(), f1);
+                MatchForm matchForm7 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m7.getId(), m7.getEmail(), f1);
+                MatchForm matchForm8 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m8.getId(), m8.getEmail(), f1);
+                MatchForm matchForm9 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m9.getId(), m9.getEmail(), f1);
 
                 matchService.createMatch(matchForm1, m1.getId());
                 matchService.createMatch(matchForm2, m2.getId());

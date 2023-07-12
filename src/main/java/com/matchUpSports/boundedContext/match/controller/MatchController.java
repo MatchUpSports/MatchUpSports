@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.match.controller;
 
+import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
@@ -39,12 +40,16 @@ public class MatchController {
     private final MemberService memberService;
     private final FutsalFieldService fieldService;
     private final Rq rq;
+    private final Districts districts;
+
 
     //매치를 위한 조건 페이지를 보여준다.
     @GetMapping("/filter")
     public String showMatchingFilter(@RequestParam(required = false) String fieldLocation, Model model) {
         model.addAttribute("fields", fieldService.findFieldsByLocation(fieldLocation));
         model.addAttribute("selectedLocation", fieldLocation);
+        model.addAttribute("bigDistricts", districts.getBigDistricts());
+
         return "matching/filterPage";
     }
 
