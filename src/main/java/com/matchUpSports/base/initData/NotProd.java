@@ -37,7 +37,8 @@ public class NotProd {
                 Member m7 = memberService.join("asd@asd.com", "user7", 7).getData();
                 Member m8 = memberService.join("asd@asd.com", "user8", 8).getData();
                 Member m9 = memberService.join("asd@asd.com", "user9", 9).getData();
-                Member fieldUser = memberService.join("suwon@naver.com", "수원 풋살 시설 관리자", 0).getData();
+                Member m10 = memberService.join("asd@asd.com", "user10", 1).getData();
+                Member fieldUser = memberService.join("seoul@naver.com", "서울 풋살 시설 관리자", 0).getData();
 
 
                 FutsalField f1 = fieldService.join("서울 풋살 경기장", "등록번호123", 100000, 10, "서울", fieldUser).getData();
@@ -54,6 +55,17 @@ public class NotProd {
                 MatchForm matchForm7 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m7.getId(), m7.getEmail(), f1);
                 MatchForm matchForm8 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m8.getId(), m8.getEmail(), f1);
                 MatchForm matchForm9 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m9.getId(), m9.getEmail(), f1);
+                MatchForm matchForm10 = new MatchForm(LocalDate.now(), "서울", "서울 풋살 경기장", 1, m10.getId(), m10.getEmail(), f1);
+
+                MatchForm matchForm11 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m1.getId(), m1.getEmail(), f2);
+                MatchForm matchForm12 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m2.getId(), m2.getEmail(), f2);
+                MatchForm matchForm13 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m3.getId(), m3.getEmail(), f2);
+                MatchForm matchForm14 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m4.getId(), m4.getEmail(), f2);
+                MatchForm matchForm15 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m5.getId(), m5.getEmail(), f2);
+                MatchForm matchForm16 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m6.getId(), m6.getEmail(), f2);
+                MatchForm matchForm17 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m7.getId(), m7.getEmail(), f2);
+                MatchForm matchForm18 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m8.getId(), m8.getEmail(), f2);
+                MatchForm matchForm19 = new MatchForm(LocalDate.now(), "서울", "서울 풋살2", 1, m9.getId(), m9.getEmail(), f2);
 
                 matchService.createMatch(matchForm1, m1.getId());
                 matchService.createMatch(matchForm2, m2.getId());
@@ -64,6 +76,17 @@ public class NotProd {
                 matchService.createMatch(matchForm7, m7.getId());
                 matchService.createMatch(matchForm8, m8.getId());
                 matchService.createMatch(matchForm9, m9.getId());
+                matchService.createMatch(matchForm10, m10.getId());
+
+                matchService.createMatch(matchForm11, m1.getId());
+                matchService.createMatch(matchForm12, m2.getId());
+                matchService.createMatch(matchForm13, m3.getId());
+                matchService.createMatch(matchForm14, m4.getId());
+                matchService.createMatch(matchForm15, m5.getId());
+                matchService.createMatch(matchForm16, m6.getId());
+                matchService.createMatch(matchForm17, m7.getId());
+                matchService.createMatch(matchForm18, m8.getId());
+                matchService.createMatch(matchForm19, m9.getId());
 
             }
         };
