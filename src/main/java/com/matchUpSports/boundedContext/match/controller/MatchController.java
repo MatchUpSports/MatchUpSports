@@ -64,8 +64,9 @@ public class MatchController {
         if (result.isSuccess()) {
             return "redirect:/match/waiting";
         } else {
-            model.addAttribute("message", result.getMsg());
-            return "matching/filterPage";
+//            model.addAttribute("message", result.getMsg());
+//            return "matching/filterPage";
+            return rq.historyBack(result.getMsg());
         }
     }
 
