@@ -1,5 +1,6 @@
 package com.matchUpSports.boundedContext.futsalField.controller;
 
+import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldModifyDto;
 import com.matchUpSports.boundedContext.futsalField.dto.FutsalFieldRegistrationDto;
@@ -29,6 +30,8 @@ public class FutsalFieldController {
 
     private final MemberService memberService;
     private final Rq rq;
+    private final Districts districts; // Districts 클래스 주입
+
 
     @GetMapping("/myFields")
     public String getMyFutsalFields(Model model) {
@@ -59,6 +62,8 @@ public class FutsalFieldController {
     public String createField(Model model) {
 
         model.addAttribute("createForm", new CreateFutsalFieldForm());
+        model.addAttribute("bigDistricts", districts.getBigDistricts()); // 큰 지역 목록 추가
+
 
         return "field/create";
     }
