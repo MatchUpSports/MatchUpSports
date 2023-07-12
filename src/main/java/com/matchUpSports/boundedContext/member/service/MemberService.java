@@ -4,7 +4,6 @@ import com.matchUpSports.base.Role;
 import com.matchUpSports.base.exception.handler.DataNotFoundException;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
-import com.matchUpSports.boundedContext.match.repository.MatchMemberRepository;
 import com.matchUpSports.boundedContext.member.dto.*;
 import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
@@ -149,8 +148,13 @@ public class MemberService {
         return memberRepository.findByUsername(userName).get().getAccessToken();
     }
 
+    // 액세스 토큰이 만료됐는지 확인하는 메서드
     public boolean checkAccessTokenIsExpired(String userName) {
         LocalDateTime myTokenTime = memberRepository.findByUsername(userName).get().getAccessTokenTime();
+
+        if (myTokenTime.equals(null)) {
+            return true;
+        }
 
         return myTokenTime.plusHours(12).isBefore(LocalDateTime.now());
     }

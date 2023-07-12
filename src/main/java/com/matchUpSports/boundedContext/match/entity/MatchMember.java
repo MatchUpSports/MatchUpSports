@@ -30,14 +30,12 @@ public class MatchMember {
 
     private int team;
 
-    private boolean ispaid;
+    private boolean isPaid;
+
+    private String paymentId;
 
     public MatchMember() {
 
-    }
-
-    public void updateIsPaid() {
-        this.ispaid = true;
     }
 
     public void setTeam(int team) {

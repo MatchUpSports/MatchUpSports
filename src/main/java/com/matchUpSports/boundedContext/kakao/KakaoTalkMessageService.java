@@ -44,7 +44,7 @@ public class KakaoTalkMessageService {      // 메시지를 전송하는 REST AP
         // 응답이 성공적으로 도착했는지 확인하고 실패한 경우 오류 메시지 출력
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                if (response.body().string().contains("access token")){
+                if (response.body().string().contains("access token")) {
 
                 }
                 System.err.println("카카오톡 메시지 전송 실패: " + response.body().string());
