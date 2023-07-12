@@ -27,7 +27,7 @@
             // Datepicker 설정
             $("#startDate").datepicker({
                 dateFormat: "yy-mm-dd",
-                minDate: 0,
+                minDate: 1,
                 showButtonPanel: true,
                 closeText: "Close",
                 currentText: "Today",
@@ -142,13 +142,11 @@
                         <label for="location">fieldLocation:</label>
                         <select id="location" name="fieldLocation" class="form-control">
                             <option value="">Select location</option>
-                            <option value="서울">서울</option>
-                            <option value="수원">수원</option>
-                            <option value="포항">포항</option>
-                            <option value="울산">울산</option>
-                            <option value="강원도">강원도</option>
+                            <option th:each="bigDistrict : ${bigDistricts}" th:value="${bigDistrict}"
+                                    th:text="${bigDistrict}"></option>
                         </select>
                     </div>
+
 
                     <div class="form-group">
                         <label for="venue">Stadium:</label>

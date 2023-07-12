@@ -60,10 +60,8 @@ public class FutsalFieldController {
 
     @GetMapping("/create")
     public String createField(Model model) {
-
         model.addAttribute("createForm", new CreateFutsalFieldForm());
         model.addAttribute("bigDistricts", districts.getBigDistricts()); // 큰 지역 목록 추가
-
 
         return "field/create";
     }
