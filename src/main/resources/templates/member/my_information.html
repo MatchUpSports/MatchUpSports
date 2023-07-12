@@ -75,12 +75,15 @@
                 </div>
                 <progress class="progress w-full" th:value="${myInformation.getWinningRate()}" max="100"></progress>
                 <button th:if="${myInformation.getAuthorities().contains('MANAGE') || myInformation.getAuthorities().contains('ADMIN')}"
-                        onclick="location.href='/field'" class="btn btn-error text-base-100 w-full mt-4">구장 관리
+                        onclick="location.href='/field'" class="btn btn-outline btn-success text-base-100 w-full mt-4">
+                    구장 관리
                 </button>
                 <button th:if="${myInformation.getAuthorities().contains('ADMIN')}"
-                        onclick="location.href='/admin'" class="btn btn-error text-base-100 w-full mt-4">관리자
+                        onclick="location.href='/adm'" class="btn btn-outline btn-success text-base-100 w-full mt-4">관리자
                 </button>
-                <button onclick="location.href='/logout'" class="btn btn-error text-base-100 w-full my-4">로그아웃</button>
+                <button onclick="location.href='/logout'" class="btn btn-outline btn-success text-base-100 w-full my-4">
+                    로그아웃
+                </button>
             </div>
         </div>
     </div>

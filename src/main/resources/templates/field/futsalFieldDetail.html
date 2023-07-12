@@ -6,7 +6,7 @@
     <script>
         function goBack() {
             var referrer = document.referrer;
-            if (referrer.includes('/admin')) {
+            if (referrer.includes('/adm')) {
                 window.history.back();
             } else {
                 window.location.href = '/field/myFields';
@@ -44,17 +44,6 @@
                     </div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <div class="card w-full bg-base-100 shadow-xl">
-                    <div class="card-body">
-                        <h2 class="card-title">Card title!</h2>
-                        <p>If a dog chews</p>
-                        <div class="card-actions justify-end">
-                            <button class="btn btn-primary">Buy Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="card w-full bg-base-100 shadow-xl">
             <figure class="px-10 pt-10"><img src="https://www.yjcmc.or.kr/images/sub/sub01/futsal_01.jpg"
@@ -70,7 +59,7 @@
                 <div class="card-actions flex justify-center">
                     <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
                        th:href="@{/field/modify/{id}(id=${futsalField.getId()})}"
-                       class="btn btn-outline btn-error btn-sm">수정하기</a>
+                       class="btn btn-outline btn-success btn-sm">수정하기</a>
                     <a th:if="${futsalField.getMember().username.equals(@rq.getUsername())}"
                        th:href="@{/field/delete/{id}(id=${futsalField.getId()})}"
                        class="btn btn-outline btn-error btn-sm">삭제하기</a>

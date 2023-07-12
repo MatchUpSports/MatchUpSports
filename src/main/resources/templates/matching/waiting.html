@@ -9,13 +9,13 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Noto Sans KR', sans-serif;
-        }
+        /** {*/
+        /*    font-family: 'Noto Sans KR', sans-serif;*/
+        /*}*/
 
-        body {
-            background-color: #f7f7f7;
-        }
+        /*body {*/
+        /*    background-color: #f7f7f7;*/
+        /*}*/
 
         .page-title {
             font-size: 2rem;
@@ -54,17 +54,17 @@
 
         .btn-cancel, .btn-confirm {
             background-color: #ffffff;
-            color: #007BFF;
+            /*color: #007BFF;*/
             padding: 0.5rem 1rem;
-            border: 1px solid #007BFF;
+            /*border: 1px solid #007BFF;*/
             transition: all 0.3s;
             border-radius: 0.5rem;
         }
 
-        .btn-cancel:hover, .btn-confirm:hover {
-            background-color: #007BFF;
-            color: #ffffff;
-        }
+        /*.btn-cancel:hover, .btn-confirm:hover {*/
+        /*    background-color: #007BFF;*/
+        /*    color: #ffffff;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -82,19 +82,19 @@
                 <div class="btn-container">
                     <form th:action="@{/match/cancel}" method="post">
                         <input type="hidden" th:value="${match.id}" name="matchId"/>
-                        <button type="submit" class="btn btn-cancel">취소하기</button>
+                        <button type="submit" class="btn btn-outline btn-error">취소하기</button>
                     </form>
                     <!--                    결제하기 버튼-->
                     <form th:action="@{'/match/pay/' + ${match.id}}" method="get"
                           th:if="${match.participantCount == 10 and match.getProgressStatus() == '1'}">
                         <input type="hidden" th:value="${match.id}"/>
-                        <button type="submit" class="btn btn-confirm">결제하기</button>
+                        <button type="submit" class="btn btn-outline btn-success">결제하기</button>
                     </form>
 
                     <form th:action="@{/match/confirm}" method="post"
                           th:if="${match.participantCount == 10 and match.getProgressStatus() == '0'}">
                         <input type="hidden" th:value="${match.id}" name="matchId"/>
-                        <button type="submit" class="btn btn-confirm">확정하기</button>
+                        <button type="submit" class="btn btn-outline btn-success">확정하기</button>
                     </form>
                 </div>
             </div>

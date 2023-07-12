@@ -1,4 +1,4 @@
-package com.matchUpSports.boundedContext.admin.controller;
+package com.matchUpSports.boundedContext.adm.controller;
 
 import com.matchUpSports.base.rq.Rq;
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
@@ -17,23 +17,23 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/adm")
 @Slf4j
-public class AdminController {
+public class AdmController {
     private final MemberService memberService;
     private final FutsalFieldService futsalFieldService;
     private final Rq rq;
 
     @GetMapping("")
     public String showAdmMain() {
-        return "admin/main";
+        return "adm/main";
     }
 
     @GetMapping("/members")
     public String showMembers(Model model) {
         List<Member> members = memberService.findAll();
         model.addAttribute("members", members);
-        return "admin/members";
+        return "adm/members";
     }
 
     @GetMapping("/fields")
@@ -44,7 +44,7 @@ public class AdminController {
         model.addAttribute("fields", fields);
         model.addAttribute("approved", approved);
         model.addAttribute("pending", pending);
-        return "admin/fields";
+        return "adm/fields";
     }
 
     @GetMapping("/approve/{id}")
@@ -57,12 +57,12 @@ public class AdminController {
         }
         futsalFieldService.approveFutsalField(id);
 
-        return "redirect:/admin/fields";
+        return "redirect:/adm/fields";
     }
 
     @GetMapping("/deleteMember/{id}")
     public String deleteMember(@PathVariable Long id) {
         memberService.deleteHard(id);
-        return rq.redirectWithMsg("/admin/members", "%d번 회원을 삭제하였습니다.".formatted(id));
+        return rq.redirectWithMsg("/adm/members", "%d번 회원을 삭제하였습니다.".formatted(id));
     }
 }

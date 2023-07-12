@@ -32,7 +32,7 @@ public class CustomOAuth2Login extends DefaultOAuth2UserService {
 
         Member member = memberService.saveOAuth2Member(customOAuth2User, accessToken, "annonymous");
 
-        return new CustomOAuth2User(member.getUsername(), member.getAuthorities());
+        return new CustomOAuth2User(member.getUsername(), "", member.getAuthorities());
     }
 
 }

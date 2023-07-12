@@ -24,6 +24,6 @@ public class FormLogin implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("유저 없음"));
 
 //        return new CustomOAuth2User(member.getUsername(), member.getPassword(), member.getAuthorities());
-        return new CustomOAuth2User(member.getUsername(), member.getAuthorities());
+        return new CustomOAuth2User(member.getUsername(), "", member.getAuthorities());
     }
 }
