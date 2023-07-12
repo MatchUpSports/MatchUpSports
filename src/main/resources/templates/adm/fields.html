@@ -26,9 +26,9 @@
                                 <p th:text="${field.getFieldLocation()}"></p>
                                 <div class="card-actions justify-end">
                                     <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
-                                       class="btn btn-outline">상세 정보 보기</a>
-                                    <a th:href="@{/admin/approve/{id}(id=${field.getId()})}"
-                                       class="btn btn-outline">승인</a>
+                                       class="btn btn-outline btn-success">상세 정보 보기</a>
+                                    <a th:href="@{/templates/adm/approve/{id}(id=${field.getId()})}"
+                                       class="btn btn-outline btn-success">승인</a>
                                 </div>
                             </div>
                         </div>
@@ -42,10 +42,10 @@
                                 <!--                                <p th:if="${field.getDeleteDate() != null}">삭제된 시설입니다.</p>-->
                                 <div class="card-actions justify-end">
                                     <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
-                                       class="btn btn-outline"
+                                       class="btn btn-outline btn-success"
                                        href="">상세 정보 보기</a>
                                     <a th:href="@{/field/delete/hard/{id}(id=${field.getId()})}"
-                                       class="btn btn-outline">삭제 하기</a>
+                                       class="btn btn-outline btn-error">삭제 하기</a>
                                 </div>
                             </div>
                         </div>

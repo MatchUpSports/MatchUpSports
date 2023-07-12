@@ -47,13 +47,12 @@
 </div>
 
 
-
 <div class="min-h-screen flex flex-col pb-10">
     <main layout:fragment="main"></main>
 </div>
 
 <script th:inline="javascript">
-    window.onload = function() {
+    window.onload = function () {
         // 버튼 요소를 변수에 저장
         var projectBtn = document.getElementById('projectBtn');
         var homeBtn = document.getElementById('homeBtn');
@@ -65,9 +64,15 @@
         userBtn.classList.remove('active');
 
         // 버튼들에 클릭 이벤트 리스너를 추가
-        projectBtn.onclick = function() { window.location.href = '/match/filter'; };
-        homeBtn.onclick = function() { window.location.href = '/'; };
-        userBtn.onclick = function() { window.location.href = '/member/myInformation'; };
+        projectBtn.onclick = function () {
+            window.location.href = '/match/filter';
+        };
+        homeBtn.onclick = function () {
+            window.location.href = '/';
+        };
+        userBtn.onclick = function () {
+            window.location.href = '/member/myInformation';
+        };
 
         // 현재 페이지의 URL 경로에 따라 적절한 버튼에 active 클래스를 적용
         if (window.location.pathname.startsWith('/match')) {
@@ -80,9 +85,6 @@
             // 경로가 다른 경우 아무 작업도 수행하지 않음
         }
     }
-
-
-
 
 
     if (params.msg) {

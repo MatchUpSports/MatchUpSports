@@ -55,7 +55,7 @@
                                 <p class="mb-1"><span>생성날짜: </span><span
                                         th:text="${member.getCreatedDate()}"></span></p>
                                 <div class="flex justify-end">
-                                    <a th:href="@{/admin/deleteMember/{id}(id=${member.getId()})}" class="btn">삭제
+                                    <a th:href="@{/templates/adm/deleteMember/{id}(id=${member.getId()})}" class="btn">삭제
                                         하기</a>
                                 </div>
                             </div>
