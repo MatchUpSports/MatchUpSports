@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org/"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout.html}">
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org/"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{common/layout.html}">-->
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <title>Filter Page</title>
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
     <script>
         $(function () {
             const getQueryParam = (name) => {
@@ -75,119 +76,83 @@
                 updateStartAndFinishTimes(selectedField);
             });
         });
+
+
     </script>
-
-
-    <style>
-        .filter-page-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var message = /*[[${message}]]*/ 'default message';
+        if (message !== 'default message') {
+            toastWarning(message);
         }
-
-        .form-container {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            background-color: #ffffff;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        /*button[type="submit"] {*/
-        /*    margin-top: 1.5rem;*/
-        /*    background-color: #007BFF;*/
-        /*    color: #FFF;*/
-        /*    border: none;*/
-        /*    transition: background-color 0.3s;*/
-        /*}*/
-
-        /*button[type="submit"]:hover {*/
-        /*    background-color: #0069d9;*/
-        /*}*/
-
-        .datepicker-container {
-            display: flex;
-        }
-
-        .datepicker-input {
-            flex-grow: 1;
-        }
-
-        #startDatePickerButton {
-            margin-left: 5px;
-        }
-    </style>
-
-    <script>
-        // 기존 자바스크립트 코드는 여기에 위치합니다.
+        /*]]>*/
     </script>
 
 </head>
 <body>
-<div layout:fragment="main" class="container mt-5">
+<!--<div layout:fragment="main" class="container mt-5">-->
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <!-- 에러 확인용 메시지 - 1.필수정보 미 입력 2.매치에 사람이 꽉 찻을 때 -->
     <div th:if="${message}" th:text="${message}" style="color:red;"></div>
 
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <h1 class="filter-page-title">조건 페이지</h1>
-
-            <div class="form-container">
+    <div class="max-w-2xl w-full px-4 mb-20">
+        <p class="text-2xl font-black my-10 text-left">조건 페이지</p>
+        <div class="card w-full bg-base-100 shadow-xl">
+            <div class="card-body">
                 <form method="post" action="/match">
-
-                    <div class="form-group">
-                        <label for="location">fieldLocation:</label>
-                        <select id="location" name="fieldLocation" class="form-control">
-                            <option value="">Select location</option>
-                            <option th:each="bigDistrict : ${bigDistricts}" th:value="${bigDistrict}"
-                                    th:text="${bigDistrict}"></option>
-                        </select>
+<!--                <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="Validation__filterField(this); return false;">-->
+                    <select id="location" name="fieldLocation"  class="select select-bordered w-full mb-12">
+                        <option disabled selected value="">지역을 선택해 주십시오</option>
+                        <option th:each="bigDistrict : ${bigDistricts}" th:value="${bigDistrict}"
+                                th:text="${bigDistrict}"></option>
+                    </select>
+                    <select id="venue" name="stadium" class="select select-bordered w-full mb-12">
+                        <option disabled selected value="">구장을 선택해 주십시오</option>
+                        <th:block th:each="field : ${fields}"
+                                  th:if="${selectedLocation eq field.fieldLocation}">
+                            <option th:value="${field.fieldName}" th:text="${field.fieldName}"></option>
+                        </th:block>
+                    </select>
+                    <div class="datepicker-container">
+                        <input type="date" id="startDate" name="matchDate" readonly placeholder=""
+                               class="input input-bordered w-full mb-12 datepicker-input"/>
                     </div>
-
-
-                    <div class="form-group">
-                        <label for="venue">Stadium:</label>
-                        <select id="venue" name="stadium" class="form-control">
-                            <option value="">Select venue</option>
-                            <th:block th:each="field : ${fields}" th:if="${selectedLocation eq field.fieldLocation}">
-                                <option th:value="${field.fieldName}" th:text="${field.fieldName}"></option>
-                            </th:block>
-                        </select>
+                    <select id="usageTime" name="usageTime" class="select select-bordered w-full mb-12">
+                        <option disabled selected value="">시간을 선택해 주십시오</option>
+                        <option value="1">1타임</option>
+                        <option value="2">2타임</option>
+                        <option value="3">3타임</option>
+                        <option value="4">4타임</option>
+                        <option value="5">5타임</option>
+                        <option value="6">6타임</option>
+                        <option value="7">7타임</option>
+                    </select>
+                    <div class="card-actions justify-end">
+                        <button type="submit" class="btn btn-outline btn-success">빠른 매칭!</button>
                     </div>
-
-                    <div class="form-group">
-                        <label for="startDate">Start Date:</label>
-                        <div class="datepicker-container">
-                            <input type="text" id="startDate" name="matchDate" readonly
-                                   class="form-control datepicker-input"/>
-                            <button type="button" id="startDatePickerButton" class="btn btn-outline-secondary">Select
-                                Date
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="usageTime">Usage Time:</label>
-                        <select id="usageTime" name="usageTime" class="form-control">
-                            <option value=''>Select usage time</option>
-                            <option value="1">1타임</option>
-                            <option value="2">2타임</option>
-                            <option value="3">3타임</option>
-                            <option value="4">4타임</option>
-                            <option value="5">5타임</option>
-                            <option value="6">6타임</option>
-                            <option value="7">7타임</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-outline btn-success">빠른 매칭!</button>
                 </form>
             </div>
         </div>
     </div>
-</div>
+</main>
+<!--<script th:inline="javascript">-->
+<!--    // 기존 자바스크립트 코드는 여기에 위치합니다.-->
+<!--    function Validation__filterField(form) {-->
+<!--        form.fieldLocation = document.getElementById("fieldLocation").value;-->
+
+<!--        if (form.fieldLocation.value.length == 0 || form.fieldLocation.value.value == "") {-->
+<!--            toastWarning("지역을 선택해 주십시오");-->
+<!--            form.fieldLocation.focus();-->
+<!--            return;-->
+<!--        }-->
+<!--        if (form.stadium.value.length == 0 || form.stadium.value.value == "") {-->
+<!--            toastWarning("구장을 선택해 주십시오");-->
+<!--            form.stadium.focus();-->
+<!--            return;-->
+<!--        }-->
+
+<!--        form.submit();-->
+<!--    }-->
+<!--</script>-->
 </body>
 </html>
