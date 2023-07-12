@@ -49,10 +49,10 @@ public class HomeController {
 //        return "ADMIN";
 //    }
 
-    @ResponseBody
-    @PreAuthorize("hasRole('MANAGE')")
-    @GetMapping("/management")
-    public String management() {
-        return "MANAGE";
-    }
+//    @ResponseBody
+//    @PreAuthorize("hasRole('MANAGE')")
+//    @GetMapping("/management")
+//    public String management() {
+//        return "MANAGE";
+//    }
 }
