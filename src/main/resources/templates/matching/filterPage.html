@@ -76,16 +76,6 @@
                 updateStartAndFinishTimes(selectedField);
             });
         });
-
-
-    </script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-        var message = /*[[${message}]]*/ 'default message';
-        if (message !== 'default message') {
-            toastWarning(message);
-        }
-        /*]]>*/
     </script>
 
 </head>
@@ -93,7 +83,7 @@
 <!--<div layout:fragment="main" class="container mt-5">-->
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <!-- 에러 확인용 메시지 - 1.필수정보 미 입력 2.매치에 사람이 꽉 찻을 때 -->
-    <div th:if="${message}" th:text="${message}" style="color:red;"></div>
+<!--    <div th:if="${message}" th:text="${message}" style="color:red;"></div>-->
 
     <div class="max-w-2xl w-full px-4 mb-20">
         <p class="text-2xl font-black my-10 text-left">조건 페이지</p>
