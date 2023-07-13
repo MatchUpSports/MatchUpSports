@@ -52,7 +52,7 @@ public class Match {
     @ManyToOne(fetch = FetchType.LAZY)
     private FutsalField field;                    // 시설
 
-    public LocalTime getUsageTime() {
+    public LocalTime getUsageTimeToHour() {
         return switch (usageTime) {
             case 1 -> LocalTime.of(17, 0, 0);
             case 2 -> LocalTime.of(18, 0, 0);

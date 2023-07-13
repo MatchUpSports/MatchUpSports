@@ -59,6 +59,7 @@ public class MatchController {
     @PostMapping
     public String addMatch(@ModelAttribute MatchForm matchForm, Model model) {
         long memberId = rq.getMemberId();
+
         RsData<Match> result = matchService.createMatch(matchForm, memberId);
 
         if (result.isSuccess()) {
@@ -248,9 +249,14 @@ public class MatchController {
         Match match = matchService.getMatch(matchId);
         List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
 
+
         // 매치 멤버의 ispaid 필드를 확인해서 모두 true이면
         // 카카오톡 메시지로 해당 멤버에게 채팅으로 예약 되었다고 메시지 보내기
-        matchService.sendKakaoMessage(user.getUsername(), match, "reserve");
+        MatchMember loggedInMatchMember = matchService.getMatchMemberByUser(match, user.getUsername());
+        if (!loggedInMatchMember.isMessageSent()) {
+            matchService.sendKakaoMessage(user.getUsername(), match, "reserve");
+            matchService.updateMessageSent(loggedInMatchMember, true); // 이 부분을 추가합니다.
+        }
 
         String paymentId = matchService.getMyPaymentId(match, user.getUsername());
 
@@ -271,4 +277,5 @@ public class MatchController {
             throw new RuntimeException(e);
         }
     }
+
 }

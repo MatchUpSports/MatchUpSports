@@ -34,6 +34,8 @@ public class MatchMember {
 
     private String paymentId;
 
+    private boolean isMessageSent;//메시지 확인하는 필드
+
     public MatchMember() {
 
     }

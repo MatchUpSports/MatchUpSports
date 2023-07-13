@@ -156,7 +156,7 @@ public class MatchService {
             Match existingMatch = matchMember.getMatch();
             if (existingMatch.getStadium().equals(matchForm.getStadium()) &&
                     existingMatch.getMatchDate().equals(matchForm.getMatchDate()) &&
-                    existingMatch.getUsageTime().equals(matchForm.getUsageTime())) {
+                    existingMatch.getUsageTime() == matchForm.getUsageTime()) {
                 return true;
             }
         }
@@ -177,7 +177,7 @@ public class MatchService {
         newMatch.setParticipantCount(1);
         newMatch.setSubStadiumCount(availableSubStadium);
         newMatch.setField(field);
-        newMatch.setMatchDateTime(LocalDateTime.of(newMatch.getMatchDate(), newMatch.getUsageTime()));
+        newMatch.setMatchDateTime(LocalDateTime.of(newMatch.getMatchDate(), newMatch.getUsageTimeToHour()));
         matchRepository.save(newMatch);
         return newMatch;
     }
@@ -356,16 +356,14 @@ public class MatchService {
             if (count > 9 && purpose.equals("reserve")) { // 예약 메시지
                 match.setPaid(true);
 
-                //username -> nickname 변경
-                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
+                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTimeToHour() + "타임 풋살 예약이 완료되었습니다.";
 
                 // 액세스 토큰과 메시지로 REST API 요청하는 메서드
                 kakaoTalkMessageService.sendTextMessage(tokenValue, message);
             } else if (purpose.equals("cancel")) { // 취소 메시지
                 match.setPaid(false);
 
-                //username -> nickname 변경
-                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 취소되었고, 해당 매치에 대한 결제도 취소 되었습니다.";
+                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTimeToHour() + "타임 풋살 예약이 취소되었고, 해당 매치에 대한 결제도 취소 되었습니다.";
 
                 kakaoTalkMessageService.sendTextMessage(tokenValue, message);
             }
@@ -484,5 +482,14 @@ public class MatchService {
         System.out.println("토스 페이먼츠 결제 취소 결과: " + response.body());
     }
 
-}
+    @Transactional
+    public void updateMessageSent(MatchMember matchMember, boolean isSent) {
+        matchMember.setMessageSent(isSent);
+        matchMemberRepository.save(matchMember);
+    }
 
+    public MatchMember getMatchMemberByUser(Match match, String username) {
+        List<MatchMember> matchMembers = matchMemberRepository.findAllByMatch(match);
+        return matchMembers.stream().filter(mm -> mm.getMember().getUsername().equals(username)).findFirst().orElse(null);
+    }
+}
