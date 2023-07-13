@@ -342,6 +342,10 @@ public class MatchService {
 
         long count = paidMatchMembers.stream().filter(matchMember -> matchMember.isPaid()).count();
 
+        //멤버에서 username-> nickname으로 나오게 하기
+        Member member = memberRepository.findByUsername(userName).orElse(null);
+        String nickname = member.getNickname();
+
         // 멤버의 액세스 토큰을 추출
         String tokenValue = memberService.getAccessToken(userName);
 
@@ -352,14 +356,16 @@ public class MatchService {
             if (count > 9 && purpose.equals("reserve")) { // 예약 메시지
                 match.setPaid(true);
 
-                message = userName + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
+                //username -> nickname 변경
+                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 완료되었습니다.";
 
                 // 액세스 토큰과 메시지로 REST API 요청하는 메서드
                 kakaoTalkMessageService.sendTextMessage(tokenValue, message);
             } else if (purpose.equals("cancel")) { // 취소 메시지
                 match.setPaid(false);
 
-                message = userName + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 취소되었고, 해당 매치에 대한 결제도 취소 되었습니다.";
+                //username -> nickname 변경
+                message = nickname + "님 " + match.getMatchDate() + " " + match.getFieldLocation() + " - " + match.getStadium() + " " + match.getUsageTime() + "타임 풋살 예약이 취소되었고, 해당 매치에 대한 결제도 취소 되었습니다.";
 
                 kakaoTalkMessageService.sendTextMessage(tokenValue, message);
             }
