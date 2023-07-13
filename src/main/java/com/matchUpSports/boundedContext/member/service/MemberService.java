@@ -192,7 +192,7 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData<Member> join(String email, String userName, String nickName ,int tier) {
+    public RsData<Member> join(String email, String userName, String nickName, int tier) {
         Member member = Member.builder()
                 .email(email)
                 .username(userName)

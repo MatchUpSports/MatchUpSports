@@ -281,7 +281,7 @@ public class MatchService {
     public RsData<MatchVote> vote(MatchMember fromVoteMember, VoteForm voteForm) {
         MatchMember toVoteMember = matchMemberRepository.findById(voteForm.getToVote()).get();
 
-        if (fromVoteMember.getId().equals(toVoteMember.getId())){
+        if (fromVoteMember.getId().equals(toVoteMember.getId())) {
             return RsData.of("F-1", "자신에게 투표는 할 수 없습니다.");
         }
 

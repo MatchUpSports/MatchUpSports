@@ -83,15 +83,15 @@
 <!--<div layout:fragment="main" class="container mt-5">-->
 <main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <!-- 에러 확인용 메시지 - 1.필수정보 미 입력 2.매치에 사람이 꽉 찻을 때 -->
-<!--    <div th:if="${message}" th:text="${message}" style="color:red;"></div>-->
+    <!--    <div th:if="${message}" th:text="${message}" style="color:red;"></div>-->
 
     <div class="max-w-2xl w-full px-4 mb-20">
         <p class="text-2xl font-black my-10 text-left">조건 페이지</p>
         <div class="card w-full bg-base-100 shadow-xl">
             <div class="card-body">
                 <form method="post" action="/match">
-<!--                <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="Validation__filterField(this); return false;">-->
-                    <select id="location" name="fieldLocation"  class="select select-bordered w-full mb-12">
+                    <!--                <form action="#" th:action method="#" th:method="${httpMethod}" onsubmit="Validation__filterField(this); return false;">-->
+                    <select id="location" name="fieldLocation" class="select select-bordered w-full mb-12">
                         <option disabled selected value="">지역을 선택해 주십시오</option>
                         <option th:each="bigDistrict : ${bigDistricts}" th:value="${bigDistrict}"
                                 th:text="${bigDistrict}"></option>
