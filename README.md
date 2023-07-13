@@ -6,6 +6,12 @@
 
 - 팀 스포츠인 풋살을 즐기는 데 있어 개인이 어려움을 겪는 문제를 해결하기 위해 이 프로젝트를 개발했습니다. 기존에 팀 모집과 시설 예약이 분리된 시스템이었지만, 이 프로젝트를 통해 두 과정을 통합하고 새로운 자동 매칭 시스템을 도입했습니다. 이 서비스는 풋살을 즐기고자 하는 이용자들을 위해 제공됩니다.
 
+- ## 프로젝트 URL
+https://matchupsports.site/
+
+![image1](https://github.com/MatchUpSports/MatchUpSports/assets/107348564/286f8add-20c4-44e6-ba22-d0fa73000c1d)
+
+
 # 개발 환경
 - IDE: IntelliJ IDEA
 - JDK: Amazon Corretto-17
@@ -50,6 +56,3 @@
 - 시설 관리자 페이지와 멤버: 한솔님
 - 배포 및 마이 페이지 제작: 상훈님
 - 매치: 진성님, 진호님
-
-## 프로젝트 URL
-https://matchupsports.site/
