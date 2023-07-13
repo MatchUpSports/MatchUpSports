@@ -39,6 +39,4 @@ public class MatchVote {
         };
     }
 
-    // 그램그램처럼 투표 사유에 대한 toString 메서드 작성해야함.
-
 }
