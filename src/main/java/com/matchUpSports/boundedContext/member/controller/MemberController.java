@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
-    @Value("${custom.site.baseUrl}")
-    private String domain;
     private final Rq rq;
     @Autowired
     private Districts districts;
