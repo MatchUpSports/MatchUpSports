@@ -1,66 +1,43 @@
-<html layout:decorate="~{common/layout}">
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>경기 결과</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <style>
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: bolder;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            width: 390px;
-            max-height: fit-content;
-            margin: 10px;
-        }
-
-        .card-mini {
-            width: 170px;
-            height: fit-content;
-            margin-top: 10px;
-            padding: 10px;
-            text-align: center;
-            align-items: center;
-        }
-
-        .result-id button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-    </style>
 </head>
 <body>
-<div layout:fragment="main" style="text-align: center;">
-    <div layout:fragment="content" class="d-flex flex-column align-items-center max-w-3xl mx-auto"
-         style="text-align: center">
-        <h1 class="card-title" style="text-align: center; margin-top: 50px">경기 결과</h1>
-        <div class="d-flex flex-row">
-            <div class="card card-mini" id="card_mvp" style="margin-right: 10px">
-                <img src="/images/mvp.png" style="width: 120px; height: 120px">
-                <h3 class="card-title">MVP</h3>
-                <br>
-                <div th:each="mvp : ${MVPs}">
-                    <span class="fs-5" th:text="${mvp.getMember().getUsername()}" style="font-weight: bolder"></span>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="max-w-2xl w-full px-4 mb-20 min-h-screen">
+        <p class="text-xl font-black mt-10 text-center">경기 결과</p>
+        <div class="flex w-full">
+            <div class="card w-full bg-base-100 shadow-xl mt-5 mr-2">
+                <div class="card-body text-center">
+                    <figure class="px-10 pt-10">
+                        <img src="/images/mvp.png" class="rounded-xl" />
+                    </figure>
+<!--                    <img src="/images/mvp.png" style="width: 120px; height: 120px">-->
+                    <h3 class="card-title">MVP</h3>
                     <br>
-                    <span class="fs-5" th:text="${mvp.votedCount} + 표"></span>
+                    <div th:each="mvp : ${MVPs}">
+                        <span class="fs-5" th:text="${mvp.getMember().getUsername()}"></span>
+                        <br>
+                        <span class="fs-5" th:text="${mvp.votedCount} + 표"></span>
+                    </div>
                 </div>
             </div>
-            <div class="card card-mini" id="card_field">
-                <img src="/images/field.png" style="width: 120px; height: 120px">
-                <h3 class="card-title">경기 구장</h3>
-                <br>
-                <span class="fs-5" th:text="${match.getField().getFieldLocation()}"></span>
-                <span class="fs-5" th:text="${match.getField().getFieldName()}"></span>
+            <div class="card w-full bg-base-100 shadow-xl mt-5 ml-2">
+                <figure class="px-10 pt-10">
+                    <img src="/images/field.png" class="rounded-xl" />
+                </figure>
+                <div class="card-body text-center">
+                    <h3 class="card-title">경기 구장</h3>
+                    <br>
+                    <span class="fs-5" th:text="${match.getField().getFieldName()}"></span>
+                    <span class="fs-5" th:text="${match.getField().getFieldLocation()}"></span>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+</main>
 </body>
 </html>

@@ -78,6 +78,7 @@ public class FutsalFieldController {
     public String modify(@PathVariable Long id, Model model) {
         FutsalField futsalField = futsalFieldService.findByIdAndDeleteDateIsNull(id);
         model.addAttribute("futsalField", futsalField);
+        model.addAttribute("bigDistricts", districts.getBigDistricts()); // 큰 지역 목록 추가
         return "field/modify";
     }
 
