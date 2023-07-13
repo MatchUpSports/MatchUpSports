@@ -1,6 +1,7 @@
 package com.matchUpSports.boundedContext.member.service;
 
 import com.matchUpSports.base.Role;
+import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.exception.handler.DataNotFoundException;
 import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.base.security.social.inter.DivideOAuth2User;
@@ -9,6 +10,7 @@ import com.matchUpSports.boundedContext.member.entity.Member;
 import com.matchUpSports.boundedContext.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,8 @@ public class MemberService {
     private static final Map<Integer, String> tierUnpacker = new HashMap<>(Map.of(1, "하수", 2, "중수", 3, "고수"));
     private static final Map<String, Role> memberClassifier = new HashMap<>(Map.of("일반 유저", Role.USER, "시설 주인", Role.MANAGE, "관리자", Role.ADMIN));
     private static final List<String> tiers = new ArrayList<>(Arrays.asList("하수", "중수", "고수"));
+    @Autowired
+    private Districts dstricts;
 
     public Member findByUsername(String username) {
         return memberRepository.findByUsername(username)
@@ -58,8 +62,11 @@ public class MemberService {
     }
 
     @Transactional(readOnly = false)
-    public Member createJoiningForm(JoiningForm joiningForm, Member member) {
-        validateUserInput(joiningForm);
+    public RsData<Member> createJoiningForm(JoiningForm joiningForm, Member member) {
+        RsData<Member> isValidated = validateUserInput(joiningForm);
+        if(isValidated.isFail()) {
+            return isValidated;
+        }
 
         Set<Role> memberAuthorities = new HashSet<>(Set.of(memberClassifier.get(joiningForm.getAuthorities())));
         Member memberWithUserInput = member.toBuilder()
@@ -72,30 +79,35 @@ public class MemberService {
                 .tier(tierClassifier.get(joiningForm.getTier()))
                 .build();
 
-        return memberRepository.save(memberWithUserInput);
+        return RsData.of("S-1", "최조 사용자 정보 기입이 완료되었습니다", memberRepository.save(memberWithUserInput));
     }
 
-    private boolean validateUserInput(BasicUserInfoForm joiningForm) {
+    private RsData<Member> validateUserInput(BasicUserInfoForm joiningForm) {
         String phoneNumberValidate = "^010[0-9]{7,8}$";
         if (!Pattern.matches(phoneNumberValidate, joiningForm.getPhone())) {
-            throw new RuntimeException("잘못된 휴대전화번호 양식입니다");
+            return RsData.of("F-1", "잘못된 휴대전화번호 양식입니다");
         }
 
         if (!tiers.contains(joiningForm.getTier())) {
-            throw new RuntimeException("잘못된 풋살 실력 양식입니다");
+            return RsData.of("F-2", "잘못된 풋살 실력 양식입니다");
         }
 
         if (joiningForm.getBigDistrict() == null || joiningForm.getBigDistrict().equals("")) {
-            throw new RuntimeException("잘못된 지역 양식입니다");
+            return RsData.of("F-3", "잘못된 지역 양식입니다");
         }
 
-        return true;
+        if (!dstricts.getBigDistricts().contains(joiningForm.getBigDistrict())
+                || !dstricts.getSmallDistricts().get(joiningForm.getBigDistrict()).contains(joiningForm.getSmallDistrict())) {
+            return RsData.of("F-4", "잘못된 지역 양식입니다");
+        }
+
+        return RsData.of("S-1", "사용자 입력 데이터 검증 완료");
     }
 
-    public ModifyingDisplaying showModifyingForm(long memberId) {
+    public RsData<ModifyingDisplaying> showModifyingForm(long memberId) {
         Optional<Member> wrappedMember = memberRepository.findById(memberId);
         if (wrappedMember.isEmpty()) {
-            return null;
+            return RsData.of("F-5", "존재하지 않는 사용자입니다");
         }
         Member member = wrappedMember.get();
         ModifyingDisplaying displayingForm = ModifyingDisplaying.builder()
@@ -107,13 +119,16 @@ public class MemberService {
                 .tier(tierUnpacker.get(member.getTier()))
                 .build();
 
-        return displayingForm;
+        return RsData.of("S-1", "수정 페이지 불러옴", displayingForm);
     }
 
 
     @Transactional(readOnly = false)
-    public Member modify(ModifyingForm modifyingForm, Member member) {
-        validateUserInput(modifyingForm);
+    public RsData<Member> modify(ModifyingForm modifyingForm, Member member) {
+        RsData<Member> isValidated = validateUserInput(modifyingForm);
+        if(isValidated.isFail()) {
+            return isValidated;
+        }
 
         Member modifiedMember = member.toBuilder()
                 .nickname(modifyingForm.getNickname())
@@ -123,7 +138,7 @@ public class MemberService {
                 .smallDistrict(modifyingForm.getSmallDistrict())
                 .tier(tierClassifier.get(modifyingForm.getTier()))
                 .build();
-        return memberRepository.save(modifiedMember);
+        return RsData.of("S-1", "사용자 정보 수정 성공", memberRepository.save(modifiedMember));
     }
 
     public MyPage showMyPage(Member member) {
