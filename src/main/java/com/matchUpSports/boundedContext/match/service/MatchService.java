@@ -247,12 +247,6 @@ public class MatchService {
         matchMember.setConfirmed(true);
         matchMemberRepository.save(matchMember);
 
-        // 테스트 용으로 내가 확정 누르면 `ProgressStatus`를 변경 - 김진호
-        if (matchMember.getMember().getUsername().equals("KAKAO__2884083653")) {
-            match.setProgressStatus("1");
-            matchRepository.save(match);
-        }
-
         // 모든 참가자의 확정 여부를 확인합니다.
         List<MatchMember> confirmedMembers = matchMemberRepository.findAllByMatch(match);
         boolean isAllConfirmed = confirmedMembers.stream().allMatch(MatchMember::isConfirmed);
