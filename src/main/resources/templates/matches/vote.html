@@ -101,7 +101,7 @@
                                                            class="checkbox checkbox-type-1 mr-2"
                                                            onchange="checkboxChanged(this)">
                                                     <div class="result-id"
-                                                         th:text=" ${matchMember.getMember().getUsername()}"></div>
+                                                         th:text=" ${matchMember.getMember().getNickname()}"></div>
                                                     <label th:for="'dropdown' + ${matchMember.getId()}"></label>
                                                     <select th:name="'dropdown' + ${matchMember.getId()}"
                                                             th:id="'dropdown' + ${matchMember.getId()}"
@@ -136,7 +136,7 @@
                                                            class="checkbox checkbox-type-1 mr-2"
                                                            onchange="checkboxChanged(this)">
                                                     <div class="result-id"
-                                                         th:text=" ${matchMember.getMember().getUsername()}"></div>
+                                                         th:text=" ${matchMember.getMember().getNickname()}"></div>
                                                     <label th:for="'dropdown' + ${matchMember.getId()}"></label>
                                                     <select th:name="'dropdown' + ${matchMember.getId()}"
                                                             th:id="'dropdown' + ${matchMember.getId()}"

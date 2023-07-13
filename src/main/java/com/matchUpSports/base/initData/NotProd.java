@@ -2,7 +2,6 @@ package com.matchUpSports.base.initData;
 
 
 import com.matchUpSports.boundedContext.futsalField.entity.FutsalField;
-import com.matchUpSports.boundedContext.futsalField.repository.FutsalFieldRepository;
 import com.matchUpSports.boundedContext.futsalField.service.FutsalFieldService;
 import com.matchUpSports.boundedContext.match.Form.MatchForm;
 import com.matchUpSports.boundedContext.match.service.MatchService;
@@ -22,23 +21,23 @@ public class NotProd {
 
     @Bean
     CommandLineRunner initData(
-            FutsalFieldService fieldService, MemberService memberService, MatchService matchService, FutsalFieldRepository futsalFieldRepository
+            FutsalFieldService fieldService, MemberService memberService, MatchService matchService
     ) {
         return new CommandLineRunner() {
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                Member m1 = memberService.join("asd@asd.com", "user1", 1).getData();
-                Member m2 = memberService.join("asd@asd.com", "user2", 2).getData();
-                Member m3 = memberService.join("asd@asd.com", "user3", 3).getData();
-                Member m4 = memberService.join("asd@asd.com", "user4", 4).getData();
-                Member m5 = memberService.join("asd@asd.com", "user5", 5).getData();
-                Member m6 = memberService.join("asd@asd.com", "user6", 6).getData();
-                Member m7 = memberService.join("asd@asd.com", "user7", 7).getData();
-                Member m8 = memberService.join("asd@asd.com", "user8", 8).getData();
-                Member m9 = memberService.join("asd@asd.com", "user9", 9).getData();
-                Member m10 = memberService.join("asd@asd.com", "user10", 1).getData();
-                Member fieldUser = memberService.join("seoul@naver.com", "서울 풋살 시설 관리자", 0).getData();
+                Member m1 = memberService.join("asd@asd.com", "user1", "user1" , 1).getData();
+                Member m2 = memberService.join("asd@asd.com", "user2", "user2", 2).getData();
+                Member m3 = memberService.join("asd@asd.com", "user3", "user3", 3).getData();
+                Member m4 = memberService.join("asd@asd.com", "user4", "user4", 4).getData();
+                Member m5 = memberService.join("asd@asd.com", "user5", "user5", 5).getData();
+                Member m6 = memberService.join("asd@asd.com", "user6", "user6", 6).getData();
+                Member m7 = memberService.join("asd@asd.com", "user7", "user7", 7).getData();
+                Member m8 = memberService.join("asd@asd.com", "user8", "user8", 8).getData();
+                Member m9 = memberService.join("asd@asd.com", "user9", "user9", 9).getData();
+                Member m10 = memberService.join("asd@asd.com", "user10", "user10", 1).getData();
+                Member fieldUser = memberService.join("seoul@naver.com", "서울 풋살 시설 관리자", "서울 풋살 시설 관리자", 0).getData();
 
 
                 FutsalField f1 = fieldService.join("서울 풋살 경기장", "등록번호123", 100000, 10, "서울", fieldUser).getData();
@@ -70,7 +69,6 @@ public class NotProd {
                 MatchForm matchForm18 = new MatchForm(tomorrow, "서울", "서울 풋살2", 1, m8.getId(), m8.getEmail(), f2);
                 MatchForm matchForm19 = new MatchForm(tomorrow, "서울", "서울 풋살2", 1, m9.getId(), m9.getEmail(), f2);
 
-
                 matchService.createMatch(matchForm1, m1.getId());
                 matchService.createMatch(matchForm2, m2.getId());
                 matchService.createMatch(matchForm3, m3.getId());
@@ -91,6 +89,7 @@ public class NotProd {
                 matchService.createMatch(matchForm17, m7.getId());
                 matchService.createMatch(matchForm18, m8.getId());
                 matchService.createMatch(matchForm19, m9.getId());
+
             }
         };
     }
