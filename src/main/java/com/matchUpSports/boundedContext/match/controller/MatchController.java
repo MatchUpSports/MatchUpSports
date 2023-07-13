@@ -64,8 +64,6 @@ public class MatchController {
         if (result.isSuccess()) {
             return "redirect:/match/waiting";
         } else {
-//            model.addAttribute("message", result.getMsg());
-//            return "matching/filterPage";
             return rq.historyBack(result.getMsg());
         }
     }
@@ -122,7 +120,7 @@ public class MatchController {
 
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/vote/{id}")
     public String vote(@PathVariable("id") Long id, @AuthenticationPrincipal User user, VoteForm voteForm) {
         Match match = matchService.getMatch(id);
