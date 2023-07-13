@@ -27,7 +27,7 @@ public class NotProd {
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                Member m1 = memberService.join("asd@asd.com", "user1", "user1" , 1).getData();
+                Member m1 = memberService.join("asd@asd.com", "user1", "user1", 1).getData();
                 Member m2 = memberService.join("asd@asd.com", "user2", "user2", 2).getData();
                 Member m3 = memberService.join("asd@asd.com", "user3", "user3", 3).getData();
                 Member m4 = memberService.join("asd@asd.com", "user4", "user4", 4).getData();
