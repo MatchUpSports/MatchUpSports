@@ -126,7 +126,7 @@
             }
         }
 
-        window.onload = function () {
+        document.addEventListener("DOMContentLoaded", function() {
             if (modifying != null) {
                 document.getElementById("bigDistrict").value = modifying.bigDistrict;
                 updateSmallDistricts()
@@ -135,7 +135,7 @@
             }
 
             updateSmallDistricts();
-        }
+        });
         /*]]>*/
 
     </script>
