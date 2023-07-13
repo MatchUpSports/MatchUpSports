@@ -2,6 +2,7 @@ package com.matchUpSports.boundedContext.member.controller;
 
 import com.matchUpSports.base.districts.Districts;
 import com.matchUpSports.base.rq.Rq;
+import com.matchUpSports.base.rsData.RsData;
 import com.matchUpSports.boundedContext.member.dto.JoiningForm;
 import com.matchUpSports.boundedContext.member.dto.ModifyingDisplaying;
 import com.matchUpSports.boundedContext.member.dto.ModifyingForm;
@@ -38,7 +39,11 @@ public class MemberController {
     public String showMyPage(Model model) {
         Member member = rq.getMember();
         if (member == null) {
-            return "redirect:member/login";
+            return rq.redirectWithMsg("/member/login", "존재하지 않는 회원입니다");
+        }
+
+        if (member.getTier() == 0) {
+            return rq.redirectWithMsg("/member/joiningForm", "필수 회원정보를 입력하여 주십시오");
         }
 
         MyPage myPage = memberService.showMyPage(member);
@@ -50,9 +55,8 @@ public class MemberController {
     @GetMapping("/joiningForm")
     public String writeJoiningForm(Model model, HttpSession session) {
         Member member = (Member) session.getAttribute("member");
-        boolean isModifiedTier = member.getTier() != 0;
-        if (isModifiedTier) {
-            return "redirect:/";
+        if (member.getTier() != 0) {
+            return rq.redirectWithMsg("/", "올바르지 않은 접근입니다");
         }
 
         model.addAttribute("httpMethod", "POST");
@@ -65,16 +69,15 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/joiningForm")
-    public String writeJoiningForm(@Valid JoiningForm joiningForm, HttpServletRequest request) {
+    public String writeJoiningForm(@Valid JoiningForm joiningForm) {
         Member member = rq.getMember();
-        memberService.createJoiningForm(joiningForm, member);
+        RsData<Member> creatingResult = memberService.createJoiningForm(joiningForm, member);
 
-        String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(domain)) {
-            return "redirect:" + referer;
+        if (creatingResult.isFail()) {
+            return rq.redirectWithMsg("/joiningForm", creatingResult.getMsg());
         }
 
-        return "redirect:/";
+        return rq.redirectWithMsg("/", "정보 제출 완료");
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -82,16 +85,16 @@ public class MemberController {
     public String modifyUserInfo(Model model) {
         Member member = rq.getMember();
         if (member.getTier() == 0) {
-            return "redirect:member/joiningForm";
+            return rq.redirectWithMsg("/member/joiningForm", "최초 회원정보를 입력 페이지로 이동합니다");
         }
         long memberId = member.getId();
-        ModifyingDisplaying modifyingForm = memberService.showModifyingForm(memberId);
+        RsData<ModifyingDisplaying> modifyingForm = memberService.showModifyingForm(memberId);
 
-        if (modifyingForm == null) {
-            throw new RuntimeException("존재하지 않는 회원입니다.");
+        if (modifyingForm.isFail()) {
+            return rq.redirectWithMsg("/", modifyingForm.getMsg());
         }
 
-        model.addAttribute("modifyingForm", modifyingForm);
+        model.addAttribute("modifyingForm", modifyingForm.getData());
         model.addAttribute("httpMethod", "PUT");
         model.addAttribute("bigDistricts", districts.getBigDistricts());
         model.addAttribute("smallDistricts", districts.getSmallDistricts());
@@ -100,15 +103,14 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/modifyForm")
-    public String modifyUserInfo(@Valid ModifyingForm modifyingForm, HttpServletRequest request) {
+    public String modifyUserInfo(@Valid ModifyingForm modifyingForm) {
         Member member = rq.getMember();
-        memberService.modify(modifyingForm, member);
+        RsData<Member> modifyingResult = memberService.modify(modifyingForm, member);
 
-        String referer = request.getHeader("Referer");
-        if (referer != null && referer.startsWith(domain)) {
-            return "redirect:" + referer;
+        if (modifyingResult.isFail()) {
+            return rq.redirectWithMsg("/member/modifyForm", modifyingResult.getMsg());
         }
 
-        return "redirect:/";
+        return rq.redirectWithMsg("/", "정보 수정 완료");
     }
 }
