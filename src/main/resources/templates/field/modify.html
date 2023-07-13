@@ -59,8 +59,9 @@
             <input th:value="${futsalField.getFieldName()}" type="text" id="name" name="name" placeholder="구장명을 입력하세요"
                    class="input input-bordered w-full mt-12"/>
 
-            <input th:value="${futsalField.getFieldLocation()}" type="text" name="location" placeholder="위치를 입력하세요"
-                   class="input input-bordered w-full mt-12"/>
+            <select name="bigDistrict" class="input input-bordered w-full mt-12">
+                <option th:each="district : ${bigDistricts}" th:value="${district}" th:text="${district}"></option>
+            </select>
 
             <input th:value="${futsalField.getPrice()}" type="text" name="price" placeholder="가격을 입력하세요"
                    class="input input-bordered w-full mt-12"/>

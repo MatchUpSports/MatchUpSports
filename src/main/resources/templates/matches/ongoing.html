@@ -1,98 +1,53 @@
-<html layout:decorate="~{common/layout}">
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>매칭 완료</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <style>
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: bolder;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            width: 300px;
-            margin: 10px;
-        }
-
-        .card-big {
-            width: 660px;
-            margin: 10px;
-            align-items: center;
-            text-align: center;
-        }
-
-        .result-id button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .result-team {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .submit-button {
-            width: 150px;
-            height: 60px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0 auto;
-        }
-    </style>
 </head>
 <body>
-<div layout:fragment="main" class="d-flex flex-column align-items-center max-w-3xl mx-auto" style="text-align: center">
-    <h1 class="card-title">매칭이 완료되었습니다. </h1>
-    <div class="card card-big">
-        <h3 class="card-title" style="margin-top: 50px">풋살 경기 진행 후 투표로 MVP를 선정해주세요</h3>
-        <br>
-        <h3 class="card-title" th:text="${match.getField().getFieldName()}"></h3>
-        <h3 class="card-title" th:text="${match.getMatchDate()}"></h3>
-        <h3 class="card-title" th:text="${match.getUsageTime() + '타임 경기'}"></h3>
-        <div class="d-flex">
-            <div class="card">
-                <div class="card-body flex-column" style="align-items: center; justify-content: space-around">
-                    <div class="result-row">
-                        <div class="result-team">1팀</div>
-                    </div>
-                    <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==1}">
-                        <div class="result-row">
-                            <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body flex-column" style="align-items: center; justify-content: space-around">
-                    <div class="result-row">
-                        <div class="result-team">2팀</div>
-                    </div>
-                    <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==2}">
-                        <div class="result-row">
-                            <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
-                        </div>
-                    </div>
-                </div>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="max-w-2xl w-full px-4 mb-20 min-h-screen">
+        <p class="text-xl font-black mt-10 text-center">풋살 경기 진행 후 투표로 MVP를 선정해주세요</p>
+        <div class="card w-full bg-base-100 shadow-xl mb-5">
+            <div class="card-body items-center text-center">
+                <br>
+                <p class="card-title" th:text="${match.getField().getFieldName()}"></p>
+                <p class="card-title" th:text="${match.getMatchDate()}"></p>
+                <p class="card-title" th:text="${match.getUsageTimeToHour() + '타임 경기'}"></p>
             </div>
         </div>
-        <div class="card-body d-flex flex-row" style="align-items: flex-end; margin: 0 auto">
-            <form th:action="@{'/match/vote/' + ${match.getId()}}" method="get">
-                <button class="submit-button" id="voteBtn"
-                        style="background-color: #ff595e; margin-bottom: 10px; margin-right: 10px">투표하기
-                </button>
-            </form>
+        <div class="card w-full bg-base-100 shadow-xl mt-5">
+            <div class="card-body text-center">
+                <div class="overflow-x-auto">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th>1팀</th>
+                            <th>2팀</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==1}">
+                                    <div class="result-id" th:text=" ${matchMember.getMember().getNickname()}"></div>
+                                </div>
+                            </td>
+                            <td>
+                                <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==2}">
+                                    <div class="result-id" th:text=" ${matchMember.getMember().getNickname()}"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <form th:action="@{'/match/vote/' + ${match.getId()}}" method="get">
+                    <button class="btn btn-outline btn-success w-full" id="voteBtn">투표하기
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+</main>
 </body>
 </html>

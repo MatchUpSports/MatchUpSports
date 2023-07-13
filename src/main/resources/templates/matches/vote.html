@@ -1,9 +1,7 @@
-<html layout:decorate="~{common/layout}">
+<html lang="ko" layout:decorate="~{common/layout.html}">
 <head>
     <meta charset="UTF-8">
     <title>MVP 투표</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
             $(".submit-button").click(function () {
@@ -26,167 +24,145 @@
 
         function checkboxChanged(checkbox) {
             var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var dropdowns = document.querySelectorAll('select');
 
-            // 체크박스가 체크되면 나머지 체크박스와 드롭다운 비활성화
             if (checkbox.checked) {
                 for (var i = 0; i < checkboxes.length; i++) {
-                    checkboxes[i].disabled = true;
-                    checkboxes[i].nextElementSibling.nextElementSibling.nextElementSibling.disabled = true;
+                    if (checkboxes[i] != checkbox) {
+                        checkboxes[i].disabled = true;
+                        dropdowns[i].disabled = true;
+                    }
                 }
-                checkbox.disabled = false;
-                checkbox.nextElementSibling.nextElementSibling.nextElementSibling.disabled = false;
-            } else {    // 체크가 풀리면 다시 활성화
+            } else {
                 for (var j = 0; j < checkboxes.length; j++) {
                     checkboxes[j].disabled = false;
-                    checkboxes[j].nextElementSibling.nextElementSibling.nextElementSibling.disabled = false;
+                    dropdowns[j].disabled = false;
                 }
             }
+        }
+
+        function checkVoteForm(form) {
+            const $checked = $('.checkbox-type-1:checked');
+
+            if ($checked.length == 0) {
+                toastWarning('한 명을 선택해주세요.');
+                return;
+            }
+
+            form.toVote.value = $checked.val();
+            form.voteTypeCode.value = $checked.find(' ~ select').val();
+
+            form.submit();
         }
     </script>
-    <style>
-        .card-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            width: 300px;
-            margin: 10px;
-        }
-
-        .card-big {
-            width: 660px;
-            margin: 10px;
-            align-items: center;
-            text-align: center;
-        }
-
-        .result-row {
-            display: flex;
-            align-items: center;
-            margin: 5px;
-            text-align: center;
-        }
-
-        .result-team {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .result-id {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .result-id button {
-            border: none;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .submit-button {
-            width: 150px;
-            height: 50px;
-            font-size: 20px;
-            text-align: center;
-            color: white;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0 auto;
-        }
-
-        .thumb-button {
-            margin-left: 10px;;
-        }
-    </style>
 </head>
 <body>
-<div layout:fragment="main" class="d-flex flex-column align-items-center max-w-3xl mx-auto" style="text-align: center">
-    <h1 class="card-title">MVP 선정 투표</h1>
-    <div class="card card-big">
-        <br>
-        <h3 class="card-title" th:text="${match.getField().getFieldName()}"></h3>
-        <h3 class="card-title" th:text="${match.getMatchDate()}"></h3>
-        <h3 class="card-title" th:text="${match.getUsageTime() + '타임 경기'}"></h3>
-        <h3 class="card-title">오늘의 MVP를 선정해주세요!</h3>
-        <div class="d-flex">
-            <div class="card">
-                <div class="card-body flex-column" style="align-items: center; justify-content: space-around">
-                    <div class="result-row">
-                        <div class="result-team">1팀</div>
-                    </div>
-                    <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==1}">
-                        <div class="result-row">
-                            <input type="checkbox" th:value="${matchMember.getId()}"
-                                   th:name="'checkbox' + ${matchMember.getId()}"
-                                   th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1"
-                                   onchange="checkboxChanged(this)">
-                            <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
-                            <label th:for="'dropdown' + ${matchMember.getId()}"></label>
-                            <select th:name="'dropdown' + ${matchMember.getId()}"
-                                    th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
-                                <option name="voteTypeCode" value="1">드리블</option>
-                                <option name="voteTypeCode" value="2">패스</option>
-                                <option name="voteTypeCode" value="3">슈팅</option>
-                                <option name="voteTypeCode" value="4">스피드</option>
-                            </select>
-                            <button disabled class="thumb-button">&#128077;</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body flex-column" style="align-items: center; justify-content: space-around">
-                    <div class="result-row">
-                        <div class="result-team">2팀</div>
-                    </div>
-                    <div th:each="matchMember : ${matchMembers}" th:if="${matchMember.getTeam()==2}">
-                        <div class="result-row">
-                            <input type="checkbox" th:value="${matchMember.getId()}"
-                                   th:name="'checkbox' + ${matchMember.getId()}"
-                                   th:id="'checkbox' + ${matchMember.getId()}" class="checkbox checkbox-type-1"
-                                   onchange="checkboxChanged(this)">
-                            <div class="result-id" th:text=" ${matchMember.getMember().getUsername()}"></div>
-                            <label th:for="'dropdown' + ${matchMember.getId()}"></label>
-                            <select th:name="'dropdown' + ${matchMember.getId()}"
-                                    th:id="'dropdown' + ${matchMember.getId()}" class="dropdown dropdown-type-1">
-                                <option name="voteTypeCode" value="1">드리블</option>
-                                <option name="voteTypeCode" value="2">패스</option>
-                                <option name="voteTypeCode" value="3">슈팅</option>
-                                <option name="voteTypeCode" value="4">스피드</option>
-                            </select>
-                            <button disabled class="thumb-button">&#128077;</button>
-                        </div>
-                    </div>
-                </div>
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="max-w-2xl w-full px-4 mb-20 min-h-screen">
+        <p class="text-xl font-black mt-10 text-center">MVP 선정 투표</p>
+        <!--    <h1 class="card-title">MVP 선정 투표</h1>-->
+        <div class="card w-full bg-base-100 shadow-xl mb-5">
+            <div class="card-body items-center text-center">
+                <br>
+                <p class="card-title" th:text="${match.getField().getFieldName()}"></p>
+                <p class="card-title" th:text="${match.getMatchDate()}"></p>
+                <p class="card-title" th:text="${match.getUsageTimeToHour() + '타임 경기'}"></p>
             </div>
         </div>
-        <form method="post" onsubmit="checkVoteForm(this); return false;"
-              th:action="@{'/match/vote/' + ${match.getId()}}">
-            <input type="hidden" name="toVote">
-            <input type="hidden" name="voteTypeCode">
-            <button class="submit-button" style="background-color: #ff595e; margin-bottom: 10px">투표 슈웃</button>
-        </form>
+        <div class="card w-full bg-base-100 shadow-xl mb-5">
+            <div class="card-body items-center text-center">
+                <h3 class="card-title">오늘의 MVP를 선정해주세요! &#128077;</h3>
+                <table class="table text-center">
+                    <thead>
+                    <tr>
+                        <th>1팀</th>
+                        <th>2팀</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
 
-        <script>
-            function checkVoteForm(form) {
-                const $checked = $('.checkbox-type-1:checked');
-
-                if ($checked.length == 0) {
-                    alert('한 명을 선택해주세요.');
-                    return;
-                }
-
-                form.toVote.value = $checked.val();
-                form.voteTypeCode.value = $checked.find(' ~ select').val();
-
-                form.submit();
-            }
-        </script>
+                        <td>
+                            <div class="d-flex">
+                                <div class="card">
+                                    <div class="card-body flex-column"
+                                         style="align-items: center; justify-content: space-around">
+                                        <div class="result-row">
+                                            <div class="result-team"></div>
+                                        </div>
+                                        <div th:each="matchMember : ${matchMembers}"
+                                             th:if="${matchMember.getTeam()==1}">
+                                            <div class="result-row">
+                                                <div class="flex mt-3">
+                                                    <input type="checkbox" th:value="${matchMember.getId()}"
+                                                           th:name="'checkbox' + ${matchMember.getId()}"
+                                                           th:id="'checkbox' + ${matchMember.getId()}"
+                                                           class="checkbox checkbox-type-1 mr-2"
+                                                           onchange="checkboxChanged(this)">
+                                                    <div class="result-id"
+                                                         th:text=" ${matchMember.getMember().getNickname()}"></div>
+                                                    <label th:for="'dropdown' + ${matchMember.getId()}"></label>
+                                                    <select th:name="'dropdown' + ${matchMember.getId()}"
+                                                            th:id="'dropdown' + ${matchMember.getId()}"
+                                                            class="dropdown dropdown-type-1">
+                                                        <option name="voteTypeCode" value="1">드리블</option>
+                                                        <option name="voteTypeCode" value="2">패스</option>
+                                                        <option name="voteTypeCode" value="3">슈팅</option>
+                                                        <option name="voteTypeCode" value="4">스피드</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex">
+                                <div class="card">
+                                    <div class="card-body flex-column"
+                                         style="align-items: center; justify-content: space-around">
+                                        <div class="result-row">
+                                            <div class="result-team"></div>
+                                        </div>
+                                        <div th:each="matchMember : ${matchMembers}"
+                                             th:if="${matchMember.getTeam()==2}">
+                                            <div class="result-row">
+                                                <div class="flex mt-3">
+                                                    <input type="checkbox" th:value="${matchMember.getId()}"
+                                                           th:name="'checkbox' + ${matchMember.getId()}"
+                                                           th:id="'checkbox' + ${matchMember.getId()}"
+                                                           class="checkbox checkbox-type-1 mr-2"
+                                                           onchange="checkboxChanged(this)">
+                                                    <div class="result-id"
+                                                         th:text=" ${matchMember.getMember().getNickname()}"></div>
+                                                    <label th:for="'dropdown' + ${matchMember.getId()}"></label>
+                                                    <select th:name="'dropdown' + ${matchMember.getId()}"
+                                                            th:id="'dropdown' + ${matchMember.getId()}"
+                                                            class="dropdown dropdown-type-1">
+                                                        <option name="voteTypeCode" value="1">드리블</option>
+                                                        <option name="voteTypeCode" value="2">패스</option>
+                                                        <option name="voteTypeCode" value="3">슈팅</option>
+                                                        <option name="voteTypeCode" value="4">스피드</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </tr>
+                    </tbody>
+                </table>
+                <form method="post" onsubmit="checkVoteForm(this); return false;"
+                      th:action="@{'/match/vote/' + ${match.getId()}}">
+                    <input type="hidden" name="toVote">
+                    <input type="hidden" name="voteTypeCode">
+                    <button class="btn btn-outline btn-success w-full">투표 하기</button>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+</main>
 </body>
 </html>

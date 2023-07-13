@@ -15,6 +15,7 @@ import com.matchUpSports.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -58,13 +59,13 @@ public class MatchController {
     @PostMapping
     public String addMatch(@ModelAttribute MatchForm matchForm, Model model) {
         long memberId = rq.getMemberId();
+
         RsData<Match> result = matchService.createMatch(matchForm, memberId);
 
         if (result.isSuccess()) {
             return "redirect:/match/waiting";
         } else {
-            model.addAttribute("message", result.getMsg());
-            return "matching/filterPage";
+            return rq.historyBack(result.getMsg());
         }
     }
 
@@ -120,7 +121,7 @@ public class MatchController {
 
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/vote/{id}")
     public String vote(@PathVariable("id") Long id, @AuthenticationPrincipal User user, VoteForm voteForm) {
         Match match = matchService.getMatch(id);
@@ -147,10 +148,6 @@ public class MatchController {
         if (voteRsData.isFail()) {
             return rq.historyBack(voteRsData);
         }
-        /*  매치가 없는 매치이면 전 페이지로 이동
-        if (match == null){
-            return "";
-        }*/
 
         return rq.redirectWithMsg("/match/result/" + id, "투표 완료");
     }
@@ -222,7 +219,7 @@ public class MatchController {
         String matchId = orderId.substring(startIndex + 1, endIndex);
 
         // 매치 멤버 결제 완료 필드 update
-        matchService.paySuccess(matchId, user.getUsername(), amount);
+        matchService.paySuccess(matchId, user.getUsername(), amount, paymentKey);
 
         model.addAttribute("responseStr", jsonObject.toJSONString());
         System.out.println(jsonObject.toJSONString());
@@ -246,30 +243,39 @@ public class MatchController {
         return rq.redirectWithMsg("/match/ongoing/" + matchId, "시설 이용료를 지불하였습니다.");
     }
 
-    @GetMapping("/pay/fail")
-    public String paymentFail(
-            Model model,
-            @RequestParam(value = "message") String message,
-            @RequestParam(value = "code") Integer code
-    ) {
-        model.addAttribute("code", code);
-        model.addAttribute("message", message);
-        return "payment/fail";
-    }
-
     @GetMapping("/ongoing/{matchId}")
     public String onGoing(@PathVariable Long matchId, @AuthenticationPrincipal User user, Model model) throws IOException {
 
         Match match = matchService.getMatch(matchId);
         List<MatchMember> matchMemberList = matchService.getMatchMemberList(match.getId());
 
+
         // 매치 멤버의 ispaid 필드를 확인해서 모두 true이면
-        // 카카오톡 메시지로 해당 멤버에게 채팅 메시지 보내기
-        matchService.sendKakaoMessage(user, match);
+        // 카카오톡 메시지로 해당 멤버에게 채팅으로 예약 되었다고 메시지 보내기
+        MatchMember loggedInMatchMember = matchService.getMatchMemberByUser(match, user.getUsername());
+        if (!loggedInMatchMember.isMessageSent()) {
+            matchService.sendKakaoMessage(user.getUsername(), match, "reserve");
+            matchService.updateMessageSent(loggedInMatchMember, true); // 이 부분을 추가합니다.
+        }
+
+        String paymentId = matchService.getMyPaymentId(match, user.getUsername());
 
         model.addAttribute("match", match);
         model.addAttribute("matchMembers", matchMemberList);
+        model.addAttribute("paymentId", paymentId);
+
         return "matches/ongoing";
+    }
+
+    @Scheduled(cron = "0 0 17-21/1 * * ?", zone = "Asia/Seoul")
+    public void cancelMatch() {
+        try {
+            matchService.cancelMatches();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

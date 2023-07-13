@@ -30,14 +30,14 @@ public class MatchMember {
 
     private int team;
 
-    private boolean ispaid;
+    private boolean isPaid;
+
+    private String paymentId;
+
+    private boolean isMessageSent;//메시지 확인하는 필드
 
     public MatchMember() {
 
-    }
-
-    public void updateIsPaid() {
-        this.ispaid = true;
     }
 
     public void setTeam(int team) {

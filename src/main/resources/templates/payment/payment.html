@@ -1,44 +1,37 @@
-<html lang="ko">
 <head>
     <title>시설 이용료 결제하기</title>
     <meta charset="UTF-8"/>
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.2.1/dist/full.css" rel="stylesheet" type="text/css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <link rel="stylesheet" href="/resource/common/bulma.min.css">
 
     <script src="https://js.tosspayments.com/v1"></script>
 </head>
 
-<body>
-
-<section class="hero is-link">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="title" style="text-align: center">
-                MatchUpSports <br> 결제 수단을 선택해주세요.
-            </h1>
-
-        </div>
-    </div>
-</section>
-<section class="section ">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="buttons is-centered">
-                <button class="button is-link" onclick="pay('카드',jsons.card);">일반결제창</button>
-                <button class="button is-link" onclick="pay('계좌이체',jsons.transfer);">계좌이체</button>
-                <button class="button is-link" onclick="pay('휴대폰',jsons.phone);">휴대폰</button>
+<body class="min-h-screen w-screen flex flex-col">
+<div class="min-h-screen flex flex-col pb-10">
+    <div class="flex-grow flex items-center justify-center">
+        <div class="max-w-2xl w-full px-4 mb-20 min-h-screen">
+            <p class="text-2xl font-black my-10 text-center"> MatchUpSports</p>
+            </section>
+            <div class="card w-full bg-base-100 shadow-xl">
+                <div class="card-body">
+                    <p class="text-xl font-black my-10 text-left">결제 수단을 선택해주세요.</p>
+                    <button class="btn btn-outline btn-success" onclick="pay('카드',jsons.card);">일반결제창</button>
+                    <button class="btn btn-outline btn-success" onclick="pay('계좌이체',jsons.transfer);">계좌이체</button>
+                    <button class="btn btn-outline btn-success" onclick="pay('휴대폰',jsons.phone);">휴대폰</button>
+                </div>
             </div>
+
         </div>
     </div>
-</section>
+</div>
+</main>
 </body>
 
 <script th:inline="javascript">
-    // let price = [[${price}]];
-    // let amount = parseInt(price);
-    // let orderName = [[${stadium}]];
-    // let customerName = [[${name}]];
     let price = [[${match.field.price}]];
     let amount = parseInt(price) / 10;
     let orderName = [[${match.stadium}]];
@@ -117,5 +110,4 @@
         }
     }
 </script>
-
 </html>

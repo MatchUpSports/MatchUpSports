@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{admin/adminLayout.html}">
-<!--<html lang="ko" layout:decorate="~{common/layout.html}">-->
+<html lang="ko" layout:decorate="~{adm/adminLayout.html}">
 <head>
     <meta charset="UTF-8">
     <title>시설 승인</title>
@@ -27,7 +26,7 @@
                                 <div class="card-actions justify-end">
                                     <a th:href="@{/field/detail/{id}(id=${field.getId()})}"
                                        class="btn btn-outline btn-success">상세 정보 보기</a>
-                                    <a th:href="@{/templates/adm/approve/{id}(id=${field.getId()})}"
+                                    <a th:href="@{/adm/approve/{id}(id=${field.getId()})}"
                                        class="btn btn-outline btn-success">승인</a>
                                 </div>
                             </div>

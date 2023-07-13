@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder(toBuilder = true)
 @Where(clause = "delete_date is null")
@@ -58,6 +60,8 @@ public class Member {
 
     private int point;
 
+    private LocalDateTime accessTokenTime;
+
     public List<? extends GrantedAuthority> getAuthorities() {
         return authorities.stream().map(i -> new SimpleGrantedAuthority("ROLE_" + i.name())).toList();
     }
@@ -69,4 +73,6 @@ public class Member {
     public void receivePaidPoints(int point) {
         this.point = getPoint() + point;
     }
+
+
 }
